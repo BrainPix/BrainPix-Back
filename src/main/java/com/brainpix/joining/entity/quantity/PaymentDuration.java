@@ -1,4 +1,4 @@
-package com.brainpix.sale.entity.quantity;
+package com.brainpix.joining.entity.quantity;
 
 public enum PaymentDuration {
 	ONCE, MONTHLY, WEEKLY, DAILY, NOT_APPLICABLE

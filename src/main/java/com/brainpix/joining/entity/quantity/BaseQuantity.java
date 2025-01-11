@@ -1,4 +1,4 @@
-package com.brainpix.sale.entity.quantity;
+package com.brainpix.joining.entity.quantity;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
