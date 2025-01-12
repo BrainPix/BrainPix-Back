@@ -6,10 +6,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Price extends BaseQuantity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +22,11 @@ public class Price extends BaseQuantity {
 
 	@Enumerated(EnumType.STRING)
 	private PaymentDuration paymentDuration;
+
+	@Builder
+	public Price(Long totalQuantity, Long occupiedQuantity, Long price, PaymentDuration paymentDuration) {
+		super(totalQuantity, occupiedQuantity);
+		this.price = price;
+		this.paymentDuration = paymentDuration;
+	}
 }
