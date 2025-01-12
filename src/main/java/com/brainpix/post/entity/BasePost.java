@@ -2,6 +2,7 @@ package com.brainpix.post.entity;
 
 import java.util.List;
 
+import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.ElementCollection;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @MappedSuperclass
 @NoArgsConstructor
 @Getter
-public abstract class BasePost {
+public abstract class BasePost extends BaseTimeEntity {
 	@ManyToOne
 	private User writer;
 

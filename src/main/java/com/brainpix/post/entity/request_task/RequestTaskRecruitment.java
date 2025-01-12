@@ -1,6 +1,7 @@
 package com.brainpix.post.entity.request_task;
 
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class RequestTaskRecruitment {
+public class RequestTaskRecruitment extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

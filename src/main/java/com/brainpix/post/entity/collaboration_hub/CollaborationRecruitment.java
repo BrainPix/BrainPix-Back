@@ -1,6 +1,7 @@
 package com.brainpix.post.entity.collaboration_hub;
 
 import com.brainpix.joining.entity.quantity.Gathering;
+import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class CollaborationRecruitment {
+public class CollaborationRecruitment extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

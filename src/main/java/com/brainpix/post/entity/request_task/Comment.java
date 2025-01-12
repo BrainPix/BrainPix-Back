@@ -1,5 +1,6 @@
 package com.brainpix.post.entity.request_task;
 
+import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Comment {
+public class Comment extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

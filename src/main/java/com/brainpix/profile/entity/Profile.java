@@ -2,6 +2,8 @@ package com.brainpix.profile.entity;
 
 import java.util.List;
 
+import com.brainpix.jpa.BaseTimeEntity;
+
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @Getter
-public abstract class Profile {
+public abstract class Profile extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

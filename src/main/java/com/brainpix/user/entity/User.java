@@ -2,6 +2,7 @@ package com.brainpix.user.entity;
 
 import java.time.LocalDateTime;
 
+import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Profile;
 
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @Getter
-public abstract class User {
+public abstract class User extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
