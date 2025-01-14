@@ -25,7 +25,7 @@ public class Portfolio extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Long title;
+	private String title;
 
 	@ElementCollection
 	@Enumerated(EnumType.STRING)
@@ -39,14 +39,27 @@ public class Portfolio extends BaseTimeEntity {
 	@ManyToOne
 	private Profile profile;
 
+	private String imageUrl;
+
 	@Builder
-	public Portfolio(Long title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
-		String content, Profile profile) {
+	public Portfolio(String title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
+		String content, Profile profile,String imageUrl) {
 		this.title = title;
 		this.specializationList = specializationList;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
 		this.profile = profile;
+		this.imageUrl=imageUrl;
+	}
+
+	public void updatePortfolio(String title, List<Specialization> specializationList, YearMonth startDate,
+		YearMonth endDate, String content,String imageUrl) {
+		this.title = title;
+		this.specializationList = specializationList;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.content = content;
+		this.imageUrl=imageUrl;
 	}
 }
