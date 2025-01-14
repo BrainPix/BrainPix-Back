@@ -1,0 +1,56 @@
+name: Brainpix CD Workflow
+
+on:
+  push:
+    branches: [ "develop" ]  # main 브랜치에 push될 때만 동작
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'openjdk'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build jar
+        run: ./gradlew --info clean bootJar -x test
+
+      - name: docker login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: docker build and push
+        uses: docker/build-push-action@v5.1.0
+        with:
+          push: true
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
+          cache-to: type=inline
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
+          build-args: |
+            APP_ENV=${{ secrets.JASYPT_KEY }}
+  
+  deploy:
+    runs-on: brainpix_self-hosted_runner
+    needs: build-and-push-image
+    steps:
+      - name: Connecting to the WAS server from a self-hosted runner
+        run: echo "추후 업데이트"
