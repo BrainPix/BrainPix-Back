@@ -25,6 +25,7 @@ public class CollaborationHub extends BasePost {
 	private Long id;
 
 	private LocalDateTime deadline;
+	private String link;
 
 	@Enumerated(EnumType.STRING)
 	private CollaborationType collaborationType;
@@ -32,9 +33,10 @@ public class CollaborationHub extends BasePost {
 	@Builder
 	public CollaborationHub(User writer, String title, String contest, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		CollaborationType collaborationType) {
+		CollaborationType collaborationType, String link) {
 		super(writer, title, contest, category, openMyProfile, viewCount, imageList, attachmentFileList);
 		this.deadline = deadline;
 		this.collaborationType = collaborationType;
+		this.link = link;
 	}
 }
