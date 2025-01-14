@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.brainpix.post.entity.BasePost;
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.post.entity.IdeaMarketAuth;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
@@ -31,21 +32,17 @@ public class IdeaMarket extends BasePost {
 	@Enumerated(EnumType.STRING)
 	private IdeaMarketType ideaMarketType;
 
-	@Enumerated(EnumType.STRING)
-	private IdeaMarketAuth ideaMarketAuth;
-
 	@OneToOne
 	private Price price;
 
 	@Builder
-	public IdeaMarket(User writer, String title, String contest, String category, Boolean openMyProfile, Long viewCount,
-		List<String> imageList, List<String> attachmentFileList, Specialization specialization,
-		IdeaMarketType ideaMarketType, IdeaMarketAuth ideaMarketAuth,
-		Price price) {
-		super(writer, title, contest, category, openMyProfile, viewCount, imageList, attachmentFileList);
+	public IdeaMarket(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
+		List<String> imageList, IdeaMarketAuth ideaMarketAuth, List<String> attachmentFileList,
+		Specialization specialization, IdeaMarketType ideaMarketType, Price price) {
+		super(writer, title, content, category, openMyProfile, viewCount, ideaMarketAuth, imageList,
+			attachmentFileList);
 		this.specialization = specialization;
 		this.ideaMarketType = ideaMarketType;
-		this.ideaMarketAuth = ideaMarketAuth;
 		this.price = price;
 	}
 }

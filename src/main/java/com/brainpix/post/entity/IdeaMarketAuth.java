@@ -1,4 +1,4 @@
-package com.brainpix.post.entity.idea_market;
+package com.brainpix.post.entity;
 
 public enum IdeaMarketAuth {
 	ALL, COMPANY, ME
