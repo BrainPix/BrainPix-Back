@@ -1,5 +1,6 @@
 package com.brainpix.post.entity.request_task;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.brainpix.post.entity.BasePost;
@@ -21,9 +22,12 @@ public class RequestTask extends BasePost {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private LocalDateTime deadline;
+
 	@Builder
 	public RequestTask(User writer, String title, String contest, String category, Boolean openMyProfile,
-		Long viewCount, List<String> imageList, List<String> attachmentFileList) {
+		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline) {
 		super(writer, title, contest, category, openMyProfile, viewCount, imageList, attachmentFileList);
+		this.deadline = deadline;
 	}
 }
