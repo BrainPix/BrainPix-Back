@@ -28,12 +28,15 @@ public class Contact extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private List<ContactType> contactTypeList;
 
+	private String contactValue; // 실제 연락처 값 (예: 전화번호, 이메일 주소)
+
 	@ManyToOne
 	private IndividualProfile individualProfile;
 
 	@Builder
-	public Contact(List<ContactType> contactTypeList, IndividualProfile individualProfile) {
+	public Contact(List<ContactType> contactTypeList, String contactValue, IndividualProfile individualProfile) {
 		this.contactTypeList = contactTypeList;
+		this.contactValue = contactValue;
 		this.individualProfile = individualProfile;
 	}
 }

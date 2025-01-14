@@ -32,4 +32,8 @@ public abstract class Profile extends BaseTimeEntity {
 	public Profile(List<Specialization> specializationList) {
 		this.specializationList = specializationList;
 	}
+
+	protected void updateSpecializations(List<Specialization> specializationList) {
+		this.specializationList = specializationList;
+	}
 }

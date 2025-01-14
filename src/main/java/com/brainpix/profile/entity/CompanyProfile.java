@@ -25,4 +25,13 @@ public class CompanyProfile extends Profile {
 		this.homepage = homepage;
 		this.openHomepage = openHomepage;
 	}
+
+	public void updateProfile(String businessType, String businessInformation, String homepage, Boolean openHomepage, List<Specialization> specializations) {
+		this.businessType = businessType;
+		this.businessInformation = businessInformation;
+		this.homepage = homepage;
+		this.openHomepage = openHomepage;
+		super.updateSpecializations(specializations); // 부모 클래스의 필드도 갱신
+	}
+
 }

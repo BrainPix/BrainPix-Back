@@ -25,4 +25,29 @@ public class IndividualProfile extends Profile {
 		this.CareerOpen = careerOpen;
 		this.stackOpen = stackOpen;
 	}
+
+	// 업데이트 로직을 위한 메서드 추가
+	public void updateSelfIntroduction(String selfIntroduction) {
+		if (selfIntroduction != null) {
+			this.selfIntroduction = selfIntroduction;
+		}
+	}
+
+	public void updateContactOpen(Boolean contactOpen) {
+		if (contactOpen != null) {
+			this.ContactOpen = contactOpen;
+		}
+	}
+
+	public void updateCareerOpen(Boolean careerOpen) {
+		if (careerOpen != null) {
+			this.CareerOpen = careerOpen;
+		}
+	}
+
+	public void updateStackOpen(Boolean stackOpen) {
+		if (stackOpen != null) {
+			this.stackOpen = stackOpen;
+		}
+	}
 }
