@@ -19,7 +19,7 @@ public abstract class BasePost extends BaseTimeEntity {
 	private User writer;
 
 	private String title;
-	private String contest;
+	private String content;
 	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
@@ -30,11 +30,11 @@ public abstract class BasePost extends BaseTimeEntity {
 	@ElementCollection
 	private List<String> attachmentFileList;
 
-	public BasePost(User writer, String title, String contest, String category, Boolean openMyProfile, Long viewCount,
+	public BasePost(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
 		List<String> imageList, List<String> attachmentFileList) {
 		this.writer = writer;
 		this.title = title;
-		this.contest = contest;
+		this.content = content;
 		this.category = category;
 		this.openMyProfile = openMyProfile;
 		this.viewCount = viewCount;

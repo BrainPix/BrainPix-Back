@@ -26,10 +26,10 @@ public class CollaborationHub extends BasePost {
 	private String link;
 
 	@Builder
-	public CollaborationHub(User writer, String title, String contest, String category, Boolean openMyProfile,
+	public CollaborationHub(User writer, String title, String content, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
 		String link) {
-		super(writer, title, contest, category, openMyProfile, viewCount, imageList, attachmentFileList);
+		super(writer, title, content, category, openMyProfile, viewCount, imageList, attachmentFileList);
 		this.deadline = deadline;
 		this.link = link;
 	}

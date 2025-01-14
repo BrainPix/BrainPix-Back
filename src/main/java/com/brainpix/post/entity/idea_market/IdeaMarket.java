@@ -38,11 +38,11 @@ public class IdeaMarket extends BasePost {
 	private Price price;
 
 	@Builder
-	public IdeaMarket(User writer, String title, String contest, String category, Boolean openMyProfile, Long viewCount,
+	public IdeaMarket(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
 		List<String> imageList, List<String> attachmentFileList, Specialization specialization,
 		IdeaMarketType ideaMarketType, IdeaMarketAuth ideaMarketAuth,
 		Price price) {
-		super(writer, title, contest, category, openMyProfile, viewCount, imageList, attachmentFileList);
+		super(writer, title, content, category, openMyProfile, viewCount, imageList, attachmentFileList);
 		this.specialization = specialization;
 		this.ideaMarketType = ideaMarketType;
 		this.ideaMarketAuth = ideaMarketAuth;
