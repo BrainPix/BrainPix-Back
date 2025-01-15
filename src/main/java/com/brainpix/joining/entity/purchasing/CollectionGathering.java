@@ -28,9 +28,13 @@ public class CollectionGathering extends BaseTimeEntity {
 	@ManyToOne
 	private CollaborationRecruitment collaborationRecruitment;
 
+
+
 	public CollectionGathering(User joiner, Boolean accepted, CollaborationRecruitment collaborationRecruitment) {
 		this.joiner = joiner;
 		this.accepted = accepted;
 		this.collaborationRecruitment = collaborationRecruitment;
+	} public void setAccepted(Boolean accepted) {
+		this.accepted = accepted;
 	}
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/myinfo/request-task")
+@RequestMapping("/api/mypage/request-task")
 @RequiredArgsConstructor
 public class RequestTaskController {
 

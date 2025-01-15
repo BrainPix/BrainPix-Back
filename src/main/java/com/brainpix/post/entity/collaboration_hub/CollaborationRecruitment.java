@@ -1,14 +1,19 @@
 package com.brainpix.post.entity.collaboration_hub;
 
+import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.jpa.BaseTimeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +34,8 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 	@OneToOne
 	private Gathering gathering;
 
+	@OneToMany(mappedBy = "collaborationRecruitment", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CollectionGathering> purchases = new ArrayList<>();
 	@Builder
 	public CollaborationRecruitment(CollaborationHub parentCollaborationHub, String domain, Gathering gathering) {
 		this.parentCollaborationHub = parentCollaborationHub;
