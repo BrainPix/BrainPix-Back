@@ -47,4 +47,18 @@ public abstract class BasePost extends BaseTimeEntity {
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
 	}
+
+	public void updateBaseFields(String title, String content, String category, Boolean openMyProfile,
+		IdeaMarketAuth ideaMarketAuth, List<String> imageList, List<String> attachmentFileList) {
+		this.title = title;
+		this.content = content;
+		this.category = category;
+		this.openMyProfile = openMyProfile;
+		this.ideaMarketAuth = ideaMarketAuth;
+		this.imageList = imageList;
+		this.attachmentFileList = attachmentFileList;
+	}
+
 }
+
+

@@ -4,6 +4,8 @@ import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,13 +28,22 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 
 	private String domain;
 
-	@OneToOne
-	private Price price;
+	private Integer currentPeople; // 현재 인원
+
+	private Integer totalPeople;   // 모집 인원
+
+	private Integer price;
+
+	@Enumerated(EnumType.STRING)
+	private AgreementType agreementType;
 
 	@Builder
-	public RequestTaskRecruitment(RequestTask requestTask, String domain, Price price) {
+	public RequestTaskRecruitment(RequestTask requestTask, String domain, Integer price, Integer currentPeople, Integer totalPeople, AgreementType agreementType) {
 		this.requestTask = requestTask;
 		this.domain = domain;
 		this.price = price;
+		this.currentPeople = currentPeople;
+		this.totalPeople = totalPeople;
+		this.agreementType = agreementType;
 	}
 }
