@@ -3,6 +3,7 @@ package com.brainpix.alarm.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +40,9 @@ public class AlarmController {
 
 	// 알림 읽음 처리 API
 	@PatchMapping("/read/{alarmId}")
-	public ResponseEntity<?> readAlarm(@PathVariable String alarmId) {
+	public ResponseEntity<?> readAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
-		alarmService.readAlarm(alarmId);
+		alarmService.readAlarm(alarmId, userId);
 
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
@@ -66,6 +67,7 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.success(data));
 	}
 
+	// 알림 수 조회 API
 	@GetMapping("/count")
 	public ResponseEntity<?> getUnreadAlarmCount(@RequestParam Long userId) {
 
@@ -73,4 +75,41 @@ public class AlarmController {
 
 		return ResponseEntity.ok(ApiResponse.success(data));
 	}
+
+	// 알림 휴지통으로 보내기 API
+	@PatchMapping("/trash/{alarmId}")
+	public ResponseEntity<?> addTrashAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+
+		alarmService.addTrashAlarm(alarmId, userId);
+
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
+	// 알림 휴지통에서 복구 API
+	@PatchMapping("/restore/{alarmId}")
+	public ResponseEntity<?> restoreAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+
+		alarmService.restoreAlarm(alarmId, userId);
+
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
+	// 알림 삭제 API
+	@DeleteMapping("/delete/{alarmId}")
+	public ResponseEntity<?> deleteAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+
+		alarmService.deleteOneAlarm(alarmId, userId);
+
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
+	// 알림 전체 삭제 API
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteAllAlarm(@RequestParam Long userId) {
+
+		alarmService.deleteAllAlarm(userId);
+
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
 }
