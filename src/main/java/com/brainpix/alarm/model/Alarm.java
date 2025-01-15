@@ -32,4 +32,12 @@ public class Alarm extends BaseTimeEntity {
 	public void readAlarm() {
 		this.isRead = true;
 	}
+
+	public void addTrash() {
+		this.trashed = true;
+	}
+
+	public void restore() {
+		this.trashed = false;
+	}
 }
