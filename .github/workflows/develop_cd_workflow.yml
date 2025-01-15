@@ -47,9 +47,3 @@ jobs:
           cache-to: type=inline
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
   
-  deploy:
-    runs-on: brainpix_self-hosted_runner
-    needs: build-and-push-image
-    steps:
-      - name: Connecting to the WAS server from a self-hosted runner
-        run: echo "추후 업데이트"
