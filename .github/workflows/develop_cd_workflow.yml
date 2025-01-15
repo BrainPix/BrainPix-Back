@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'openjdk'
+          distribution: 'adopt'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -41,12 +41,11 @@ jobs:
       - name: docker build and push
         uses: docker/build-push-action@v5.1.0
         with:
+          context: .
           push: true
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
           cache-to: type=inline
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
-          build-args: |
-            APP_ENV=${{ secrets.JASYPT_KEY }}
   
   deploy:
     runs-on: brainpix_self-hosted_runner
