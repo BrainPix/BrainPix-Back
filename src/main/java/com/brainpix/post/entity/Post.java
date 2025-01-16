@@ -5,18 +5,30 @@ import java.util.List;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @NoArgsConstructor
 @Getter
-public abstract class BasePost extends BaseTimeEntity {
+public abstract class Post extends BaseTimeEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	@ManyToOne
 	private User writer;
 
@@ -35,7 +47,7 @@ public abstract class BasePost extends BaseTimeEntity {
 	@ElementCollection
 	private List<String> attachmentFileList;
 
-	public BasePost(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
+	public Post(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
 		IdeaMarketAuth ideaMarketAuth, List<String> imageList, List<String> attachmentFileList) {
 		this.writer = writer;
 		this.title = title;

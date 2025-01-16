@@ -1,4 +1,4 @@
-package com.brainpix.post.entity.request_task;
+package com.brainpix.post.entity;
 
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
@@ -24,7 +24,7 @@ public class Comment extends BaseTimeEntity {
 	private User writer;
 
 	@ManyToOne
-	private RequestTask parentRequestTask;
+	private Post parentPost;
 
 	@ManyToOne
 	private Comment parentComment;
@@ -32,9 +32,9 @@ public class Comment extends BaseTimeEntity {
 	private String content;
 
 	@Builder
-	public Comment(User writer, RequestTask parentRequestTask, Comment parentComment, String content) {
+	public Comment(User writer, Post parentPost, Comment parentComment, String content) {
 		this.writer = writer;
-		this.parentRequestTask = parentRequestTask;
+		this.parentPost = parentPost;
 		this.parentComment = parentComment;
 		this.content = content;
 	}

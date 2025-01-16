@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Profile;
 
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @NoArgsConstructor
 @Getter
 // @Table(name = "`user`")

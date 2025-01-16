@@ -4,3 +4,19 @@ spring:
       on-profile: dev
   application:
     name: brainpix
+  datasource:
+    url: ENC(TUndP/xaOEDBpOvFTYrYrf2wxeXzBWxYD4axrevm8gozV85pc6I1UJq+sZk/4AFmclNAAq+B16ZGAzTXHJE+nvqLwaReXqZdpQ9jpt3YxL5FFXIow2Mj+CIEJWfbebMznxvmxmfi7Sr4U7FZRc53N7cL4GpXw9Y6yCHRqPtS7/U=)
+    username: ENC(1FyUCTH5uqA1rVjkWkAbQLaNZCmBQLb44EZSuQYOonvV44lFv+vGbFHXqYf83jw2)
+    password: ENC(qMqB9te807UWNY97Qi2F5FKRK+E6uceslH7DU5aCz2HmY45o4FZBH71Ell6zolarVnzGSSuFVWB0es3o2pCBzhOkGH+1Li22DmXxyGtzbZw=)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+jasypt:
+  encryptor:
+    password: jasyptKey
+    bean: jasyptEncryptor

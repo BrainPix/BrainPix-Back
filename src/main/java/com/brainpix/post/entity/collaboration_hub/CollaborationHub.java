@@ -3,14 +3,11 @@ package com.brainpix.post.entity.collaboration_hub;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.brainpix.post.entity.BasePost;
+import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.IdeaMarketAuth;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class CollaborationHub extends BasePost {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+public class CollaborationHub extends Post {
 	private LocalDateTime deadline;
 	private String link;
 
