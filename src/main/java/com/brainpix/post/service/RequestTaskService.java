@@ -23,26 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class RequestTaskService {
 
 	private final RequestTaskRepository requestTaskRepository;
-
-	// Mock 사용자 가져오기 (테스트용)
-	// private User getMockUser() {
-	// 	Individual mockUser = Individual.builder()
-	// 		.identifier("testuser")
-	// 		.name("Test User")
-	// 		.email("testuser@example.com")
-	// 		.profile(null) // 필요에 따라 설정
-	// 		.build();
-	//
-	// 	try {
-	// 		Field idField = User.class.getDeclaredField("id");
-	// 		idField.setAccessible(true);
-	// 		idField.set(mockUser, 1L); // id 강제로 설정
-	// 	} catch (Exception e) {
-	// 		throw new RuntimeException("Mock User 생성 중 오류 발생", e);
-	// 	}
-	//
-	// 	return mockUser;
-	// }
 	private final UserRepository userRepository;
 
 	public Long createRequestTask(RequestTaskCreateDto createDto) {
