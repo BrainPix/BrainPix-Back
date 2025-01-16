@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.brainpix.jpa.BaseTimeEntity;
 
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @NoArgsConstructor
 @Getter
 public abstract class Profile extends BaseTimeEntity {

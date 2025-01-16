@@ -2,8 +2,8 @@ package com.brainpix.post.entity.idea_market;
 
 import java.util.List;
 
-import com.brainpix.post.entity.BasePost;
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.IdeaMarketAuth;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
@@ -11,9 +11,6 @@ import com.brainpix.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,11 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class IdeaMarket extends BasePost {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+public class IdeaMarket extends Post {
 	private Specialization specialization;
 
 	@Enumerated(EnumType.STRING)
