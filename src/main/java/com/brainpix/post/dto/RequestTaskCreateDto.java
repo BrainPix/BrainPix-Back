@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.brainpix.post.entity.IdeaMarketAuth;
-import com.brainpix.post.entity.request_task.CollaborationType;
+import com.brainpix.post.entity.collaboration_hub.CollaborationType;
 
 import lombok.Data;
 

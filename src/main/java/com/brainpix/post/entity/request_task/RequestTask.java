@@ -8,6 +8,7 @@ import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.BasePost;
 import com.brainpix.post.entity.IdeaMarketAuth;
+import com.brainpix.post.entity.collaboration_hub.CollaborationType;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -32,11 +33,13 @@ public class RequestTask extends BasePost {
 
 	private LocalDateTime deadline;
 
+	/*
 	@Enumerated(EnumType.STRING)
 	private CollaborationType collaborationType;
 
 	@OneToMany(mappedBy = "requestTask", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RequestTaskRecruitment> recruitments = new ArrayList<>();
+	 */
 
 	@Builder
 	public RequestTask(User writer, String title, String content, String category, Boolean openMyProfile,
@@ -48,6 +51,7 @@ public class RequestTask extends BasePost {
 		this.collaborationType = collaborationType;
 	}
 
+	/*
 	public void updateRequestTaskFields(RequestTaskUpdateDto updateDto) {
 		// BasePost의 필드를 업데이트
 		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(), updateDto.getOpenMyProfile(),
@@ -65,6 +69,6 @@ public class RequestTask extends BasePost {
 				new RequestTaskRecruitment(this, recruitmentDto.getDomain(), recruitmentDto.getPrice(), recruitmentDto.getCurrentPeople(), recruitmentDto.getTotalPeople() ,recruitmentDto.getAgreementType()));
 		}
 	}
-
+	*/
 
 }
