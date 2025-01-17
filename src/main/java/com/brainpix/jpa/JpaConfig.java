@@ -10,7 +10,7 @@ import com.brainpix.alarm.repository.AlarmRepository;
 
 @Configuration
 @EnableJpaAuditing
-@EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AlarmRepository.class))
+@EnableJpaRepositories(basePackages = {"com.brainpix"}, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AlarmRepository.class))
 public class JpaConfig {
 
 }
