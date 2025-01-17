@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
-import com.brainpix.post.entity.collaboration_hub.CollaborationType;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
@@ -22,15 +21,15 @@ public class RequestTask extends Post {
 	private LocalDateTime deadline;
 
 	@Enumerated(EnumType.STRING)
-	private CollaborationType collaborationType;
+	private RequestTaskType requestTaskType;
 
 	@Builder
 	public RequestTask(User writer, String title, String content, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		CollaborationType collaborationType, PostAuth postAuth) {
+		RequestTaskType requestTaskType, PostAuth postAuth) {
 		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
-		this.collaborationType = collaborationType;
+		this.requestTaskType = requestTaskType;
 	}
 }
