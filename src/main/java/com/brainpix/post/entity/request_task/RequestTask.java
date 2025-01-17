@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.brainpix.post.entity.Post;
-import com.brainpix.post.entity.IdeaMarketAuth;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationType;
 import com.brainpix.user.entity.User;
 
@@ -27,8 +27,8 @@ public class RequestTask extends Post {
 	@Builder
 	public RequestTask(User writer, String title, String content, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		CollaborationType collaborationType, IdeaMarketAuth ideaMarketAuth) {
-		super(writer, title, content, category, openMyProfile, viewCount, ideaMarketAuth, imageList,
+		CollaborationType collaborationType, PostAuth postAuth) {
+		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
 		this.collaborationType = collaborationType;

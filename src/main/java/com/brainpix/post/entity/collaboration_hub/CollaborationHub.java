@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.brainpix.post.entity.Post;
-import com.brainpix.post.entity.IdeaMarketAuth;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
@@ -22,8 +22,8 @@ public class CollaborationHub extends Post {
 	@Builder
 	public CollaborationHub(User writer, String title, String content, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		String link, IdeaMarketAuth ideaMarketAuth) {
-		super(writer, title, content, category, openMyProfile, viewCount, ideaMarketAuth, imageList,
+		String link, PostAuth postAuth) {
+		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
 		this.link = link;
