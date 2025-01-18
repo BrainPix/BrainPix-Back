@@ -59,4 +59,11 @@ public abstract class Post extends BaseTimeEntity {
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
 	}
+
+	public String getFirstImage() {
+		if (imageList == null || imageList.isEmpty()) {
+			return "thumbnail does not exist;";
+		}
+		return imageList.get(0);
+	}
 }
