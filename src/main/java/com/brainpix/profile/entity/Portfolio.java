@@ -1,5 +1,6 @@
 package com.brainpix.profile.entity;
 
+import jakarta.persistence.FetchType;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -25,9 +26,9 @@ public class Portfolio extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Long title;
+	private String title;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	private List<Specialization> specializationList;
 
@@ -40,7 +41,7 @@ public class Portfolio extends BaseTimeEntity {
 	private Profile profile;
 
 	@Builder
-	public Portfolio(Long title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
+	public Portfolio(String title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
 		String content, Profile profile) {
 		this.title = title;
 		this.specializationList = specializationList;
@@ -48,5 +49,22 @@ public class Portfolio extends BaseTimeEntity {
 		this.endDate = endDate;
 		this.content = content;
 		this.profile = profile;
+	}
+
+	public void changeTitle(String title) {
+		this.title = title;
+	}
+
+	public void changeSpecializations(List<Specialization> newSpecs) {
+		this.specializationList = newSpecs;
+	}
+
+	public void changeDates(YearMonth start, YearMonth end) {
+		this.startDate = start;
+		this.endDate = end;
+	}
+
+	public void changeContent(String content) {
+		this.content = content;
 	}
 }
