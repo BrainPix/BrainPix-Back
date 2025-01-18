@@ -1,5 +1,5 @@
 package com.brainpix.post.entity;
 
-public enum IdeaMarketAuth {
+public enum PostAuth {
 	ALL, COMPANY, ME
 }
