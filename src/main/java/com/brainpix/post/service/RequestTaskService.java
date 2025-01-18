@@ -43,8 +43,8 @@ public class RequestTaskService {
 			.imageList(createDto.getImageList())
 			.attachmentFileList(createDto.getAttachmentFileList())
 			.deadline(createDto.getDeadline())
-			.collaborationType(createDto.getCollaborationType())
-			.ideaMarketAuth(createDto.getIdeaMarketAuth())
+			.requestTaskType(createDto.getRequestTaskType())
+			.postAuth(createDto.getPostAuth())
 			.build();
 
 		if (createDto.getRecruitments() != null) {

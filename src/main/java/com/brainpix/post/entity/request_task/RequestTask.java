@@ -48,11 +48,11 @@ public class RequestTask extends Post {
 		// BasePost의 필드를 업데이트
 		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(),
 			updateDto.getOpenMyProfile(),
-			updateDto.getIdeaMarketAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
+			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
 
 		// RequestTask 고유 필드 업데이트
 		this.deadline = updateDto.getDeadline();
-		this.collaborationType = updateDto.getCollaborationType();
+		this.requestTaskType = updateDto.getRequestTaskType();
 
 		// for (RequestTaskRecruitmentDto recruitmentDto : recruitmentDtos) {
 		// 	this.recruitments.updateRecruitmentFields(recruitmentDto);

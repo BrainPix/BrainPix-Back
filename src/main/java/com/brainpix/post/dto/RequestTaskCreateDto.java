@@ -3,8 +3,8 @@ package com.brainpix.post.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.brainpix.post.entity.IdeaMarketAuth;
-import com.brainpix.post.entity.collaboration_hub.CollaborationType;
+import com.brainpix.post.entity.PostAuth;
+import com.brainpix.post.entity.request_task.RequestTaskType;
 
 import lombok.Data;
 
@@ -17,7 +17,7 @@ public class RequestTaskCreateDto {
 	private List<String> imageList;
 	private List<String> attachmentFileList;
 	private LocalDateTime deadline;
-	private CollaborationType collaborationType;
-	private IdeaMarketAuth ideaMarketAuth;
+	private RequestTaskType requestTaskType;
+	private PostAuth postAuth;
 	private List<RequestTaskRecruitmentDto> recruitments;
 }
