@@ -19,9 +19,9 @@ public class GetPopularIdeaListDtoConverter {
 		return GetPopularIdeaListDto.Response.builder()
 			.responseDataList(responseDataList)
 			.totalPages(ideaMarkets.getTotalPages())
-			.totalElements(ideaMarkets.getNumberOfElements())
+			.totalElements((int)ideaMarkets.getTotalElements())
 			.currentPage(ideaMarkets.getNumber())
-			.currentSize(ideaMarkets.getContent().size())
+			.currentSize(ideaMarkets.getNumberOfElements())
 			.hasNext(ideaMarkets.hasNext())
 			.build();
 	}

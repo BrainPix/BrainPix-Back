@@ -30,9 +30,9 @@ public class GetIdeaCommentListDtoConverter {
 		return GetIdeaCommentListDto.Response.builder()
 			.responseDataList(responseDataList)
 			.totalPages(comments.getTotalPages())
-			.totalElements(comments.getNumberOfElements())
+			.totalElements((int)comments.getTotalElements())
 			.currentPage(comments.getNumber())
-			.currentSize(comments.getContent().size())
+			.currentSize(comments.getNumberOfElements())
 			.hasNext(comments.hasNext())
 			.build();
 	}
