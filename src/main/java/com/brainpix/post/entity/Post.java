@@ -39,7 +39,7 @@ public abstract class Post extends BaseTimeEntity {
 	private Long viewCount;
 
 	@Enumerated(EnumType.STRING)
-	private IdeaMarketAuth ideaMarketAuth;
+	private PostAuth postAuth;
 
 	@ElementCollection
 	private List<String> imageList;
@@ -48,14 +48,14 @@ public abstract class Post extends BaseTimeEntity {
 	private List<String> attachmentFileList;
 
 	public Post(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
-		IdeaMarketAuth ideaMarketAuth, List<String> imageList, List<String> attachmentFileList) {
+		PostAuth postAuth, List<String> imageList, List<String> attachmentFileList) {
 		this.writer = writer;
 		this.title = title;
 		this.content = content;
 		this.category = category;
 		this.openMyProfile = openMyProfile;
 		this.viewCount = viewCount;
-		this.ideaMarketAuth = ideaMarketAuth;
+		this.postAuth = postAuth;
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
 	}

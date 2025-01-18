@@ -8,8 +8,7 @@ import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.Post;
-import com.brainpix.post.entity.IdeaMarketAuth;
-import com.brainpix.post.entity.collaboration_hub.CollaborationType;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -29,7 +28,7 @@ public class RequestTask extends Post {
 	private LocalDateTime deadline;
 
 	@Enumerated(EnumType.STRING)
-	private CollaborationType collaborationType;
+	private RequestTaskType requestTaskType;
 
 
 	@OneToMany(mappedBy = "requestTask", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -38,11 +37,11 @@ public class RequestTask extends Post {
 	@Builder
 	public RequestTask(User writer, String title, String content, String category, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		CollaborationType collaborationType, IdeaMarketAuth ideaMarketAuth) {
-		super(writer, title, content, category, openMyProfile, viewCount, ideaMarketAuth, imageList,
+		RequestTaskType requestTaskType, PostAuth postAuth) {
+		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
-		this.collaborationType = collaborationType;
+		this.requestTaskType = requestTaskType;
 	}
 
 	public void updateRequestTaskFields(RequestTaskUpdateDto updateDto, List<RequestTaskRecruitmentDto> recruitmentDtos) {
