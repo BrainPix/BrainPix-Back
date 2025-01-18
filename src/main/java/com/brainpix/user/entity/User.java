@@ -1,5 +1,6 @@
 package com.brainpix.user.entity;
 
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 import com.brainpix.jpa.BaseTimeEntity;
@@ -18,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "users") //user 테이블 이름과 SQL 예약어 충돌 (테스트할때 충돌나서 넣었습니다)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @NoArgsConstructor
@@ -45,5 +47,9 @@ public abstract class User extends BaseTimeEntity {
 		this.email = email;
 		this.profileImage = profileImage;
 		this.profile = profile;
+	}
+
+	public long getProfileId() {
+		return profile.getId();
 	}
 }

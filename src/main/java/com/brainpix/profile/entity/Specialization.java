@@ -1,5 +1,7 @@
 package com.brainpix.profile.entity;
 
+import java.util.Arrays;
+
 public enum Specialization {
 	ADVERTISING_PROMOTION, // 광고 · 홍보
 	DESIGN,               // 디자인
@@ -13,5 +15,12 @@ public enum Specialization {
 	STARTUP_BUSINESS,     // 창업 · 사업
 	FOOD_BEVERAGE,        // 푸드 및 음료
 	IT_TECH,              // IT · 테크
-	OTHERS                  // 기타
+	OTHERS;					//기타
+
+	public static Specialization of(String name) {
+		return Arrays.stream(values())
+			.filter(value -> value.name().equalsIgnoreCase(name))
+			.findAny()
+			.orElseGet(() -> OTHERS);
+	}
 }
