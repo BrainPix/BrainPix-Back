@@ -42,41 +42,53 @@ class PortfolioServiceTest {
 	private ProfileRepository profileRepository;
 
 	@Test
-	@DisplayName("포트폴리오 생성 후 조회 테스트")
-	void createAndFindPortfolio() {
-		//given
-		Individual user = createIndividualUser("test1");
+	@DisplayName("포트폴리오 여러 개 생성 후 페이지네이션 조회 테스트")
+	void createMultiplePortfoliosAndFindWithPagination() {
+		// given
+		Individual user = createIndividualUser("testUser");
 		userRepository.save(user);
 
-		PortfolioRequest request = new PortfolioRequest(
-			"포트폴리오 제목",
-			List.of(new SpecializationRequest("IT_TECH")),
-			YearMonth.of(2023, 1),
-			YearMonth.of(2023, 3),
-			"포트폴리오 내용"
-		);
-		//when then
-		Long portfolioId = portfolioService.createPortfolio(user.getId(), request);
-		assertThat(portfolioId).isNotNull();
+		// 포트폴리오 15개 생성
+		for (int i = 1; i <= 15; i++) {
+			PortfolioRequest request = new PortfolioRequest(
+				"포트폴리오 제목 " + i,
+				List.of(new SpecializationRequest("IT_TECH")),
+				YearMonth.of(2023, i % 12 + 1),
+				YearMonth.of(2024, i % 12 + 1),
+				"포트폴리오 내용 " + i
+			);
+			portfolioService.createPortfolio(user.getId(), request);
+		}
 
-		PageRequest pageable = PageRequest.of(0, 1, Sort.by("createdAt").descending());
-		Page<PortfolioResponse> portfolios = portfolioService.findAllMyPortfolios(user.getId(), pageable);
+		// when - 페이지네이션 조회 (페이지 크기: 5)
+		PageRequest pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
+		Page<PortfolioResponse> portfoliosPage = portfolioService.findAllMyPortfolios(user.getId(), pageable);
 
-		assertThat(portfolios).isNotNull();
-		assertThat(portfolios).hasSize(1);
-		assertThat(portfolios.getTotalElements()).isEqualTo(1);
-		assertThat(portfolios.getTotalPages()).isEqualTo(1);
+		// then - 페이지네이션 검증
+		assertThat(portfoliosPage).isNotNull();
+		assertThat(portfoliosPage.getContent()).hasSize(5); // 페이지 크기: 5
+		assertThat(portfoliosPage.getTotalElements()).isEqualTo(15); // 전체 포트폴리오 개수
+		assertThat(portfoliosPage.getTotalPages()).isEqualTo(3); // 전체 페이지 수: 15 / 5 = 3
+		assertThat(portfoliosPage.getNumber()).isEqualTo(0); // 현재 페이지 번호
 
-		PortfolioResponse response = portfolios.getContent().get(0); // 첫 번째 포트폴리오
-		assertThat(response.id()).isEqualTo(portfolioId);
-		assertThat(response.title()).isEqualTo("포트폴리오 제목");
+		// 첫 번째 포트폴리오 검증 (최신순)
+		PortfolioResponse firstPortfolio = portfoliosPage.getContent().get(0);
+		assertThat(firstPortfolio.title()).isEqualTo("포트폴리오 제목 15");
 
-		PortfolioDetailResponse detail = portfolioService.findPortfolioDetail(user.getId(), portfolioId);
-		assertThat(detail.title()).isEqualTo("포트폴리오 제목");
-		assertThat(detail.content()).isEqualTo("포트폴리오 내용");
-		assertThat(detail.specializations()).containsExactly("IT_TECH");
-		assertThat(detail.startDate()).isEqualTo("2023-01");
-		assertThat(detail.endDate()).isEqualTo("2023-03");
+		// 두 번째 페이지 조회
+		PageRequest secondPageable = PageRequest.of(1, 5, Sort.by("createdAt").descending());
+		Page<PortfolioResponse> secondPage = portfolioService.findAllMyPortfolios(user.getId(), secondPageable);
+
+		// 두 번째 페이지 검증
+		assertThat(secondPage).isNotNull();
+		assertThat(secondPage.getContent()).hasSize(5);
+		assertThat(secondPage.getTotalElements()).isEqualTo(15);
+		assertThat(secondPage.getTotalPages()).isEqualTo(3);
+		assertThat(secondPage.getNumber()).isEqualTo(1);
+
+		// 두 번째 페이지의 첫 번째 포트폴리오 검증
+		PortfolioResponse secondPageFirstPortfolio = secondPage.getContent().get(0);
+		assertThat(secondPageFirstPortfolio.title()).isEqualTo("포트폴리오 제목 10");
 	}
 
 	@Test
