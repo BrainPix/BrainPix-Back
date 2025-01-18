@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaListDto;
+import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.repository.IdeaMarketRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,15 @@ public class IdeaMarketService {
 			request.getKeyword(), request.getCategory(), request.getOnlyCompany(), request.getSortType(), pageable);
 
 		return GetIdeaListDtoConverter.toResponse(result);
+	}
+
+	// 저장순으로 아이디어를 조회합니다.
+	@Transactional(readOnly = true)
+	public GetPopularIdeaListDto.Response getPopularIdeaList(GetPopularIdeaListDto.Request request, Pageable pageable) {
+
+		// 아이디어-저장수 쌍으로 반환된 결과
+		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(request.getIdeaType(), pageable);
+
+		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
 	}
 }

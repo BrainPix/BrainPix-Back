@@ -12,4 +12,7 @@ public interface IdeaMarketCustomRepository {
 	// 검색 기능을 포함한 아이디어 조회
 	Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword, Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable);
+
+	// (IDEA_SOLUTION, MARKET_PLACE)로 구분한 뒤, 모든 아이디어 중에서 저장순으로 조회
+	Page<Object[]> findPopularIdeaListWithSaveCount(IdeaMarketType ideaMarketType, Pageable pageable);
 }

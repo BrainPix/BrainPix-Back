@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.post.dto.GetIdeaListDto;
+import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.service.IdeaMarketService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,15 @@ public class IdeaMarketController {
 		Pageable pageable
 	) {
 		GetIdeaListDto.Response response = ideaMarketService.getIdeaList(request, pageable);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
+
+	@GetMapping("/popular")
+	public ResponseEntity<ApiResponse<GetPopularIdeaListDto.Response>> getPopularIdeaList(
+		GetPopularIdeaListDto.Request request,
+		Pageable pageable
+	) {
+		GetPopularIdeaListDto.Response response = ideaMarketService.getPopularIdeaList(request, pageable);	// post 서비스로 옮겨도 되겠다.
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }
