@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
@@ -37,6 +38,15 @@ public class IdeaMarketController {
 		@PathVariable("ideaId") Long ideaId
 	) {
 		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(ideaId);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
+
+	@GetMapping("/{ideaId}/comments")
+	public ResponseEntity<ApiResponse<GetIdeaCommentListDto.Response>> getIdeaCommentList(
+		@PathVariable("ideaId") Long ideaId,
+		Pageable pageable
+	) {
+		GetIdeaCommentListDto.Response response = ideaMarketService.getIdeaCommentList(ideaId, pageable);		// post 서비스로 옮겨도 되겠다.
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
