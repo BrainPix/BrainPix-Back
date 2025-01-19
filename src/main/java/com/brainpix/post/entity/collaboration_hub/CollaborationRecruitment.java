@@ -4,6 +4,7 @@ import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.post.dto.CollaborationRecruitmentDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 
 	private String domain;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	private Gathering gathering;
 
 	@Builder

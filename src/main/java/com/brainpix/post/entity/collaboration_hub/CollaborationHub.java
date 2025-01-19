@@ -25,7 +25,7 @@ public class CollaborationHub extends Post {
 	private LocalDateTime deadline;
 	private String link;
 
-	@OneToMany(mappedBy = "collaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CollaborationRecruitment> recruitments = new ArrayList<>();
 
 	@Builder

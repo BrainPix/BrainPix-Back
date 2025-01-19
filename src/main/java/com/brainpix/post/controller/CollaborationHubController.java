@@ -26,19 +26,19 @@ public class CollaborationHubController {
 	private final CollaborationHubService collaborationHubService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> createRequestTask(@RequestBody CollaborationHubCreateDto createDto) {
+	public ResponseEntity<ApiResponse> createCollaborationHub(@RequestBody CollaborationHubCreateDto createDto) {
 		Long workspaceId = collaborationHubService.createCollaborationHub(createDto);
 		return ResponseEntity.ok(ApiResponse.success(Map.of("workspaceId", workspaceId)));
 	}
 
 	@PatchMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse> updateRequestTask(@PathVariable("workspaceId") Long id, @RequestBody CollaborationHubUpdateDto updateDto) {
+	public ResponseEntity<ApiResponse> updateCollaborationHub(@PathVariable("workspaceId") Long id, @RequestBody CollaborationHubUpdateDto updateDto) {
 		collaborationHubService.updateCollaborationHub(id, updateDto);
 		return ResponseEntity.ok(ApiResponse.success("협업 광장 게시글이 성공적으로 수정되었습니다."));
 	}
 
 	@DeleteMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse> deleteRequestTask(@PathVariable("workspaceId") Long id) {
+	public ResponseEntity<ApiResponse> deleteCollaborationHub(@PathVariable("workspaceId") Long id) {
 		collaborationHubService.deleteCollaborationHub(id);
 		return ResponseEntity.ok(ApiResponse.success("협업 광장 게시글이 성공적으로 삭제되었습니다."));
 	}
