@@ -16,7 +16,7 @@ import com.brainpix.post.service.SavedPostService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/saved-posts")
+@RequestMapping("/saved-posts")
 @RequiredArgsConstructor
 public class SavedPostController {
 

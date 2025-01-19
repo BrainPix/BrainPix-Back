@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.SavedPostErrorCode;
 import com.brainpix.post.dto.SavedPostSimpleResponse;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.SavedPost;
@@ -27,22 +28,19 @@ public class SavedPostService {
 	@Transactional
 	public void savePost(long userId, long postId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 postId입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.POST_NOT_FOUND.getMessage()));
 
-		// 중복 저장 방지
-		if (savedPostRepository.existsByUserAndPost(user, post)) {
-			throw new IllegalStateException("이미 저장된 게시물입니다.");
-		}
+		SavedPost.validateNotDuplicate(savedPostRepository, user, post);
 
 		savedPostRepository.save(new SavedPost(user, post));
 	}
 
 	public List<SavedPostSimpleResponse> findSavedRequestTasks(long userId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
 		return savedPostRepository.findSavedRequestTasksByUser(user)
 			.stream()
@@ -52,7 +50,7 @@ public class SavedPostService {
 
 	public List<SavedPostSimpleResponse> findSavedIdeaMarkets(long userId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
 		return savedPostRepository.findSavedIdeaMarketsByUser(user)
 			.stream()
@@ -62,7 +60,7 @@ public class SavedPostService {
 
 	public List<SavedPostSimpleResponse> findSavedCollaborationHubs(long userId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
 		return savedPostRepository.findSavedCollaborationHubsByUser(user)
 			.stream()
