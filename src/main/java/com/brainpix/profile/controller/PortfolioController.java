@@ -38,7 +38,7 @@ public class PortfolioController {
 			Long portfolioId = portfolioService.createPortfolio(userId, request);
 			return ResponseEntity.ok(ApiResponse.success(portfolioId));
 		} finally {
-			// 예외는 전파되며, 추가 작업이 없다면 finally 블록은 생략 가능
+
 		}
 	}
 
@@ -52,7 +52,7 @@ public class PortfolioController {
 			portfolioService.updatePortfolio(userId, portfolioId, request);
 			return ResponseEntity.ok(ApiResponse.successWithNoData());
 		} finally {
-			// 추가 작업 없음
+
 		}
 	}
 
@@ -65,7 +65,7 @@ public class PortfolioController {
 			Page<PortfolioResponse> result = portfolioService.findAllMyPortfolios(userId, pageable);
 			return ResponseEntity.ok(ApiResponse.success(result));
 		} finally {
-			// 추가 작업 없음
+
 		}
 	}
 

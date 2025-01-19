@@ -1,6 +1,5 @@
 package com.brainpix.profile.entity;
 
-import jakarta.persistence.FetchType;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,6 +49,29 @@ public class Portfolio extends BaseTimeEntity {
 		this.endDate = endDate;
 		this.content = content;
 		this.profile = profile;
+	}
+
+	// 팩토리 메서드
+	public static Portfolio create(Profile profile, String title, List<Specialization> specializationList,
+		YearMonth startDate, YearMonth endDate, String content) {
+		return Portfolio.builder()
+			.title(title)
+			.specializationList(specializationList)
+			.startDate(startDate)
+			.endDate(endDate)
+			.content(content)
+			.profile(profile)
+			.build();
+	}
+
+	// 상태 업데이트 메서드
+	public void update(String title, List<Specialization> specializationList, YearMonth startDate,
+		YearMonth endDate, String content) {
+		this.title = title;
+		this.specializationList = specializationList;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.content = content;
 	}
 
 	public void changeTitle(String title) {
