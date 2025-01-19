@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brainpix.api.ApiResponse;
 import com.brainpix.post.dto.SavedPostSimpleResponse;
 import com.brainpix.post.service.SavedPostService;
 
@@ -22,30 +23,27 @@ public class SavedPostController {
 	private final SavedPostService savedPostService;
 
 	@PostMapping
-	public ResponseEntity<String> savePost(@RequestParam long userId, @RequestParam long postId) {
-		try {
-			savedPostService.savePost(userId, postId);
-			return ResponseEntity.ok("게시물이 성공적으로 저장되었습니다.");
-		} catch (IllegalStateException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	public ResponseEntity<ApiResponse<Void>> savePost(@RequestParam long userId, @RequestParam long postId) {
+		savedPostService.savePost(userId, postId);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
 	@GetMapping("/request-tasks")
-	public ResponseEntity<List<SavedPostSimpleResponse>> getSavedRequestTasks(@RequestParam long userId) {
+	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedRequestTasks(@RequestParam long userId) {
 		List<SavedPostSimpleResponse> result = savedPostService.findSavedRequestTasks(userId);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 
 	@GetMapping("/idea-markets")
-	public ResponseEntity<List<SavedPostSimpleResponse>> getSavedIdeaMarkets(@RequestParam long userId) {
+	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedIdeaMarkets(@RequestParam long userId) {
 		List<SavedPostSimpleResponse> result = savedPostService.findSavedIdeaMarkets(userId);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 
 	@GetMapping("/collaboration-hubs")
-	public ResponseEntity<List<SavedPostSimpleResponse>> getSavedCollaborationHubs(@RequestParam long userId) {
+	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedCollaborationHubs(
+		@RequestParam long userId) {
 		List<SavedPostSimpleResponse> result = savedPostService.findSavedCollaborationHubs(userId);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 }
