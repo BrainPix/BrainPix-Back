@@ -4,6 +4,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 import com.brainpix.jpa.BaseTimeEntity;
+import com.brainpix.user.entity.User;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -72,6 +73,10 @@ public class Portfolio extends BaseTimeEntity {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
+	}
+
+	public boolean isOwnedBy(User user) {
+		return this.profile.getId().equals(user.getProfileId());
 	}
 
 	public void changeTitle(String title) {

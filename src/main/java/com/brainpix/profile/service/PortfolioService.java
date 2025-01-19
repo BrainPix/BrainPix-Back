@@ -65,10 +65,9 @@ public class PortfolioService {
 				"%d는 존재하지 않는 portfolioId".formatted(portfolioId)
 			));
 
-		if (!portfolio.getProfile().getId().equals(user.getProfileId())) {
+		if (!portfolio.isOwnedBy(user)) { // 엔티티 메서드 호출
 			throw new IllegalArgumentException("본인 소유의 포트폴리오가 아닙니다");
 		}
-
 		portfolio.update(
 			request.title(),
 			request.specializations().stream()
@@ -102,8 +101,8 @@ public class PortfolioService {
 			.orElseThrow(() -> new IllegalArgumentException(
 				"%d는 존재하지 않는 portfolioId".formatted(portfolioId)));
 
-		if (portfolio.getProfile().getId() != userId) {
-			throw new IllegalArgumentException("본인 소유의 포트폴리오가 아닙니다.");
+		if (!portfolio.isOwnedBy(user)) { // 엔티티 메서드 호출
+			throw new IllegalArgumentException("본인 소유의 포트폴리오가 아닙니다");
 		}
 		return PortfolioDetailResponse.of(portfolio);
 	}
