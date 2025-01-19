@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.CommonPageResponse;
 import com.brainpix.api.ApiResponse;
+import com.brainpix.profile.dto.CreatePortfolioDto;
 import com.brainpix.profile.dto.request.PortfolioRequest;
 import com.brainpix.profile.dto.response.PortfolioDetailResponse;
 import com.brainpix.profile.dto.response.PortfolioResponse;
@@ -31,16 +32,14 @@ public class PortfolioController {
 	private final PortfolioService portfolioService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Long>> createPortfolio(
+	public ResponseEntity<ApiResponse<CreatePortfolioDto.Response>> createPortfolio(
 		@RequestParam long userId,
 		@RequestBody PortfolioRequest request
 	) {
-		try {
-			Long portfolioId = portfolioService.createPortfolio(userId, request);
-			return ResponseEntity.ok(ApiResponse.success(portfolioId));
-		} finally {
+		Long portfolioId = portfolioService.createPortfolio(userId, request);
 
-		}
+		CreatePortfolioDto.Response response = new CreatePortfolioDto.Response(portfolioId);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@PutMapping("/{portfolioId}")
