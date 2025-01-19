@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brainpix.CommonPageResponse;
 import com.brainpix.api.ApiResponse;
 import com.brainpix.profile.dto.request.PortfolioRequest;
 import com.brainpix.profile.dto.response.PortfolioDetailResponse;
@@ -23,7 +24,7 @@ import com.brainpix.profile.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/portfolios")
+@RequestMapping("/portfolios")
 @RequiredArgsConstructor
 public class PortfolioController {
 
@@ -57,16 +58,16 @@ public class PortfolioController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<Page<PortfolioResponse>>> findMyPortfolios(
+	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findMyPortfolios(
 		@RequestParam long userId,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		try {
-			Page<PortfolioResponse> result = portfolioService.findAllMyPortfolios(userId, pageable);
-			return ResponseEntity.ok(ApiResponse.success(result));
-		} finally {
+		Page<PortfolioResponse> page = portfolioService.findAllMyPortfolios(userId, pageable);
 
-		}
+		// Page -> CommonPageResponse 변환
+		CommonPageResponse<PortfolioResponse> response = CommonPageResponse.of(page);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{portfolioId}")
