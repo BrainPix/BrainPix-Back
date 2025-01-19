@@ -38,7 +38,7 @@ public class PortfolioService {
 				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
 			));
 
-		Profile profile = profileRepository.findById(user.getProfileId())
+		Profile profile = profileRepository.findByUserId(user.getId())
 			.orElseThrow(() -> new IllegalArgumentException(
 				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
 			));
@@ -92,7 +92,7 @@ public class PortfolioService {
 				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
 			));
 
-		Profile profile = profileRepository.findById(user.getProfileId())
+		Profile profile = profileRepository.findByUserId(user.getId())
 			.orElseThrow(() -> new IllegalArgumentException(
 				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
 			));
@@ -111,6 +111,11 @@ public class PortfolioService {
 		Portfolio portfolio = portfolioRepository.findById(portfolioId)
 			.orElseThrow(() -> new IllegalArgumentException(
 				PortfolioErrorCode.PORTFOLIO_NOT_FOUND.getMessage()
+			));
+
+		Profile profile = profileRepository.findByUserId(user.getId())
+			.orElseThrow(() -> new IllegalArgumentException(
+				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
 			));
 
 		if (!portfolio.isOwnedBy(user)) {
