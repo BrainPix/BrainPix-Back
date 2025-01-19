@@ -1,5 +1,7 @@
 package com.brainpix.profile.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.brainpix.profile.dto.response.PortfolioDetailResponse;
 import com.brainpix.profile.dto.response.PortfolioResponse;
 import com.brainpix.profile.entity.Portfolio;
 import com.brainpix.profile.entity.Profile;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.profile.repository.PortfolioRepository;
 import com.brainpix.profile.repository.ProfileRepository;
 import com.brainpix.profile.repository.UserRepository;
@@ -40,12 +43,14 @@ public class PortfolioService {
 				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
 			));
 
+		List<Specialization> specializations = request.specializations().stream()
+			.map(SpecializationRequest::toDomain)
+			.toList();
+
 		Portfolio portfolio = Portfolio.create(
 			profile,
 			request.title(),
-			request.specializations().stream()
-				.map(SpecializationRequest::toDomain)
-				.toList(),
+			specializations,
 			request.startDate(),
 			request.endDate(),
 			request.content()
@@ -68,17 +73,13 @@ public class PortfolioService {
 				PortfolioErrorCode.PORTFOLIO_NOT_FOUND.getMessage()
 			));
 
-		if (!portfolio.isOwnedBy(user)) {
-			throw new IllegalArgumentException(
-				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
-			);
-		}
+		List<Specialization> specializations = request.specializations().stream()
+			.map(SpecializationRequest::toDomain)
+			.toList();
 
 		portfolio.update(
 			request.title(),
-			request.specializations().stream()
-				.map(SpecializationRequest::toDomain)
-				.toList(),
+			specializations,
 			request.startDate(),
 			request.endDate(),
 			request.content()
