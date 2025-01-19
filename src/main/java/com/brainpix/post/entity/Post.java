@@ -70,7 +70,4 @@ public abstract class Post extends BaseTimeEntity {
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
 	}
-
 }
-
-

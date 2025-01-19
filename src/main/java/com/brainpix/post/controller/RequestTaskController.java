@@ -19,7 +19,7 @@ import com.brainpix.post.service.RequestTaskService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 public class RequestTaskController {
 
