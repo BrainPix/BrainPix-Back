@@ -29,4 +29,8 @@ public class Price extends BaseQuantity {
 		this.price = price;
 		this.paymentDuration = paymentDuration;
 	}
+
+	public void updateIdeaMarketPriceFields(Long price) {
+		this.price = price;
+	}
 }
