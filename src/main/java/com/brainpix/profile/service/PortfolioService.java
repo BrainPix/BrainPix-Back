@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.PortfolioErrorCode;
 import com.brainpix.profile.dto.request.PortfolioRequest;
 import com.brainpix.profile.dto.request.SpecializationRequest;
 import com.brainpix.profile.dto.response.PortfolioDetailResponse;
@@ -31,11 +32,13 @@ public class PortfolioService {
 	public Long createPortfolio(long userId, PortfolioRequest request) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 userId".formatted(userId)
+				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
 			));
 
 		Profile profile = profileRepository.findById(user.getProfileId())
-			.orElseThrow();
+			.orElseThrow(() -> new IllegalArgumentException(
+				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
+			));
 
 		Portfolio portfolio = Portfolio.create(
 			profile,
@@ -57,17 +60,20 @@ public class PortfolioService {
 	public void updatePortfolio(long userId, long portfolioId, PortfolioRequest request) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 userId".formatted(userId)
+				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
 			));
 
 		Portfolio portfolio = portfolioRepository.findById(portfolioId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 portfolioId".formatted(portfolioId)
+				PortfolioErrorCode.PORTFOLIO_NOT_FOUND.getMessage()
 			));
 
-		if (!portfolio.isOwnedBy(user)) { // 엔티티 메서드 호출
-			throw new IllegalArgumentException("본인 소유의 포트폴리오가 아닙니다");
+		if (!portfolio.isOwnedBy(user)) {
+			throw new IllegalArgumentException(
+				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
+			);
 		}
+
 		portfolio.update(
 			request.title(),
 			request.specializations().stream()
@@ -82,29 +88,38 @@ public class PortfolioService {
 	public Page<PortfolioResponse> findAllMyPortfolios(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 userId".formatted(userId)));
+				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
+			));
+
 		Profile profile = profileRepository.findById(user.getProfileId())
-			.orElseThrow();
+			.orElseThrow(() -> new IllegalArgumentException(
+				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
+			));
 
 		Page<Portfolio> portfolio = portfolioRepository.findByProfile(profile, pageable);
 
 		return portfolio.map(PortfolioResponse::from);
-
 	}
 
 	public PortfolioDetailResponse findPortfolioDetail(long userId, long portfolioId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 userId".formatted(userId)));
+				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
+			));
 
 		Portfolio portfolio = portfolioRepository.findById(portfolioId)
 			.orElseThrow(() -> new IllegalArgumentException(
-				"%d는 존재하지 않는 portfolioId".formatted(portfolioId)));
+				PortfolioErrorCode.PORTFOLIO_NOT_FOUND.getMessage()
+			));
 
-		if (!portfolio.isOwnedBy(user)) { // 엔티티 메서드 호출
-			throw new IllegalArgumentException("본인 소유의 포트폴리오가 아닙니다");
+		if (!portfolio.isOwnedBy(user)) {
+			throw new IllegalArgumentException(
+				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
+			);
 		}
+
 		return PortfolioDetailResponse.of(portfolio);
 	}
-
 }
+
+
