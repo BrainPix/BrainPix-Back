@@ -2,6 +2,7 @@ package com.brainpix.post.entity.collaboration_hub;
 
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.jpa.BaseTimeEntity;
+import com.brainpix.post.dto.CollaborationRecruitmentDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,5 +35,10 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 		this.parentCollaborationHub = parentCollaborationHub;
 		this.domain = domain;
 		this.gathering = gathering;
+	}
+
+	public void updateRecruitmentFields(CollaborationRecruitmentDto recruitmentDto) {
+		this.domain = recruitmentDto.getDomain();
+		this.gathering.updateGatheringFields(recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity());
 	}
 }
