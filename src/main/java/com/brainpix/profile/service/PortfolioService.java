@@ -86,6 +86,23 @@ public class PortfolioService {
 		);
 	}
 
+	@Transactional
+	public void deletePortfolio(long userId, long portfolioId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException(
+				PortfolioErrorCode.USER_NOT_FOUND.getMessage()
+			));
+
+		Portfolio portfolio = portfolioRepository.findById(portfolioId)
+			.orElseThrow(() -> new IllegalArgumentException(
+				PortfolioErrorCode.PORTFOLIO_NOT_FOUND.getMessage()
+			));
+
+		portfolio.validateOwnership(user);
+
+		portfolioRepository.delete(portfolio);
+	}
+
 	public Page<PortfolioResponse> findAllMyPortfolios(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(
@@ -118,11 +135,7 @@ public class PortfolioService {
 				PortfolioErrorCode.RESOURCE_NOT_FOUND.getMessage()
 			));
 
-		if (!portfolio.isOwnedBy(user)) {
-			throw new IllegalArgumentException(
-				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
-			);
-		}
+		portfolio.validateOwnership(user);
 
 		return PortfolioDetailResponse.of(portfolio);
 	}

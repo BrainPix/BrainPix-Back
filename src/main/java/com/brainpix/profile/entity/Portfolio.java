@@ -3,6 +3,7 @@ package com.brainpix.profile.entity;
 import java.time.YearMonth;
 import java.util.List;
 
+import com.brainpix.api.code.error.PortfolioErrorCode;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
@@ -75,24 +76,11 @@ public class Portfolio extends BaseTimeEntity {
 		this.content = content;
 	}
 
-	public boolean isOwnedBy(User user) {
-		return this.profile.getId().equals(user.getProfileId());
-	}
-
-	public void changeTitle(String title) {
-		this.title = title;
-	}
-
-	public void changeSpecializations(List<Specialization> newSpecs) {
-		this.specializationList = newSpecs;
-	}
-
-	public void changeDates(YearMonth start, YearMonth end) {
-		this.startDate = start;
-		this.endDate = end;
-	}
-
-	public void changeContent(String content) {
-		this.content = content;
+	public void validateOwnership(User user) {
+		if (!this.profile.getUser().equals(user)) {
+			throw new IllegalArgumentException(
+				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
+			);
+		}
 	}
 }
