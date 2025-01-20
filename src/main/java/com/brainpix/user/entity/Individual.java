@@ -15,8 +15,9 @@ import lombok.NoArgsConstructor;
 public class Individual extends User {
 
 	@Builder
-	public Individual(String identifier, String password, String name, LocalDateTime birthday, String email,
+	public Individual(String identifier, String password, String name, String nickName, LocalDateTime birthday,
+		String email,
 		String profileImage, Profile profile) {
-		super(identifier, password, name, birthday, email, profileImage, profile);
+		super(identifier, password, name, nickName, birthday, email, profileImage, profile);
 	}
 }
