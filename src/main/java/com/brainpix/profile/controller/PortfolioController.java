@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.brainpix.CommonPageResponse;
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.profile.dto.CreatePortfolioDto;
 import com.brainpix.profile.dto.request.PortfolioRequest;
 import com.brainpix.profile.dto.response.PortfolioDetailResponse;
@@ -56,6 +57,15 @@ public class PortfolioController {
 		}
 	}
 
+	@DeleteMapping("/{portfolioId}")
+	public ResponseEntity<ApiResponse<Void>> deletePortfolio(
+		@RequestParam long userId,
+		@PathVariable long portfolioId
+	) {
+		portfolioService.deletePortfolio(userId, portfolioId);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
 	@GetMapping
 	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findMyPortfolios(
 		@RequestParam long userId,
@@ -63,7 +73,7 @@ public class PortfolioController {
 	) {
 		Page<PortfolioResponse> page = portfolioService.findAllMyPortfolios(userId, pageable);
 
-		// Page -> CommonPageResponse 변환
+		// Page -> CommonPageResponse
 		CommonPageResponse<PortfolioResponse> response = CommonPageResponse.of(page);
 
 		return ResponseEntity.ok(response);
