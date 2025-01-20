@@ -49,7 +49,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 				postAuthEq(onlyCompany)    // 5. 기업 공개만, 기업 공개 제외
 			)
 			.groupBy(ideaMarket)
-			.orderBy(applySortType(sortType))
+			.orderBy(sortType.getOrder())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -130,23 +130,6 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 			return ideaMarket.postAuth.eq(PostAuth.COMPANY);
 		else
 			return null;
-	}
-
-	private OrderSpecifier<?> applySortType(SortType sortType) {
-		if (sortType != null) {
-			if (sortType == SortType.NEWEST)
-				return QIdeaMarket.ideaMarket.createdAt.desc();
-			else if (sortType == SortType.OLDEST)
-				return QIdeaMarket.ideaMarket.createdAt.asc();
-			else if (sortType == SortType.POPULAR)
-				return savedPost.count().desc();
-			else if (sortType == SortType.LOWEST_PRICE)
-				return QIdeaMarket.ideaMarket.price.price.asc();
-			else
-				return QIdeaMarket.ideaMarket.price.price.desc();
-		} else {
-			return QIdeaMarket.ideaMarket.createdAt.desc();
-		}
 	}
 
 	private List<Object[]> parsingResult(List<Tuple> queryResult) {
