@@ -1,19 +1,15 @@
 package com.brainpix.post.entity.request_task;
 
-import java.util.List;
 
-import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.jpa.BaseTimeEntity;
-import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
@@ -29,11 +25,12 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "request_task_id")
 	private RequestTask requestTask;
 
 	private String domain;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private Price price;
 
 	@Builder
@@ -43,19 +40,7 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 		this.price = price;
 	}
 
-	public void updateRecruitmentFields(RequestTaskRecruitmentDto recruitmentDto) {
-		this.domain = recruitmentDto.getDomain();
-		this.price.updatePriceFields(recruitmentDto.getPrice(),
-				recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity(),
-				recruitmentDto.getPaymentDuration());
-
+	public void updateRecruitmentFields(String domain) {
+		this.domain = domain;
 	}
-
-	// public void updateRecruitmentFields(String domain, Long price, Long occupiedQuantity, Long totalQuantity,
-	// 	PaymentDuration paymentDuration) {
-	// 	this.domain = domain;
-	// 	if (this.price != null) {
-	// 		this.price.updatePriceFields(price, occupiedQuantity, totalQuantity, paymentDuration);
-	// 	}
-	// }
 }

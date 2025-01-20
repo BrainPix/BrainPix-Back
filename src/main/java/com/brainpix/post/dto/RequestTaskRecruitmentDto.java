@@ -1,15 +1,17 @@
 package com.brainpix.post.dto;
 
+import com.brainpix.joining.dto.PriceDto;
 import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.joining.entity.quantity.Price;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestTaskRecruitmentDto {
 	private String domain;
-	private Long price;
-	private Long totalQuantity;
-	private Long occupiedQuantity;
-	private PaymentDuration paymentDuration;
+	private PriceDto priceDto;
 }

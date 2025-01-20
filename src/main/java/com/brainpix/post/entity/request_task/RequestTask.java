@@ -44,7 +44,7 @@ public class RequestTask extends Post {
 		this.requestTaskType = requestTaskType;
 	}
 
-	public void updateRequestTaskFields(RequestTaskUpdateDto updateDto, List<RequestTaskRecruitmentDto> recruitmentDtos) {
+	public void updateRequestTaskFields(RequestTaskUpdateDto updateDto) {
 		// BasePost의 필드를 업데이트
 		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(),
 			updateDto.getOpenMyProfile(),
@@ -53,31 +53,5 @@ public class RequestTask extends Post {
 		// RequestTask 고유 필드 업데이트
 		this.deadline = updateDto.getDeadline();
 		this.requestTaskType = updateDto.getRequestTaskType();
-
-		// for (RequestTaskRecruitmentDto recruitmentDto : recruitmentDtos) {
-		// 	this.recruitments.updateRecruitmentFields(recruitmentDto);
-
-			// recruitments 업데이트
-		if (recruitmentDtos != null) {
-			for (int i = 0; i < recruitmentDtos.size(); i++) {
-				if (i < this.recruitments.size()) {
-					// 기존 Recruitment 업데이트
-					this.recruitments.get(i).updateRecruitmentFields(recruitmentDtos.get(i));
-				} else {
-					// 새 Recruitment 추가
-					RequestTaskRecruitmentDto recruitmentDto = recruitmentDtos.get(i);
-					this.recruitments.add(new RequestTaskRecruitment(
-						this,
-						recruitmentDto.getDomain(),
-						new Price(recruitmentDto.getPrice(), recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity(),
-							recruitmentDto.getPaymentDuration())
-					));
-				}
-			}
-				// 남아있는 recruitments가 더 많을 경우 삭제
-			if (recruitmentDtos.size() < this.recruitments.size()) {
-				this.recruitments.subList(recruitmentDtos.size(), this.recruitments.size()).clear();
-			}
-		}
 	}
 }

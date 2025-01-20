@@ -13,11 +13,13 @@ import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
+import com.brainpix.post.repository.RequestTaskRecruitmentRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,11 +27,12 @@ import lombok.RequiredArgsConstructor;
 public class RequestTaskService {
 
 	private final RequestTaskRepository requestTaskRepository;
+	private final RequestTaskRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
 
-	public Long createRequestTask(RequestTaskCreateDto createDto) {
-		User writer = userRepository.findById(1L)
-		//Individual writer = (Individual) userRepository.findById(1L)
+	@Transactional
+	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
+		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		RequestTask requestTask = RequestTask.builder()
@@ -47,38 +50,26 @@ public class RequestTaskService {
 			.postAuth(createDto.getPostAuth())
 			.build();
 
-		if (createDto.getRecruitments() != null) {
-			for (RequestTaskRecruitmentDto recruitmentDto : createDto.getRecruitments()) {
-				Price price = Price.builder()
-					.totalQuantity(recruitmentDto.getTotalQuantity())
-					.occupiedQuantity(recruitmentDto.getOccupiedQuantity())
-					.price(recruitmentDto.getPrice())
-					.paymentDuration(recruitmentDto.getPaymentDuration())
-					.build();
+		requestTaskRepository.save(requestTask);
 
-				RequestTaskRecruitment recruitment = RequestTaskRecruitment.builder()
-					.requestTask(requestTask)
-					.domain(recruitmentDto.getDomain())
-					.price(price)
-					.build();
-				requestTask.getRecruitments().add(recruitment);
-			}
-		}
+		// 모집 정보 추가
+		recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
 
-		RequestTask savedTask = requestTaskRepository.save(requestTask);
-		return savedTask.getId();
+		return requestTask.getId();
 	}
 
-	public void updateRequestTask(Long id, RequestTaskUpdateDto updateDto) {
-		RequestTask existingTask = requestTaskRepository.findById(id)
+	@Transactional
+	public void updateRequestTask(Long taskid, RequestTaskUpdateDto updateDto) {
+		RequestTask requestTask = requestTaskRepository.findById(taskid)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// RequestTask 고유 필드 업데이트
-		existingTask.updateRequestTaskFields(updateDto, updateDto.getRecruitments());
+		requestTask.updateRequestTaskFields(updateDto);
 
-		requestTaskRepository.save(existingTask);
+		requestTaskRepository.save(requestTask);
 	}
 
+	@Transactional
 	public void deleteRequestTask(Long id) {
 		if (!requestTaskRepository.existsById(id)) {
 			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);

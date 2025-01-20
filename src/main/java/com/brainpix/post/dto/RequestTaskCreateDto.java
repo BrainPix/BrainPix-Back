@@ -6,9 +6,13 @@ import java.util.List;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTaskType;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestTaskCreateDto {
 	private String title;
 	private String content;
@@ -19,5 +23,6 @@ public class RequestTaskCreateDto {
 	private LocalDateTime deadline;
 	private RequestTaskType requestTaskType;
 	private PostAuth postAuth;
+	//@NotEmpty(message = "모집 분야는 최소 하나 이상 등록해야 합니다.")
 	private List<RequestTaskRecruitmentDto> recruitments;
 }

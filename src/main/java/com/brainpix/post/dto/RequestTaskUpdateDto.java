@@ -6,9 +6,13 @@ import java.util.List;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTaskType;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestTaskUpdateDto {
 	private String title;
 	private String content;
@@ -19,5 +23,4 @@ public class RequestTaskUpdateDto {
 	private LocalDateTime deadline;
 	private RequestTaskType requestTaskType;
 	private PostAuth postAuth;
-	private List<RequestTaskRecruitmentDto> recruitments;
 }
