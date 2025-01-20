@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class scrap extends BaseTimeEntity {
+public class Scrap extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class scrap extends BaseTimeEntity {
 	private User scrapper;
 
 	@Builder
-	public scrap(Post scrapedPost, User scrapper) {
+	public Scrap(Post scrapedPost, User scrapper) {
 		this.scrapedPost = scrapedPost;
 		this.scrapper = scrapper;
 	}
