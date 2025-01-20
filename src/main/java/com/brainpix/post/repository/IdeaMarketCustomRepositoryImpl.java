@@ -122,7 +122,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	}
 
 	private BooleanExpression categoryEq(Specialization category) {
-		return category != null ? ideaMarket.category.eq(category.toString()) : null;
+		return category != null ? ideaMarket.specialization.eq(category) : null;
 	}
 
 	private BooleanExpression postAuthEq(Boolean onlyCompany) {

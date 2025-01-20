@@ -4,31 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.entity.Comment;
 
 public class GetIdeaCommentListDtoConverter {
 
+	public static GetIdeaCommentListDto.Parameter toParameter(Long ideaId, Pageable pageable) {
+		return GetIdeaCommentListDto.Parameter.builder()
+			.ideaId(ideaId)
+			.pageable(pageable)
+			.build();
+	}
+
 	public static GetIdeaCommentListDto.Response toResponse(Page<Comment> comments) {
 
-		List<GetIdeaCommentListDto.ResponseData> responseDataList = new ArrayList<>();
+		List<GetIdeaCommentListDto.Comment> commentList = new ArrayList<>();
 
 		// 댓글의 최대 깊이가 1인 경우만 적용됩니다.
 		for(Comment comment : comments) {
-			GetIdeaCommentListDto.ResponseData responseData = toResponseData(comment);
+			GetIdeaCommentListDto.Comment commentDto = toComment(comment);
 
 			// 자식 댓글인 경우 리스트에서 부모를 꺼내 자식 리스트에 추가
-			if(responseData.getParentCommentId() != null && !responseDataList.isEmpty()) {
-				GetIdeaCommentListDto.ResponseData parent = responseDataList.get(responseDataList.size() - 1);
-				parent.getChildComments().add(responseData);
+			if(commentDto.getParentCommentId() != null && !commentList.isEmpty()) {
+				GetIdeaCommentListDto.Comment parent = commentList.get(commentList.size() - 1);
+				parent.getChildComments().add(commentDto);
 			} else {
-				responseDataList.add(responseData);
+				commentList.add(commentDto);
 			}
 		}
 
 		return GetIdeaCommentListDto.Response.builder()
-			.responseDataList(responseDataList)
+			.commentList(commentList)
 			.totalPages(comments.getTotalPages())
 			.totalElements((int)comments.getTotalElements())
 			.currentPage(comments.getNumber())
@@ -37,9 +45,9 @@ public class GetIdeaCommentListDtoConverter {
 			.build();
 	}
 
-	public static GetIdeaCommentListDto.ResponseData toResponseData(Comment comment) {
+	public static GetIdeaCommentListDto.Comment toComment(Comment comment) {
 
-		return GetIdeaCommentListDto.ResponseData.builder()
+		return GetIdeaCommentListDto.Comment.builder()
 			.commentId(comment.getId())
 			.writerId(comment.getWriter().getId())
 			.content(comment.getContent())

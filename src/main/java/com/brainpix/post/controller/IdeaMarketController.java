@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.converter.GetIdeaCommentListDtoConverter;
+import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
+import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
@@ -18,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/ideas")
+@RequestMapping("/ideas")
 @RequiredArgsConstructor
 @Slf4j
 public class IdeaMarketController {
@@ -29,7 +33,8 @@ public class IdeaMarketController {
 		GetIdeaListDto.Request request,
 		Pageable pageable
 	) {
-		GetIdeaListDto.Response response = ideaMarketService.getIdeaList(request, pageable);
+		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(request, pageable);
+		GetIdeaListDto.Response response = ideaMarketService.getIdeaList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
@@ -37,7 +42,8 @@ public class IdeaMarketController {
 	public ResponseEntity<ApiResponse<GetIdeaDetailDto.Response>> getIdeaDetail(
 		@PathVariable("ideaId") Long ideaId
 	) {
-		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(ideaId);
+		GetIdeaDetailDto.Parameter parameter = GetIdeaDetailDtoConverter.toParameter(ideaId);
+		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
@@ -46,7 +52,8 @@ public class IdeaMarketController {
 		@PathVariable("ideaId") Long ideaId,
 		Pageable pageable
 	) {
-		GetIdeaCommentListDto.Response response = ideaMarketService.getIdeaCommentList(ideaId, pageable);		// post 서비스로 옮겨도 되겠다.
+		GetIdeaCommentListDto.Parameter parameter = GetIdeaCommentListDtoConverter.toParameter(ideaId, pageable);
+		GetIdeaCommentListDto.Response response = ideaMarketService.getIdeaCommentList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
@@ -55,7 +62,8 @@ public class IdeaMarketController {
 		GetPopularIdeaListDto.Request request,
 		Pageable pageable
 	) {
-		GetPopularIdeaListDto.Response response = ideaMarketService.getPopularIdeaList(request, pageable);	// post 서비스로 옮겨도 되겠다.
+		GetPopularIdeaListDto.Parameter parameter = GetPopularIdeaListDtoConverter.toParameter(request, pageable);
+		GetPopularIdeaListDto.Response response = ideaMarketService.getPopularIdeaList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }

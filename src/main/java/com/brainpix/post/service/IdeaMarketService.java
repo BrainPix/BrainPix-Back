@@ -36,21 +36,21 @@ public class IdeaMarketService {
 
 	// 아이디어 메인페이지에서 검색 조건을 적용하여 아이디어 목록을 반환합니다.
 	@Transactional(readOnly = true)
-	public GetIdeaListDto.Response getIdeaList(GetIdeaListDto.Request request, Pageable pageable) {
+	public GetIdeaListDto.Response getIdeaList(GetIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
-		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(request.getType(),
-			request.getKeyword(), request.getCategory(), request.getOnlyCompany(), request.getSortType(), pageable);
+		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(parameter.getType(),
+			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(), parameter.getPageable());
 
 		return GetIdeaListDtoConverter.toResponse(result);
 	}
 
 	// 아이디어 식별자 값을 입력받아 상세보기에 관한 내용을 반환합니다.
 	@Transactional(readOnly = true)
-	public GetIdeaDetailDto.Response getIdeaDetail(Long ideaId) {
+	public GetIdeaDetailDto.Response getIdeaDetail(GetIdeaDetailDto.Parameter parameter) {
 
 		// 아이디어 조회
-		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 작성자 조회
@@ -70,24 +70,24 @@ public class IdeaMarketService {
 
 	// 아이디어 식별자 값을 입력받아 댓글 목록을 조회합니다.
 	@Transactional(readOnly = true)
-	public GetIdeaCommentListDto.Response getIdeaCommentList(Long ideaId, Pageable pageable) {
+	public GetIdeaCommentListDto.Response getIdeaCommentList(GetIdeaCommentListDto.Parameter parameter) {
 
 		// 아이디어 조회
-		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 게시글에 연관된 모든 댓글을 조회
-		Page<Comment> comments = commentRepository.findByParentPostId(ideaMarket.getId(), pageable);
+		Page<Comment> comments = commentRepository.findByParentPostId(ideaMarket.getId(), parameter.getPageable());
 
 		return GetIdeaCommentListDtoConverter.toResponse(comments);
 	}
 
 	// 저장순으로 아이디어를 조회합니다.
 	@Transactional(readOnly = true)
-	public GetPopularIdeaListDto.Response getPopularIdeaList(GetPopularIdeaListDto.Request request, Pageable pageable) {
+	public GetPopularIdeaListDto.Response getPopularIdeaList(GetPopularIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
-		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(request.getIdeaType(), pageable);
+		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getType(), parameter.getPageable());
 
 		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
 	}

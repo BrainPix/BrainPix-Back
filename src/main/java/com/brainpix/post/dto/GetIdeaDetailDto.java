@@ -14,10 +14,16 @@ public class GetIdeaDetailDto {
 
 	@Builder
 	@Getter
+	public static class Parameter {
+		private Long ideaId;	// 아이디어 ID
+	}
+
+	@Builder
+	@Getter
 	public static class Response {
 		private Long ideaId;                // 아이디어 ID
 		private String thumbnailImageUrl;   // 썸네일 이미지 URL
-		private String category;            // 아이디어 카테고리
+		private Specialization category;            // 아이디어 카테고리
 		private IdeaMarketType ideaMarketType;  // 아이디어 솔루션 / 마켓 플레이스
 		private PostAuth auth;  // 아이디어 공개 유형 (ALL, COMPANY)
 		private String title;               // 아이디어 제목
