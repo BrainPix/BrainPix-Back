@@ -1,7 +1,7 @@
 package com.brainpix.post.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.SavedPostCollaborationResponse;
 import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
 import com.brainpix.post.dto.SavedPostRequestTaskResponse;
@@ -31,24 +32,24 @@ public class SavedPostController {
 	}
 
 	@GetMapping("/request-tasks")
-	public ResponseEntity<ApiResponse<List<SavedPostRequestTaskResponse>>> getSavedRequestTasks(
-		@RequestParam long userId) {
-		List<SavedPostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId);
-		return ResponseEntity.ok(ApiResponse.success(result));
+	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostRequestTaskResponse>>> getSavedRequestTasks(
+		@RequestParam long userId, Pageable pageable) {
+		Page<SavedPostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
 	@GetMapping("/idea-markets")
-	public ResponseEntity<ApiResponse<List<SavedPostIdeaMarketResponse>>> getSavedIdeaMarkets(
-		@RequestParam long userId) {
-		List<SavedPostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId);
-		return ResponseEntity.ok(ApiResponse.success(result));
+	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostIdeaMarketResponse>>> getSavedIdeaMarkets(
+		@RequestParam long userId, Pageable pageable) {
+		Page<SavedPostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
 	@GetMapping("/collaboration-hubs")
-	public ResponseEntity<ApiResponse<List<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
-		@RequestParam long userId) {
-		List<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId);
-		return ResponseEntity.ok(ApiResponse.success(result));
+	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
+		@RequestParam long userId, Pageable pageable) {
+		Page<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
 }
