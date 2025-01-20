@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +23,10 @@ public class RequestTask extends Post {
 	@Enumerated(EnumType.STRING)
 	private RequestTaskType requestTaskType;
 
-	@Builder
-	public RequestTask(User writer, String title, String content, String category, Boolean openMyProfile,
+	public RequestTask(User writer, String title, String content, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		RequestTaskType requestTaskType, PostAuth postAuth) {
-		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
+		RequestTaskType requestTaskType, PostAuth postAuth, Specialization specialization) {
+		super(writer, title, content, openMyProfile, viewCount, postAuth, specialization, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
 		this.requestTaskType = requestTaskType;

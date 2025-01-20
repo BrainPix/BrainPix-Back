@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.dto.SavedPostSimpleResponse;
+import com.brainpix.post.dto.SavedPostCollaborationResponse;
+import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
+import com.brainpix.post.dto.SavedPostRequestTaskResponse;
 import com.brainpix.post.service.SavedPostService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,21 +31,24 @@ public class SavedPostController {
 	}
 
 	@GetMapping("/request-tasks")
-	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedRequestTasks(@RequestParam long userId) {
-		List<SavedPostSimpleResponse> result = savedPostService.findSavedRequestTasks(userId);
+	public ResponseEntity<ApiResponse<List<SavedPostRequestTaskResponse>>> getSavedRequestTasks(
+		@RequestParam long userId) {
+		List<SavedPostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId);
 		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 
 	@GetMapping("/idea-markets")
-	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedIdeaMarkets(@RequestParam long userId) {
-		List<SavedPostSimpleResponse> result = savedPostService.findSavedIdeaMarkets(userId);
+	public ResponseEntity<ApiResponse<List<SavedPostIdeaMarketResponse>>> getSavedIdeaMarkets(
+		@RequestParam long userId) {
+		List<SavedPostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId);
 		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 
 	@GetMapping("/collaboration-hubs")
-	public ResponseEntity<ApiResponse<List<SavedPostSimpleResponse>>> getSavedCollaborationHubs(
+	public ResponseEntity<ApiResponse<List<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
 		@RequestParam long userId) {
-		List<SavedPostSimpleResponse> result = savedPostService.findSavedCollaborationHubs(userId);
+		List<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId);
 		return ResponseEntity.ok(ApiResponse.success(result));
 	}
+
 }
