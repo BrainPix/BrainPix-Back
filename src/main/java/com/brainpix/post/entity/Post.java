@@ -3,6 +3,7 @@ package com.brainpix.post.entity;
 import java.util.List;
 
 import com.brainpix.jpa.BaseTimeEntity;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.DiscriminatorColumn;
@@ -34,12 +35,14 @@ public abstract class Post extends BaseTimeEntity {
 
 	private String title;
 	private String content;
-	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
 
 	@Enumerated(EnumType.STRING)
 	private PostAuth postAuth;
+
+	@Enumerated(EnumType.STRING)
+	private Specialization specialization;
 
 	@ElementCollection
 	private List<String> imageList;
@@ -47,15 +50,15 @@ public abstract class Post extends BaseTimeEntity {
 	@ElementCollection
 	private List<String> attachmentFileList;
 
-	public Post(User writer, String title, String content, String category, Boolean openMyProfile, Long viewCount,
-		PostAuth postAuth, List<String> imageList, List<String> attachmentFileList) {
+	public Post(User writer, String title, String content, Boolean openMyProfile, Long viewCount,
+		PostAuth postAuth, Specialization specialization,List<String> imageList, List<String> attachmentFileList) {
 		this.writer = writer;
 		this.title = title;
 		this.content = content;
-		this.category = category;
 		this.openMyProfile = openMyProfile;
 		this.viewCount = viewCount;
 		this.postAuth = postAuth;
+		this.specialization = specialization;
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
 	}
