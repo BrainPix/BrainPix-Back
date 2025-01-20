@@ -1,6 +1,10 @@
 package com.brainpix.post.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +15,7 @@ import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.QSavedPost;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.entity.idea_market.QIdeaMarket;
+import com.brainpix.post.enums.PostBooleanExpression;
 import com.brainpix.post.enums.SortType;
 import com.brainpix.profile.entity.Specialization;
 import com.querydsl.core.Tuple;
@@ -36,20 +41,28 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	public Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword, Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable) {
 
+		// 검색 조건
+		BooleanExpression where = Stream.of(
+				PostBooleanExpression.EXCLUDE_PRIVATE.get(null),                // 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),  // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.TITLE_CONTAINS.get(keyword),              // 3. 검색어 필터
+				PostBooleanExpression.CATEGORY_EQ.get(category),                // 4. 카테고리 필터
+				PostBooleanExpression.ONLY_COMPANY.get(onlyCompany)             // 5. 기업 공개만, 기업 공개 제외
+			)
+			.reduce(BooleanExpression::and)
+			.orElse(null);
+
+		// 정렬 조건 (기본 값은 최신순)
+		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.NEWEST.getOrder();
+
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
 			.select(ideaMarket, savedPost.count())
 			.from(ideaMarket)
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
-			.where(
-				excludePrivate(),        // 1. 비공개 제외
-				ideaMarketTypeEq(ideaMarketType),    // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-				titleContains(keyword),        // 3. 검색어가 있는 경우
-				categoryEq(category),    // 4. 카테고리가 있는 경우
-				postAuthEq(onlyCompany)    // 5. 기업 공개만, 기업 공개 제외
-			)
+			.where(where)
 			.groupBy(ideaMarket)
-			.orderBy(sortType.getOrder())
+			.orderBy(order)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -59,13 +72,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 			.select(ideaMarket.count())
 			.from(ideaMarket)
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
-			.where(
-				excludePrivate(),					// 1. 비공개 제외
-				ideaMarketTypeEq(ideaMarketType),	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-				titleContains(keyword),				// 3. 검색어가 있는 경우
-				categoryEq(category),				// 4. 카테고리가 있는 경우
-				postAuthEq(onlyCompany)				// 5. 기업 공개만, 기업 공개 제외
-			);
+			.where(where);
 
 		// 게시글-저장수를 쌍으로 저장
 		List<Object[]> result = parsingResult(queryResult);
@@ -79,17 +86,25 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	@Override
 	public Page<Object[]> findPopularIdeaListWithSaveCount(IdeaMarketType ideaMarketType, Pageable pageable) {
 
+		// 검색 조건
+		BooleanExpression where = Stream.of(
+				PostBooleanExpression.EXCLUDE_PRIVATE.get(null),                // 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)  // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+			)
+			.reduce(BooleanExpression::and)
+			.orElse(null);
+
+		// 정렬 조건
+		OrderSpecifier<?> order = savedPost.count().desc();
+
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
 			.select(ideaMarket, savedPost.count())
 			.from(ideaMarket)
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
-			.where(
-				excludePrivate(),        			// 1. 비공개 제외
-				ideaMarketTypeEq(ideaMarketType)    // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-			)
+			.where(where)
 			.groupBy(ideaMarket)
-			.orderBy(savedPost.count().desc())
+			.orderBy(order)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -98,38 +113,12 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 		JPAQuery<Long> countQuery = queryFactory
 			.select(ideaMarket.count())
 			.from(ideaMarket)
-			.where(
-				excludePrivate(),					// 1. 비공개 제외
-				ideaMarketTypeEq(ideaMarketType)	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-			);
+			.where(where);
 
 		// 게시글-저장수를 쌍으로 저장
 		List<Object[]> result = parsingResult(queryResult);
 
 		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
-	}
-
-	private BooleanExpression excludePrivate() {
-		return ideaMarket.postAuth.ne(PostAuth.ME);
-	}
-
-	private BooleanExpression ideaMarketTypeEq(IdeaMarketType ideaMarketType) {
-		return ideaMarketType != null ? ideaMarket.ideaMarketType.eq(ideaMarketType) : null;
-	}
-
-	private BooleanExpression titleContains(String keyword) {
-		return keyword != null ? ideaMarket.title.contains(keyword) : null;
-	}
-
-	private BooleanExpression categoryEq(Specialization category) {
-		return category != null ? ideaMarket.specialization.eq(category) : null;
-	}
-
-	private BooleanExpression postAuthEq(Boolean onlyCompany) {
-		if (onlyCompany != null && onlyCompany)
-			return ideaMarket.postAuth.eq(PostAuth.COMPANY);
-		else
-			return null;
 	}
 
 	private List<Object[]> parsingResult(List<Tuple> queryResult) {
@@ -142,5 +131,4 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 			})
 			.toList();
 	}
-
 }
