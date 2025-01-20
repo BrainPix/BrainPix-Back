@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.brainpix.joining.entity.quantity.Price;
-import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
@@ -47,7 +45,7 @@ public class RequestTask extends Post {
 
 	public void updateRequestTaskFields(RequestTaskUpdateDto updateDto) {
 		// BasePost의 필드를 업데이트
-		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(),
+		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getSpecialization(),
 			updateDto.getOpenMyProfile(),
 			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTaskType;
+import com.brainpix.profile.entity.Specialization;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class RequestTaskUpdateDto {
 	private String title;
 	private String content;
-	private String category;
+	private Specialization specialization;
 	private Boolean openMyProfile;
 	private List<String> imageList;
 	private List<String> attachmentFileList;

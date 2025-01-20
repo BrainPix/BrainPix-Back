@@ -40,7 +40,7 @@ public class RequestTaskService {
 			//.writer(currentUser)
 			.title(createDto.getTitle())
 			.content(createDto.getContent())
-			.category(createDto.getCategory())
+			.specialization(createDto.getSpecialization())
 			.openMyProfile(createDto.getOpenMyProfile())
 			.viewCount(0L) // 초기 조회수는 0으로 설정
 			.imageList(createDto.getImageList())
