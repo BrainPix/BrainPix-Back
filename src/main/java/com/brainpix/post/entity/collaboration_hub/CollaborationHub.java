@@ -3,7 +3,9 @@ package com.brainpix.post.entity.collaboration_hub;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.profile.entity.Specialization;
@@ -36,4 +38,22 @@ public class CollaborationHub extends Post {
 		this.link = link;
 	}
 
+	public long getTotalQuantity() {
+		return this.getCollaborations()
+			.stream()
+			.map(CollaborationRecruitment::getGathering)
+			.filter(Objects::nonNull)
+			.mapToLong(Gathering::getTotalQuantity)
+			.sum();
+	}
+
+	// 모집 현재 인원 합산 메서드
+	public long getOccupiedQuantity() {
+		return this.getCollaborations()
+			.stream()
+			.map(CollaborationRecruitment::getGathering)
+			.filter(Objects::nonNull)
+			.mapToLong(Gathering::getOccupiedQuantity)
+			.sum();
+	}
 }
