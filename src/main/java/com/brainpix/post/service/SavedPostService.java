@@ -1,8 +1,9 @@
 package com.brainpix.post.service;
 
-import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,52 +47,51 @@ public class SavedPostService {
 		savedPostRepository.save(new SavedPost(user, post));
 	}
 
-	public List<SavedPostRequestTaskResponse> findSavedRequestTasks(long userId) {
+	@Transactional(readOnly = true)
+	public Page<SavedPostRequestTaskResponse> findSavedRequestTasks(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
-		return savedPostRepository.findSavedRequestTasksByUser(user)
-			.stream()
+		return savedPostRepository.findSavedRequestTasksByUser(user, pageable)
 			.map(savedPost -> {
 				RequestTask requestTask = (RequestTask)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(requestTask.getId());
 				return SavedPostRequestTaskResponse.from(requestTask, saveCount);
-			})
-			.toList();
+			});
 	}
 
-	public List<SavedPostIdeaMarketResponse> findSavedIdeaMarkets(long userId) {
+	@Transactional(readOnly = true)
+	public Page<SavedPostIdeaMarketResponse> findSavedIdeaMarkets(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
-		return savedPostRepository.findSavedIdeaMarketsByUser(user)
-			.stream()
+		return savedPostRepository.findSavedIdeaMarketsByUser(user, pageable)
 			.map(savedPost -> {
 				IdeaMarket ideaMarket = (IdeaMarket)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(ideaMarket.getId());
 				return SavedPostIdeaMarketResponse.from(ideaMarket, saveCount);
-			})
-			.toList();
+			});
 	}
 
-	public List<SavedPostCollaborationResponse> findSavedCollaborationHubs(long userId) {
+	@Transactional(readOnly = true)
+	public Page<SavedPostCollaborationResponse> findSavedCollaborationHubs(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
-		return savedPostRepository.findSavedCollaborationHubsByUser(user)
-			.stream()
+		return savedPostRepository.findSavedCollaborationHubsByUser(user, pageable)
 			.map(savedPost -> {
 				CollaborationHub collaborationHub = (CollaborationHub)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(collaborationHub.getId());
 
 				// 모든 모집 데이터의 현재 인원과 모집 인원 합산
-				List<CollaborationRecruitment> recruitments = collaborationHub.getCollaborations();
-				long totalQuantity = recruitments.stream()
+				long totalQuantity = collaborationHub.getCollaborations()
+					.stream()
 					.map(CollaborationRecruitment::getGathering)
 					.filter(Objects::nonNull)
 					.mapToLong(Gathering::getTotalQuantity)
 					.sum();
-				long occupiedQuantity = recruitments.stream()
+				long occupiedQuantity = collaborationHub.getCollaborations()
+					.stream()
 					.map(CollaborationRecruitment::getGathering)
 					.filter(Objects::nonNull)
 					.mapToLong(Gathering::getOccupiedQuantity)
@@ -99,8 +99,7 @@ public class SavedPostService {
 
 				return SavedPostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
 					occupiedQuantity);
-			})
-			.toList();
+			});
 	}
 
 }

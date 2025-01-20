@@ -1,14 +1,15 @@
 package com.brainpix.post.repository;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.brainpix.post.entity.SavedPost;
 import com.brainpix.user.entity.User;
 
 public interface SavedPostRepositoryCustom {
-	List<SavedPost> findSavedRequestTasksByUser(User user);
+	Page<SavedPost> findSavedRequestTasksByUser(User user, Pageable pageable);
 
-	List<SavedPost> findSavedIdeaMarketsByUser(User user);
+	Page<SavedPost> findSavedIdeaMarketsByUser(User user, Pageable pageable);
 
-	List<SavedPost> findSavedCollaborationHubsByUser(User user);
+	Page<SavedPost> findSavedCollaborationHubsByUser(User user, Pageable pageable);
 }
