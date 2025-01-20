@@ -1,6 +1,6 @@
 package com.brainpix.user.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.brainpix.profile.entity.Profile;
 
@@ -16,7 +16,7 @@ public class Company extends User {
 	private String position;
 
 	@Builder
-	public Company(String identifier, String password, String name, String nickName, LocalDateTime birthday,
+	public Company(String identifier, String password, String name, String nickName, LocalDate birthday,
 		String email, String profileImage, Profile profile, String position) {
 		super(identifier, password, name, nickName, birthday, email, profileImage, profile);
 		this.position = position;

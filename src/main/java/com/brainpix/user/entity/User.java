@@ -1,6 +1,6 @@
 package com.brainpix.user.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Profile;
@@ -30,14 +30,14 @@ public abstract class User extends BaseTimeEntity {
 	private String password;
 	private String name;
 	private String nickName;
-	private LocalDateTime birthday;
+	private LocalDate birthday;
 	private String email;
 	private String profileImage;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private Profile profile;
 
-	public User(String identifier, String password, String name, String nickName, LocalDateTime birthday, String email,
+	public User(String identifier, String password, String name, String nickName, LocalDate birthday, String email,
 		String profileImage, Profile profile) {
 		this.identifier = identifier;
 		this.password = password;
