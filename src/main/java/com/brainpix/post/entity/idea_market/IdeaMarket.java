@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class IdeaMarket extends Post {
-	private Specialization specialization;
 
 	@Enumerated(EnumType.STRING)
 	private IdeaMarketType ideaMarketType;

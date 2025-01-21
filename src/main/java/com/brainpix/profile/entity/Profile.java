@@ -3,17 +3,20 @@ package com.brainpix.profile.entity;
 import java.util.List;
 
 import com.brainpix.jpa.BaseTimeEntity;
+import com.brainpix.user.entity.User;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +33,9 @@ public abstract class Profile extends BaseTimeEntity {
 	@ElementCollection
 	@Enumerated(EnumType.STRING)
 	private List<Specialization> specializationList;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	private User user;
 
 	public Profile(List<Specialization> specializationList) {
 		this.specializationList = specializationList;

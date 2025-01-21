@@ -16,8 +16,8 @@ import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
-import com.brainpix.profile.repository.UserRepository;
 import com.brainpix.user.entity.User;
+import com.brainpix.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
