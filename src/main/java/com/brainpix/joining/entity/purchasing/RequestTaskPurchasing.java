@@ -6,6 +6,7 @@ import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +30,7 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 
 	private Boolean accepted;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private RequestTaskRecruitment requestTaskRecruitment;
 
 	@Builder
