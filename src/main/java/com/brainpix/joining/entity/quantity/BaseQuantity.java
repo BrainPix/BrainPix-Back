@@ -27,13 +27,4 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 	public void updateQuantityFields(Long totalQuantity) {
 		this.totalQuantity = totalQuantity;
 	}
-
-	public void incrementOccupiedQuantity() {
-		if (this.occupiedQuantity < this.totalQuantity) {
-			this.occupiedQuantity++;
-		} else {
-			throw new BrainPixException(CommonErrorCode.METHOD_NOT_ALLOWED); //FULL_CAPACITY, "모집이 마감되었습니다.");
-		}
-	}
-
 }

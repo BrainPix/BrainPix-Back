@@ -7,6 +7,8 @@ import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTaskType;
 import com.brainpix.profile.entity.Specialization;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,14 +16,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestTaskUpdateDto {
-	private String title;
-	private String content;
-	private Specialization specialization;
-	private Boolean openMyProfile;
-	private List<String> imageList;
-	private List<String> attachmentFileList;
+public class RequestTaskUpdateDto extends PostDto {
+
+	@Future(message = "마감일은 현재 날짜보다 미래여야 합니다.")
+	@NotNull(message = "마감일은 필수입니다.")
 	private LocalDateTime deadline;
+
+	@NotNull(message = "요청 과제 유형은 필수입니다.")
 	private RequestTaskType requestTaskType;
-	private PostAuth postAuth;
 }

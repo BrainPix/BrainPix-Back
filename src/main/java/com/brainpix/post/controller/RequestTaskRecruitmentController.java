@@ -25,6 +25,6 @@ public class RequestTaskRecruitmentController {
 	@PutMapping("/{recruitmentId}")
 	public ResponseEntity<ApiResponse> updateRecruitments(@PathVariable Long recruitmentId, @RequestBody List<RequestTaskRecruitmentDto> recruitmentDtos) {
 		recruitmentService.updateRecruitments(recruitmentId, recruitmentDtos);
-		return ResponseEntity.ok(ApiResponse.success(null));
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 }

@@ -12,6 +12,7 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.service.PriceService;
+import com.brainpix.post.converter.CreateRequestTaskRecruitmentConverter;
 import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
@@ -26,6 +27,7 @@ public class RequestTaskRecruitmentService {
 
 	private final RequestTaskRecruitmentRepository recruitmentRepository;
 	private final PriceService priceService;
+	private final CreateRequestTaskRecruitmentConverter createRequestTaskRecruitmentConverter;
 
 	@Transactional
 	public void createRecruitments(RequestTask requestTask, List<RequestTaskRecruitmentDto> recruitmentDtos) {
@@ -45,11 +47,7 @@ public class RequestTaskRecruitmentService {
 			// 가격 정보 생성
 			Price price = priceService.createPrice(recruitmentDto.getPriceDto());
 
-			RequestTaskRecruitment recruitment = RequestTaskRecruitment.builder()
-				.requestTask(requestTask)
-				.domain(recruitmentDto.getDomain())
-				.price(price)
-				.build();
+			RequestTaskRecruitment recruitment = createRequestTaskRecruitmentConverter.convertToRequestTaskRecruitment(requestTask, recruitmentDto, price);
 
 			recruitments.add(recruitment);
 
@@ -102,15 +100,4 @@ public class RequestTaskRecruitmentService {
 			recruitmentRepository.deleteAll(existingRecruitmentMap.values());
 		}
 	}
-
-	//참가 신청
-	@Transactional
-	public void applyToRecruitment(Long recruitmentId) {
-		RequestTaskRecruitment recruitment = recruitmentRepository.findById(recruitmentId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-		recruitment.getPrice().incrementOccupiedQuantity();
-		recruitmentRepository.save(recruitment);
-	}
-
 }

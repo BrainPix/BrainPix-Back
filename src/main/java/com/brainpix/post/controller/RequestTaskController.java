@@ -1,6 +1,7 @@
 package com.brainpix.post.controller;
 
 import java.util.Map;
+import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.dto.RequestTaskApiResponseDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.service.RequestTaskService;
@@ -27,20 +29,20 @@ public class RequestTaskController {
 	private final RequestTaskService requestTaskService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> createRequestTask(@RequestParam Long userId, @RequestBody RequestTaskCreateDto createDto) {
-		Long taskId = requestTaskService.createRequestTask(userId, createDto);
-		return ResponseEntity.ok(ApiResponse.created(Map.of("taskId", taskId)));
+	public ResponseEntity<ApiResponse<RequestTaskApiResponseDto>> createRequestTask(@RequestParam Long userId, @Valid @RequestBody RequestTaskCreateDto createDto) {
+		Long taskId = requestTaskService.createRequestTask(userId, createDto); // 컨버터행
+		return ResponseEntity.ok(ApiResponse.success(new RequestTaskApiResponseDto("taskId", taskId)));
 	}
 
 	@PutMapping("/{taskId}")
-	public ResponseEntity<ApiResponse> updateRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId, @RequestBody RequestTaskUpdateDto updateDto) {
+	public ResponseEntity<ApiResponse<Void>> updateRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId, @Valid @RequestBody RequestTaskUpdateDto updateDto) {
 		requestTaskService.updateRequestTask(taskid, userId, updateDto);
-		return ResponseEntity.ok(ApiResponse.success(null));
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
 	@DeleteMapping("/{taskId}")
-	public ResponseEntity<ApiResponse> deleteRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> deleteRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId) {
 		requestTaskService.deleteRequestTask(taskid, userId);
-		return ResponseEntity.ok(ApiResponse.success(null));
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 }

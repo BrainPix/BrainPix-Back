@@ -35,9 +35,6 @@ public class RequestTaskService {
 
 	@Transactional
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
-		if (createDto == null) {
-			throw new BrainPixException(RequestTaskErrorCode.INVALID_TASK_INPUT);
-		}
 
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
@@ -60,9 +57,7 @@ public class RequestTaskService {
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
-		if (!requestTask.getWriter().getId().equals(userId)) {
-			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
-		}
+		requestTask.validateWriter(userId);
 
 		// RequestTask 고유 필드 업데이트
 		requestTask.updateRequestTaskFields(updateDto);
@@ -80,9 +75,7 @@ public class RequestTaskService {
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
-		if (!requestTask.getWriter().getId().equals(userId)) {
-			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
-		}
+		requestTask.validateWriter(userId);
 
 		try {
 			requestTaskRepository.delete(requestTask);

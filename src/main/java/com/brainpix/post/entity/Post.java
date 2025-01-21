@@ -2,6 +2,8 @@ package com.brainpix.post.entity;
 
 import java.util.List;
 
+import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
@@ -72,5 +74,12 @@ public abstract class Post extends BaseTimeEntity {
 		this.postAuth = postAuth;
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
+	}
+
+	// 작성자 검증 메서드
+	public void validateWriter(Long userId) {
+		if (!this.getWriter().getId().equals(userId)) {
+			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
+		}
 	}
 }

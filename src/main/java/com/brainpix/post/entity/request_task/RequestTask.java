@@ -53,4 +53,6 @@ public class RequestTask extends Post {
 		this.deadline = updateDto.getDeadline();
 		this.requestTaskType = updateDto.getRequestTaskType();
 	}
+
+
 }
