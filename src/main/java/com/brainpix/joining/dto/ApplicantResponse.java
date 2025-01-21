@@ -9,4 +9,6 @@ public class ApplicantResponse {
 	private Long applicantId;   // 지원자 ID
 	private String applicantName; // 지원자 이름
 	private Boolean accepted;     // 수락 여부
+
 }
+

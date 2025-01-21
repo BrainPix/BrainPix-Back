@@ -32,7 +32,7 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 
 	private String domain;
 
-	@OneToOne
+	@OneToOne(mappedBy = "collaborationRecruitment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Gathering gathering;
 
 	@OneToMany(mappedBy = "collaborationRecruitment", cascade = CascadeType.ALL, orphanRemoval = true)

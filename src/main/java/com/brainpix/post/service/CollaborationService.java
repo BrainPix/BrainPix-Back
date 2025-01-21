@@ -12,8 +12,8 @@ import com.brainpix.post.dto.collaborationhub.CollaborationDetailResponse;
 import com.brainpix.post.dto.collaborationhub.CollaborationPreviewResponse;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
-import com.brainpix.post.repository.CollaborationHubRepository;
-import com.brainpix.post.repository.CollaborationRecruitmentRepository;
+import com.brainpix.post.repository.collaborationhub.CollaborationHubRepository;
+import com.brainpix.post.repository.collaborationhub.CollaborationRecruitmentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ public class CollaborationService {
 
 	private final CollaborationHubRepository hubRepository;
 	private final CollaborationRecruitmentRepository recruitmentRepository;
-	//private final SavedPostRepository savedPostRepository;
+	private final SavedPostRepository savedPostRepository;
 
 	/**
 	 * 협업광장 게시물 미리보기

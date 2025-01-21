@@ -1,4 +1,4 @@
-package com.brainpix.post.repository;
+package com.brainpix.post.repository.collaborationhub;
 
 import java.util.List;
 
