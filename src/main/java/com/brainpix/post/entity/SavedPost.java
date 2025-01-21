@@ -1,8 +1,6 @@
 package com.brainpix.post.entity;
 
-import com.brainpix.api.code.error.SavedPostErrorCode;
 import com.brainpix.jpa.BaseTimeEntity;
-import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.Entity;
@@ -39,9 +37,4 @@ public class SavedPost extends BaseTimeEntity {
 		this.post = post;
 	}
 
-	public static void validateNotDuplicate(SavedPostRepository repository, User user, Post post) {
-		if (repository.existsByUserAndPost(user, post)) {
-			throw new IllegalStateException(SavedPostErrorCode.DUPLICATE_SAVED_POST.getMessage());
-		}
-	}
 }

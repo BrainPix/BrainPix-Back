@@ -38,7 +38,7 @@ public class SavedPostService {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.POST_NOT_FOUND.getMessage()));
 
-		SavedPost.validateNotDuplicate(savedPostRepository, user, post);
+		validateNotDuplicate(user, post);
 
 		savedPostRepository.save(new SavedPost(user, post));
 	}
@@ -83,6 +83,12 @@ public class SavedPostService {
 				return SavedPostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
 					occupiedQuantity);
 			});
+	}
+
+	private void validateNotDuplicate(User user, Post post) {
+		if (savedPostRepository.existsByUserAndPost(user, post)) {
+			throw new IllegalStateException(SavedPostErrorCode.DUPLICATE_SAVED_POST.getMessage());
+		}
 	}
 
 }
