@@ -1,20 +1,16 @@
 package com.brainpix.alarm.controller;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.brainpix.alarm.dto.CreateAlarmDto;
 import com.brainpix.alarm.dto.GetAlarmDto;
 import com.brainpix.alarm.dto.GetUnreadAlarmDto;
 import com.brainpix.alarm.service.AlarmService;
@@ -28,15 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class AlarmController {
 
 	private final AlarmService alarmService;
-
-	// 알림 생성 API
-	@PostMapping
-	public ResponseEntity<?> createAlarm(@RequestBody CreateAlarmDto.Request request) {
-
-		CreateAlarmDto.Response data = alarmService.createAlarm(request);
-
-		return new ResponseEntity<>(ApiResponse.success(data), HttpStatus.CREATED);
-	}
 
 	// 알림 읽음 처리 API
 	@PatchMapping("/read/{alarmId}")
