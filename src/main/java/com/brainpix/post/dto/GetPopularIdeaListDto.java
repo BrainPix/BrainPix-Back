@@ -19,7 +19,7 @@ public class GetPopularIdeaListDto {
 	@Getter
 	@Setter
 	public static class Request {
-		private IdeaMarketType type;    // 아이디어 타입 (IDEA_SOLUTION, MARKET_PLACE)
+		private String type;    // 아이디어 타입 (IDEA_SOLUTION, MARKET_PLACE)
 		private Integer page;		// 페이지 수
 		private Integer size;		// 조회 개수
 	}
@@ -46,13 +46,13 @@ public class GetPopularIdeaListDto {
 	@Getter
 	public static class IdeaDetail {
 		private Long ideaId;                // 게시글의 식별자 값
-		private PostAuth auth;					// 공개 범위
+		private String auth;					// 공개 범위
 		private String writerImageUrl;			// 작성자 프로필
 		private String writerName;				// 작성자 이름
 		private String thumbnailImageUrl;          // 대표 이미지 경로
 		private String title;				// 제목
 		private Long price;				// 가격
-		private Specialization category;	// 게시글의 카테고리
+		private String category;	// 게시글의 카테고리
 		private Long saveCount;		// 저장 횟수
 		private Long viewCount;		// 조회수
 	}

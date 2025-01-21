@@ -23,9 +23,9 @@ public class GetIdeaDetailDto {
 	public static class Response {
 		private Long ideaId;                // 아이디어 ID
 		private String thumbnailImageUrl;   // 썸네일 이미지 URL
-		private Specialization category;            // 아이디어 카테고리
-		private IdeaMarketType ideaMarketType;  // 아이디어 솔루션 / 마켓 플레이스
-		private PostAuth auth;  // 아이디어 공개 유형 (ALL, COMPANY)
+		private String category;            // 아이디어 카테고리
+		private String ideaMarketType;  // 아이디어 솔루션 / 마켓 플레이스
+		private String auth;  // 아이디어 공개 유형 (ALL, COMPANY)
 		private String title;               // 아이디어 제목
 		private String content;         // 아이디어 내용
 		private Long price;                 // 아이디어 가격
@@ -45,7 +45,7 @@ public class GetIdeaDetailDto {
 		private String name;              // 작성자 이름
 		private String profileImageUrl;   // 작성자 프로필 이미지 URL
 		private String role;              // 작성자 역할 (COMPANY, INDIVIDUAL)
-		private Specialization specialization; // 작성자의 분야 (IT_TECH, DESIGN, ...)
+		private String specialization; // 작성자의 분야 (IT_TECH, DESIGN, ...)
 		private Long totalIdeas;       // 작성자가 등록한 아이디어 수
 		private Long totalCollaborations;     // 작성자가 협업한 경험 수
 	}
