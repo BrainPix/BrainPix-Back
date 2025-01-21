@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SavedPost extends BaseTimeEntity {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -35,4 +36,5 @@ public class SavedPost extends BaseTimeEntity {
 		this.user = user;
 		this.post = post;
 	}
+
 }

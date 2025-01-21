@@ -2,10 +2,13 @@ package com.brainpix.post.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.SavedPost;
+import com.brainpix.user.entity.User;
 
-public interface SavedPostRepository extends JpaRepository<SavedPost, Long> {
+public interface SavedPostRepository extends JpaRepository<SavedPost, Long>, SavedPostRepositoryCustom {
 
-	// 게시글의 저장 횟수 조회
+	boolean existsByUserAndPost(User user, Post post);
+
 	Long countByPostId(Long postId);
 }

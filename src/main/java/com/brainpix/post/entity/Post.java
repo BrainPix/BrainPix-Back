@@ -37,6 +37,7 @@ public abstract class Post extends BaseTimeEntity {
 
 	private String title;
 	private String content;
+	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
 
@@ -81,5 +82,12 @@ public abstract class Post extends BaseTimeEntity {
 		if (!this.getWriter().getId().equals(userId)) {
 			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
 		}
+	}
+
+	public String getFirstImage() {
+		if (imageList == null || imageList.isEmpty()) {
+			return "thumbnail does not exist;";
+		}
+		return imageList.get(0);
 	}
 }

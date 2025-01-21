@@ -17,8 +17,8 @@ import com.brainpix.profile.entity.Profile;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.profile.repository.PortfolioRepository;
 import com.brainpix.profile.repository.ProfileRepository;
-import com.brainpix.profile.repository.UserRepository;
 import com.brainpix.user.entity.User;
+import com.brainpix.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
