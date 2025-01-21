@@ -1,12 +1,15 @@
 package com.brainpix.post.entity.request_task;
 
+
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.jpa.BaseTimeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
@@ -22,11 +25,12 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "request_task_id")
 	private RequestTask requestTask;
 
 	private String domain;
 
-	@OneToOne
+	@OneToOne(orphanRemoval = true)
 	private Price price;
 
 	@Builder
@@ -34,5 +38,9 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 		this.requestTask = requestTask;
 		this.domain = domain;
 		this.price = price;
+	}
+
+	public void updateRecruitmentFields(String domain) {
+		this.domain = domain;
 	}
 }
