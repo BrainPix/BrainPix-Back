@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.post.converter.CreateRequestTaskConverter;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
@@ -29,51 +31,63 @@ public class RequestTaskService {
 	private final RequestTaskRepository requestTaskRepository;
 	private final RequestTaskRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
+	private final CreateRequestTaskConverter createRequestTaskConverter;
 
 	@Transactional
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
+		if (createDto == null) {
+			throw new BrainPixException(RequestTaskErrorCode.INVALID_TASK_INPUT);
+		}
+
 		User writer = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		RequestTask requestTask = RequestTask.builder()
-			.writer(writer)
-			//.writer(currentUser)
-			.title(createDto.getTitle())
-			.content(createDto.getContent())
-			.specialization(createDto.getSpecialization())
-			.openMyProfile(createDto.getOpenMyProfile())
-			.viewCount(0L) // 초기 조회수는 0으로 설정
-			.imageList(createDto.getImageList())
-			.attachmentFileList(createDto.getAttachmentFileList())
-			.deadline(createDto.getDeadline())
-			.requestTaskType(createDto.getRequestTaskType())
-			.postAuth(createDto.getPostAuth())
-			.build();
+		RequestTask requestTask	= createRequestTaskConverter.convertToRequestTask(createDto, writer);
 
-		requestTaskRepository.save(requestTask);
-
-		// 모집 정보 추가
-		recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
+		try {
+			requestTaskRepository.save(requestTask);
+			recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
+		} catch (Exception e) {
+			throw new BrainPixException(RequestTaskErrorCode.TASK_CREATION_FAILED);
+		}
 
 		return requestTask.getId();
 	}
 
 	@Transactional
-	public void updateRequestTask(Long taskid, RequestTaskUpdateDto updateDto) {
-		RequestTask requestTask = requestTaskRepository.findById(taskid)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+	public void updateRequestTask(Long taskId, Long userId, RequestTaskUpdateDto updateDto) {
+		RequestTask requestTask = requestTaskRepository.findById(taskId)
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+
+		// 작성자 검증 로직 추가
+		if (!requestTask.getWriter().getId().equals(userId)) {
+			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
+		}
 
 		// RequestTask 고유 필드 업데이트
 		requestTask.updateRequestTaskFields(updateDto);
 
-		requestTaskRepository.save(requestTask);
+		try {
+			requestTaskRepository.save(requestTask);
+		} catch (Exception e) {
+			throw new BrainPixException(RequestTaskErrorCode.TASK_UPDATE_FAILED);
+		}
 	}
 
 	@Transactional
-	public void deleteRequestTask(Long id) {
-		if (!requestTaskRepository.existsById(id)) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+	public void deleteRequestTask(Long taskId, Long userId) {
+		RequestTask requestTask = requestTaskRepository.findById(taskId)
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+
+		// 작성자 검증 로직 추가
+		if (!requestTask.getWriter().getId().equals(userId)) {
+			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
 		}
-		requestTaskRepository.deleteById(id);
+
+		try {
+			requestTaskRepository.delete(requestTask);
+		} catch (Exception e) {
+			throw new BrainPixException(RequestTaskErrorCode.TASK_DELETE_FAILED);
+		}
 	}
 }

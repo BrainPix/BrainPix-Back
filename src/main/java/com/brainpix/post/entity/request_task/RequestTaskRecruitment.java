@@ -30,7 +30,7 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 
 	private String domain;
 
-	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@OneToOne(orphanRemoval = true)
 	private Price price;
 
 	@Builder

@@ -27,20 +27,20 @@ public class RequestTaskController {
 	private final RequestTaskService requestTaskService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> createRequestTask(@RequestParam Long userId, RequestTaskCreateDto createDto) {
+	public ResponseEntity<ApiResponse> createRequestTask(@RequestParam Long userId, @RequestBody RequestTaskCreateDto createDto) {
 		Long taskId = requestTaskService.createRequestTask(userId, createDto);
 		return ResponseEntity.ok(ApiResponse.created(Map.of("taskId", taskId)));
 	}
 
 	@PutMapping("/{taskId}")
-	public ResponseEntity<ApiResponse> updateRequestTask(@PathVariable("taskId") Long taskid, @RequestBody RequestTaskUpdateDto updateDto) {
-		requestTaskService.updateRequestTask(taskid, updateDto);
+	public ResponseEntity<ApiResponse> updateRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId, @RequestBody RequestTaskUpdateDto updateDto) {
+		requestTaskService.updateRequestTask(taskid, userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 
 	@DeleteMapping("/{taskId}")
-	public ResponseEntity<ApiResponse> deleteRequestTask(@PathVariable("taskId") Long taskid) {
-		requestTaskService.deleteRequestTask(taskid);
+	public ResponseEntity<ApiResponse> deleteRequestTask(@PathVariable("taskId") Long taskid, @RequestParam Long userId) {
+		requestTaskService.deleteRequestTask(taskid, userId);
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 }
