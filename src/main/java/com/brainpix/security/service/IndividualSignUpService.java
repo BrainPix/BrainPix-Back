@@ -21,7 +21,7 @@ public class IndividualSignUpService extends SignUpService {
 	}
 
 	@Override
-	protected void loginProcess(User user) {
+	protected void firstSignupProcess(User user) {
 		IndividualProfile profile = IndividualProfile.builder()
 			.user(user)
 			.specializationList(null)

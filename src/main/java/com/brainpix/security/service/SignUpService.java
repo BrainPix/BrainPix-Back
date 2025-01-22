@@ -28,7 +28,7 @@ public abstract class SignUpService {
 
 		User user = commonSignUpRequest.toEntity(passwordEncoder.encode(commonSignUpRequest.getPassword()));
 		userRepository.save(user);
-		loginProcess(user);
+		firstSignupProcess(user);
 	}
 
 	public boolean isDuplicated(String identifier) {
@@ -39,5 +39,5 @@ public abstract class SignUpService {
 		return userRepository.findByNickName(nickName).isPresent();
 	}
 
-	protected abstract void loginProcess(User user);
+	protected abstract void firstSignupProcess(User user);
 }

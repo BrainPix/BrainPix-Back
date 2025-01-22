@@ -21,7 +21,7 @@ public class CompanySignUpService extends SignUpService {
 	}
 
 	@Override
-	protected void loginProcess(User user) {
+	protected void firstSignupProcess(User user) {
 		CompanyProfile profile = CompanyProfile.builder()
 			.user(user)
 			.specializationList(null)
