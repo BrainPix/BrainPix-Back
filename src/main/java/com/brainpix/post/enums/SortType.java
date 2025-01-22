@@ -11,11 +11,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum SortType {
-	NEWEST(QPost.post.createdAt::desc),        // 최신 순
-	OLDEST(QPost.post.createdAt::asc),        // 오래된 순
-	POPULAR(QPost.post.count()::desc),	   // 저장 순
-	HIGHST_PRICE(QIdeaMarket.ideaMarket.price.price::desc),	// 높은 가격 순
-	LOWEST_PRICE(QIdeaMarket.ideaMarket.price.price::asc);   // 낮은 가격 순
+	IDEA_NEWEST(QIdeaMarket.ideaMarket.createdAt::desc),	// 최신 순
+	IDEA_OLDEST(QIdeaMarket.ideaMarket.createdAt::asc),	// 오래된 순
+	IDEA_POPULAR(QIdeaMarket.ideaMarket.count()::desc),	// 저장 순
+	IDEA_HIGHST_PRICE(QIdeaMarket.ideaMarket.price.price::desc),	// 높은 가격 순
+	IDEA_LOWEST_PRICE(QIdeaMarket.ideaMarket.price.price::asc);	// 낮은 가격 순
 
 	private final Supplier<OrderSpecifier<?>> orderSpecifierSupplier;
 

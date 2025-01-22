@@ -43,17 +43,17 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
-				PostBooleanExpression.EXCLUDE_PRIVATE.get(null),                // 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),  // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-				PostBooleanExpression.TITLE_CONTAINS.get(keyword),              // 3. 검색어 필터
-				PostBooleanExpression.CATEGORY_EQ.get(category),                // 4. 카테고리 필터
-				PostBooleanExpression.ONLY_COMPANY.get(onlyCompany)             // 5. 기업 공개만, 기업 공개 제외
+				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),	// 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.IDEA_TITLE_CONTAINS.get(keyword),	// 3. 검색어 필터
+				PostBooleanExpression.IDEA_CATEGORY_EQ.get(category),	// 4. 카테고리 필터
+				PostBooleanExpression.IDEA_ONLY_COMPANY.get(onlyCompany)	// 5. 기업 공개만, 기업 공개 제외
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
 
 		// 정렬 조건 (기본 값은 최신순)
-		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.NEWEST.getOrder();
+		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.IDEA_NEWEST.getOrder();
 
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
@@ -88,8 +88,8 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
-				PostBooleanExpression.EXCLUDE_PRIVATE.get(null),                // 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)  // 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),	// 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
