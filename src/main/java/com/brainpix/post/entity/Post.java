@@ -2,6 +2,8 @@ package com.brainpix.post.entity;
 
 import java.util.List;
 
+import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
@@ -35,6 +37,7 @@ public abstract class Post extends BaseTimeEntity {
 
 	private String title;
 	private String content;
+	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
 
@@ -61,5 +64,30 @@ public abstract class Post extends BaseTimeEntity {
 		this.specialization = specialization;
 		this.imageList = imageList;
 		this.attachmentFileList = attachmentFileList;
+	}
+
+	public void updateBaseFields(String title, String content, Specialization specialization,Boolean openMyProfile,
+		PostAuth postAuth, List<String> imageList, List<String> attachmentFileList) {
+		this.title = title;
+		this.content = content;
+		this.specialization = specialization;
+		this.openMyProfile = openMyProfile;
+		this.postAuth = postAuth;
+		this.imageList = imageList;
+		this.attachmentFileList = attachmentFileList;
+	}
+
+	// 작성자 검증 메서드
+	public void validateWriter(Long userId) {
+		if (!this.getWriter().getId().equals(userId)) {
+			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS); // 권한 없음 예외
+		}
+	}
+
+	public String getFirstImage() {
+		if (imageList == null || imageList.isEmpty()) {
+			return "thumbnail does not exist;";
+		}
+		return imageList.get(0);
 	}
 }
