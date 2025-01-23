@@ -20,6 +20,5 @@ public class CreateCollaborationHubConverter {
 			.link(createDto.getLink())
 			.postAuth(createDto.getPostAuth())
 			.build();
-
 	}
 }

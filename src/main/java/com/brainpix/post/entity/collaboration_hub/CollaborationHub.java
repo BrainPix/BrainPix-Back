@@ -7,8 +7,6 @@ import java.util.Objects;
 
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
-import com.brainpix.post.dto.CollaborationRecruitmentDto;
-import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.profile.entity.Specialization;
@@ -30,6 +28,9 @@ public class CollaborationHub extends Post {
 
 	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CollaborationRecruitment> collaborations = new ArrayList<>();
+
+	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CollaborationHubProjectMember> members = new ArrayList<>();
 
 	@Builder
 	public CollaborationHub(User writer, String title, String content, Boolean openMyProfile,

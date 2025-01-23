@@ -3,13 +3,10 @@ package com.brainpix.post.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.brainpix.post.entity.PostAuth;
-
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,9 +19,11 @@ public class CollaborationHubCreateDto extends PostDto{
 	@NotNull(message = "마감일은 필수입니다.")
 	private LocalDateTime deadline;
 
-
 	private String link;
 
 	@NotEmpty(message = "모집 정보는 최소 하나 이상 필요합니다.")
 	private List<CollaborationRecruitmentDto> recruitments;
+
+	@NotEmpty(message = "개최 인원 정보는 최소 한 명 이상 등록해야 합니다.")
+	private List<CollaborationHubProjectMemberDto> members;
 }

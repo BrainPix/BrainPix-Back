@@ -2,6 +2,7 @@ package com.brainpix.post.service;
 
 import org.springframework.stereotype.Service;
 
+import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
@@ -25,6 +26,7 @@ public class CollaborationHubService {
 	private final CollaborationHubRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubConverter createCollaborationHubConverter;
+	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -37,8 +39,9 @@ public class CollaborationHubService {
 		try {
 			collaborationHubRepository.save(collaborationHub);
 			recruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
+			collaborationHubProjectMemberService.createProjectMembers(collaborationHub, createDto.getMembers());
 		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_CREATION_FAILED);
+			throw new BrainPixException(CollaborationHubErrorCode.TASK_CREATION_FAILED);
 		}
 
 		return collaborationHub.getId();
