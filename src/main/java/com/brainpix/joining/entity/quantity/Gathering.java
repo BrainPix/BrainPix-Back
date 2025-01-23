@@ -20,8 +20,4 @@ public class Gathering extends BaseQuantity {
 	public Gathering(Long totalQuantity, Long occupiedQuantity) {
 		super(totalQuantity, occupiedQuantity);
 	}
-
-	public void updateGatheringFields(Long occupiedQuantity, Long totalQuantity) {
-		this.updateQuantityFields(occupiedQuantity, totalQuantity);
-	}
 }

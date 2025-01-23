@@ -1,7 +1,5 @@
 package com.brainpix.post.controller;
 
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -9,13 +7,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.dto.CollaborationHubApiResponseDto;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.service.CollaborationHubService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,20 +27,22 @@ public class CollaborationHubController {
 	private final CollaborationHubService collaborationHubService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse> createCollaborationHub(@RequestBody CollaborationHubCreateDto createDto) {
-		Long workspaceId = collaborationHubService.createCollaborationHub(createDto);
-		return ResponseEntity.ok(ApiResponse.success(Map.of("workspaceId", workspaceId)));
+	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@RequestParam Long userId, @Valid @RequestBody CollaborationHubCreateDto createDto) {
+		Long workspaceId = collaborationHubService.createCollaborationHub(userId, createDto);
+		return ResponseEntity.ok(ApiResponse.success(new CollaborationHubApiResponseDto("workspaceId", workspaceId)));
 	}
 
 	@PatchMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse> updateCollaborationHub(@PathVariable("workspaceId") Long id, @RequestBody CollaborationHubUpdateDto updateDto) {
-		collaborationHubService.updateCollaborationHub(id, updateDto);
-		return ResponseEntity.ok(ApiResponse.success("협업 광장 게시글이 성공적으로 수정되었습니다."));
+	public ResponseEntity<ApiResponse<Void>> updateCollaborationHub(@PathVariable("workspaceId") Long workspaceId, @RequestParam Long userId, @Valid @RequestBody CollaborationHubUpdateDto updateDto) {
+		collaborationHubService.updateCollaborationHub(workspaceId, userId, updateDto);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+
 	}
 
 	@DeleteMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse> deleteCollaborationHub(@PathVariable("workspaceId") Long id) {
-		collaborationHubService.deleteCollaborationHub(id);
-		return ResponseEntity.ok(ApiResponse.success("협업 광장 게시글이 성공적으로 삭제되었습니다."));
+	public ResponseEntity<ApiResponse<Void>> deleteCollaborationHub(@PathVariable("workspaceId") Long workspaceId, @RequestParam Long userId) {
+		collaborationHubService.deleteCollaborationHub(workspaceId, userId);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+
 	}
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "collaboration_hub_id")
 	private CollaborationHub parentCollaborationHub;
 
 	private String domain;
@@ -36,10 +38,5 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 		this.parentCollaborationHub = parentCollaborationHub;
 		this.domain = domain;
 		this.gathering = gathering;
-	}
-
-	public void updateRecruitmentFields(CollaborationRecruitmentDto recruitmentDto) {
-		this.domain = recruitmentDto.getDomain();
-		this.gathering.updateGatheringFields(recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity());
 	}
 }

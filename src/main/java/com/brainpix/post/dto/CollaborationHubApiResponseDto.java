@@ -1,7 +1,5 @@
 package com.brainpix.post.dto;
 
-import com.brainpix.joining.dto.GatheringDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CollaborationRecruitmentDto {
-	private String domain;
+public class CollaborationHubApiResponseDto {
 
-	private GatheringDto gatheringDto;
+	private String message;
+	private Long taskId;
 }

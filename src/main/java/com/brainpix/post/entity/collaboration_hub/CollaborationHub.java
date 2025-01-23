@@ -41,37 +41,15 @@ public class CollaborationHub extends Post {
 		this.link = link;
 	}
 
-	public void updateCollaborationHubFields(CollaborationHubUpdateDto updateDto, List<CollaborationRecruitmentDto> recruitmentDtos) {
+	public void updateCollaborationHubFields(CollaborationHubUpdateDto updateDto) {
 		// BasePost의 필드를 업데이트
-		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(),
+		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getSpecialization(),
 			updateDto.getOpenMyProfile(),
 			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
 
-		// RequestTask 고유 필드 업데이트
+		// CollaborationHub 고유 필드 업데이트
 		this.deadline = updateDto.getDeadline();
 		this.link = updateDto.getLink();
-
-		// recruitments 업데이트
-		if (recruitmentDtos != null) {
-			for (int i = 0; i < recruitmentDtos.size(); i++) {
-				if (i < this.collaborations.size()) {
-					// 기존 Recruitment 업데이트
-					this.collaborations.get(i).updateRecruitmentFields(recruitmentDtos.get(i));
-				} else {
-					// 새 Recruitment 추가
-					CollaborationRecruitmentDto recruitmentDto = recruitmentDtos.get(i);
-					this.collaborations.add(new CollaborationRecruitment(
-						this,
-						recruitmentDto.getDomain(),
-						new Gathering(recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity())
-					));
-				}
-			}
-			// 남아있는 recruitments가 더 많을 경우 삭제
-			if (recruitmentDtos.size() < this.collaborations.size()) {
-				this.collaborations.subList(recruitmentDtos.size(), this.collaborations.size()).clear();
-			}
-		}
 
 	}
 

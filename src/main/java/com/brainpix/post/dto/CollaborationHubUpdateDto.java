@@ -5,19 +5,22 @@ import java.util.List;
 
 import com.brainpix.post.entity.PostAuth;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class CollaborationHubUpdateDto {
-	private String title;
-	private String content;
-	private String category;
-	private Boolean openMyProfile;
-	private List<String> imageList;
-	private List<String> attachmentFileList;
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CollaborationHubUpdateDto extends PostDto{
+
+	@Future(message = "마감일은 현재 날짜보다 미래여야 합니다.")
+	@NotNull(message = "마감일은 필수입니다.")
 	private LocalDateTime deadline;
+
 	private String link;
-	private PostAuth postAuth;
-	private List<CollaborationRecruitmentDto> recruitments;
 
 }

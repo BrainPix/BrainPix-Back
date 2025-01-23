@@ -3,18 +3,18 @@ package com.brainpix.post.service;
 import org.springframework.stereotype.Service;
 
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.joining.entity.quantity.Gathering;
+import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
 
-import com.brainpix.post.dto.CollaborationRecruitmentDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
-import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,61 +22,60 @@ import lombok.RequiredArgsConstructor;
 public class CollaborationHubService {
 
 	private final CollaborationHubRepository collaborationHubRepository;
+	private final CollaborationHubRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
+	private final CreateCollaborationHubConverter createCollaborationHubConverter;
 
-	public Long createCollaborationHub(CollaborationHubCreateDto createDto) {
-		User writer = userRepository.findById(1L)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+	@Transactional
+	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
 
-		CollaborationHub collaborationHub = CollaborationHub.builder()
-			.writer(writer)
-			//.writer(currentUser)
-			.title(createDto.getTitle())
-			.content(createDto.getContent())
-			.category(createDto.getCategory())
-			.openMyProfile(createDto.getOpenMyProfile())
-			.viewCount(0L) // 초기 조회수는 0으로 설정
-			.imageList(createDto.getImageList())
-			.attachmentFileList(createDto.getAttachmentFileList())
-			.deadline(createDto.getDeadline())
-			.link(createDto.getLink())
-			.postAuth(createDto.getPostAuth())
-			.build();
+		User writer = userRepository.findById(userId)
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		if (createDto.getRecruitments() != null) {
-			for (CollaborationRecruitmentDto recruitmentDto : createDto.getRecruitments()) {
-				Gathering gathering = Gathering.builder()
-					.totalQuantity(recruitmentDto.getTotalQuantity())
-					.occupiedQuantity(recruitmentDto.getOccupiedQuantity())
-					.build();
+		CollaborationHub collaborationHub = createCollaborationHubConverter.convertToCollaborationHub(createDto, writer);
 
-				CollaborationRecruitment recruitment = CollaborationRecruitment.builder()
-					.parentCollaborationHub(collaborationHub)
-					.domain(recruitmentDto.getDomain())
-					.gathering(gathering)
-					.build();
-				collaborationHub.getRecruitments().add(recruitment);
-			}
+		try {
+			collaborationHubRepository.save(collaborationHub);
+			recruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
+		} catch (Exception e) {
+			throw new BrainPixException(RequestTaskErrorCode.TASK_CREATION_FAILED);
 		}
 
-		CollaborationHub savedTask = collaborationHubRepository.save(collaborationHub);
-		return savedTask.getId();
+		return collaborationHub.getId();
 	}
 
-	public void updateCollaborationHub(Long id, CollaborationHubUpdateDto updateDto) {
-		CollaborationHub existingTask = collaborationHubRepository.findById(id)
+	@Transactional
+	public void updateCollaborationHub(Long workspaceId, Long userId, CollaborationHubUpdateDto updateDto) {
+		CollaborationHub collaboration = collaborationHubRepository.findById(workspaceId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 작성자 검증 로직 추가
+		collaboration.validateWriter(userId);
 
 		// CollaborationHub 고유 필드 업데이트
-		existingTask.updateCollaborationHubFields(updateDto, updateDto.getRecruitments());
+		collaboration.updateCollaborationHubFields(updateDto);
 
-		collaborationHubRepository.save(existingTask);
+		try {
+			collaborationHubRepository.save(collaboration);
+		} catch (Exception e) {
+			throw new BrainPixException(CollaborationHubErrorCode.TASK_UPDATE_FAILED);
+		}
 	}
 
-	public void deleteCollaborationHub(Long id) {
-		if (!collaborationHubRepository.existsById(id)) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+	@Transactional
+	public void deleteCollaborationHub(Long workspaceId, Long userId) {
+		CollaborationHub collaboration = collaborationHubRepository.findById(workspaceId)
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 작성자 검증 로직 추가
+		collaboration.validateWriter(userId);
+
+		collaborationHubRepository.deleteById(workspaceId);
+
+		try {
+			collaborationHubRepository.deleteById(workspaceId);
+		} catch (Exception e) {
+			throw new BrainPixException(CollaborationHubErrorCode.TASK_DELETE_FAILED);
 		}
-		collaborationHubRepository.deleteById(id);
 	}
 }
