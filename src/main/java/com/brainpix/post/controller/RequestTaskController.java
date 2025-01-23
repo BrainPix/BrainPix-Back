@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.post.converter.GetPopularRequestTaskListDtoConverter;
+import com.brainpix.post.converter.GetRequestTaskDetailDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskListDtoConverter;
 import com.brainpix.post.dto.GetPopularRequestTaskListDto;
+import com.brainpix.post.dto.GetRequestTaskDetailDto;
 import com.brainpix.post.dto.GetRequestTaskListDto;
 import com.brainpix.post.dto.RequestTaskApiResponseDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
@@ -44,8 +46,18 @@ public class RequestTaskController {
 	@GetMapping("/popular")
 	public ResponseEntity<ApiResponse<GetPopularRequestTaskListDto.Response>> getPopularRequestTaskList(
 		GetPopularRequestTaskListDto.Request request, Pageable pageable) {
-		GetPopularRequestTaskListDto.Parameter parameter = GetPopularRequestTaskListDtoConverter.toParameter(request, pageable);
+		GetPopularRequestTaskListDto.Parameter parameter = GetPopularRequestTaskListDtoConverter.toParameter(request,
+			pageable);
 		GetPopularRequestTaskListDto.Response response = requestTaskService.getPopularRequestTaskList(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
+
+	@GetMapping("/{taskId}")
+	public ResponseEntity<ApiResponse<GetRequestTaskDetailDto.Response>> getRequestTaskDetail(
+		@PathVariable("taskId") Long taskId
+	) {
+		GetRequestTaskDetailDto.Parameter parameter = GetRequestTaskDetailDtoConverter.toParameter(taskId);
+		GetRequestTaskDetailDto.Response response = requestTaskService.getRequestTaskDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
