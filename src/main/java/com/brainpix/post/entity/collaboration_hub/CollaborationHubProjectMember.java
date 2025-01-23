@@ -26,12 +26,12 @@ public class CollaborationHubProjectMember {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "collaboration_hub_id")
-	private CollaborationHub collaborationHub;
+	private CollaborationHub parentCollaborationHub;
 
 	@Builder
 	public CollaborationHubProjectMember(String userId, String domain, CollaborationHub collaborationHub) {
 		this.userId = userId;
 		this.domain = domain;
-		this.collaborationHub = collaborationHub;
+		this.parentCollaborationHub = collaborationHub;
 	}
 }

@@ -1,9 +1,12 @@
 package com.brainpix.post.converter;
 
+import org.springframework.stereotype.Component;
+
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.user.entity.User;
 
+@Component
 public class CreateCollaborationHubConverter {
 
 	public CollaborationHub convertToCollaborationHub(CollaborationHubCreateDto createDto, User writer) {
