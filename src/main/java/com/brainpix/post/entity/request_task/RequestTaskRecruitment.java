@@ -1,10 +1,8 @@
 package com.brainpix.post.entity.request_task;
 
-
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.jpa.BaseTimeEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

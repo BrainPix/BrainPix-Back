@@ -1,8 +1,5 @@
 package com.brainpix.joining.entity.quantity;
 
-import com.brainpix.api.code.error.PriceErrorCode;
-import com.brainpix.api.exception.BrainPixException;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
