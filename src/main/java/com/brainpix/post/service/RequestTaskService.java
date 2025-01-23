@@ -8,7 +8,9 @@ import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.converter.CreateRequestTaskConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetPopularRequestTaskListDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskListDtoConverter;
+import com.brainpix.post.dto.GetPopularRequestTaskListDto;
 import com.brainpix.post.dto.GetRequestTaskListDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
@@ -38,6 +40,18 @@ public class RequestTaskService {
 			parameter.getPageable());
 
 		return GetRequestTaskListDtoConverter.toResponse(result);
+	}
+
+	// 저장순으로 요청 과제를 조회합니다.
+	@Transactional(readOnly = true)
+	public GetPopularRequestTaskListDto.Response getPopularRequestTaskList(
+		GetPopularRequestTaskListDto.Parameter parameter) {
+
+		// 요청 과제-저장수 쌍으로 반환된 결과
+		Page<Object[]> result = requestTaskRepository.findPopularRequestTaskListWithSaveCount(parameter.getType(),
+			parameter.getPageable());
+
+		return GetPopularRequestTaskListDtoConverter.toResponse(result);
 	}
 
 	@Transactional
