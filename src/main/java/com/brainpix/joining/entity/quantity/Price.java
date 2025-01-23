@@ -33,6 +33,7 @@ public class Price extends BaseQuantity {
 		this.paymentDuration = paymentDuration;
 	}
 
+	/*
 	//기존 참여 인원과 비교하는 로직
 	public void updatePriceFields(Long price, Long totalQuantity, PaymentDuration paymentDuration) {
 
@@ -43,5 +44,6 @@ public class Price extends BaseQuantity {
 		this.paymentDuration = paymentDuration;
 		this.updateQuantityFields(totalQuantity);
 	}
+	 */
 
 }

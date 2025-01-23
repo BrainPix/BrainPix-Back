@@ -40,7 +40,9 @@ public class RequestTaskRecruitment extends BaseTimeEntity {
 		this.price = price;
 	}
 
+	/*
 	public void updateRecruitmentFields(String domain) {
 		this.domain = domain;
 	}
+	 */
 }
