@@ -3,12 +3,15 @@ package com.brainpix.post.entity.collaboration_hub;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.CollaborationRecruitmentDto;
+import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -26,13 +29,13 @@ public class CollaborationHub extends Post {
 	private String link;
 
 	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CollaborationRecruitment> recruitments = new ArrayList<>();
+	private List<CollaborationRecruitment> collaborations = new ArrayList<>();
 
 	@Builder
-	public CollaborationHub(User writer, String title, String content, String category, Boolean openMyProfile,
+	public CollaborationHub(User writer, String title, String content, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,
-		String link, PostAuth postAuth) {
-		super(writer, title, content, category, openMyProfile, viewCount, postAuth, imageList,
+		String link, PostAuth postAuth, Specialization specialization) {
+		super(writer, title, content, openMyProfile, viewCount, postAuth, specialization, imageList,
 			attachmentFileList);
 		this.deadline = deadline;
 		this.link = link;
@@ -51,13 +54,13 @@ public class CollaborationHub extends Post {
 		// recruitments 업데이트
 		if (recruitmentDtos != null) {
 			for (int i = 0; i < recruitmentDtos.size(); i++) {
-				if (i < this.recruitments.size()) {
+				if (i < this.collaborations.size()) {
 					// 기존 Recruitment 업데이트
-					this.recruitments.get(i).updateRecruitmentFields(recruitmentDtos.get(i));
+					this.collaborations.get(i).updateRecruitmentFields(recruitmentDtos.get(i));
 				} else {
 					// 새 Recruitment 추가
 					CollaborationRecruitmentDto recruitmentDto = recruitmentDtos.get(i);
-					this.recruitments.add(new CollaborationRecruitment(
+					this.collaborations.add(new CollaborationRecruitment(
 						this,
 						recruitmentDto.getDomain(),
 						new Gathering(recruitmentDto.getOccupiedQuantity(), recruitmentDto.getTotalQuantity())
@@ -65,10 +68,29 @@ public class CollaborationHub extends Post {
 				}
 			}
 			// 남아있는 recruitments가 더 많을 경우 삭제
-			if (recruitmentDtos.size() < this.recruitments.size()) {
-				this.recruitments.subList(recruitmentDtos.size(), this.recruitments.size()).clear();
+			if (recruitmentDtos.size() < this.collaborations.size()) {
+				this.collaborations.subList(recruitmentDtos.size(), this.collaborations.size()).clear();
 			}
 		}
 
+	}
+
+	public long getTotalQuantity() {
+		return this.getCollaborations()
+			.stream()
+			.map(CollaborationRecruitment::getGathering)
+			.filter(Objects::nonNull)
+			.mapToLong(Gathering::getTotalQuantity)
+			.sum();
+	}
+
+	// 모집 현재 인원 합산 메서드
+	public long getOccupiedQuantity() {
+		return this.getCollaborations()
+			.stream()
+			.map(CollaborationRecruitment::getGathering)
+			.filter(Objects::nonNull)
+			.mapToLong(Gathering::getOccupiedQuantity)
+			.sum();
 	}
 }

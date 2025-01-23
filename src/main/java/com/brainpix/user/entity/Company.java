@@ -1,6 +1,6 @@
 package com.brainpix.user.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.brainpix.profile.entity.Profile;
 
@@ -13,14 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Company extends User {
-	private String companyName;
 	private String position;
 
 	@Builder
-	public Company(String identifier, String password, String name, LocalDateTime birthday, String email,
-		String profileImage, Profile profile, String companyName, String position) {
-		super(identifier, password, name, birthday, email, profileImage, profile);
-		this.companyName = companyName;
+	public Company(String identifier, String password, String name, String nickName, LocalDate birthday,
+		String email, String profileImage, Profile profile, String position) {
+		super(identifier, password, name, nickName, birthday, email, profileImage, profile);
 		this.position = position;
 	}
 }

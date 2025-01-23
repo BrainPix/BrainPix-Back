@@ -8,3 +8,5 @@ import com.brainpix.user.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 }
+
+// 테스트 하려고 임의로 만듬
