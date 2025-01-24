@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class IdeaMarketApiResponseDto {
 
 	private String message;
-	private Long taskId;
+	private Long userId;
 }

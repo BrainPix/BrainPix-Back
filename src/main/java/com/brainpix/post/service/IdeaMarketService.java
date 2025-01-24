@@ -6,14 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.IdeaMarketErrorCode;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateIdeaMarketConverter;
-import com.brainpix.post.dto.IdeaMarketCreateDto;
-import com.brainpix.post.dto.IdeaMarketUpdateDto;
-import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.post.converter.GetIdeaCommentListDtoConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
@@ -22,6 +19,8 @@ import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
+import com.brainpix.post.dto.IdeaMarketCreateDto;
+import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.Comment;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.CommentRepository;
@@ -54,17 +53,13 @@ public class IdeaMarketService {
 
 		IdeaMarket ideaMarket = createIdeaMarketConverter.convertToIdeaMarket(createDto, writer, price);
 
-		try {
-			ideaMarketRepository.save(ideaMarket);
-		} catch (Exception e) {
-			throw new BrainPixException(IdeaMarketErrorCode.IDEA_CREATION_FAILED);
-		}
+		ideaMarketRepository.save(ideaMarket);
 
 		return ideaMarket.getId();
 	}
 
 	@Transactional
-	public void updateIdeaMarket(Long ideaId, Long userId ,IdeaMarketUpdateDto updateDto) {
+	public void updateIdeaMarket(Long ideaId, Long userId, IdeaMarketUpdateDto updateDto) {
 		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
 			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
 
@@ -73,11 +68,7 @@ public class IdeaMarketService {
 		// CollaborationHub 고유 필드 업데이트
 		ideaMarket.updateIdeaMarketFields(updateDto);
 
-		try {
-			ideaMarketRepository.save(ideaMarket);
-		} catch (Exception e) {
-			throw new BrainPixException(IdeaMarketErrorCode.IDEA_UPDATE_FAILED);
-		}
+		ideaMarketRepository.save(ideaMarket);
 	}
 
 	@Transactional
@@ -100,7 +91,8 @@ public class IdeaMarketService {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
 		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(parameter.getType(),
-			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(), parameter.getPageable());
+			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(),
+			parameter.getPageable());
 
 		return GetIdeaListDtoConverter.toResponse(result);
 	}
@@ -142,13 +134,13 @@ public class IdeaMarketService {
 		return GetIdeaCommentListDtoConverter.toResponse(comments);
 	}
 
-
 	// 저장순으로 아이디어를 조회합니다.
 	@Transactional(readOnly = true)
 	public GetPopularIdeaListDto.Response getPopularIdeaList(GetPopularIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
-		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getType(), parameter.getPageable());
+		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getType(),
+			parameter.getPageable());
 
 		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
 	}
