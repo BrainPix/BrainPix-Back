@@ -1,5 +1,7 @@
 package com.brainpix.joining.entity.quantity;
 
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.MappedSuperclass;
@@ -20,5 +22,9 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 	public BaseQuantity(Long totalQuantity, Long occupiedQuantity) {
 		this.totalQuantity = totalQuantity;
 		this.occupiedQuantity = occupiedQuantity;
+	}
+
+	public void updateQuantityFields(Long totalQuantity) {
+		this.totalQuantity = totalQuantity;
 	}
 }
