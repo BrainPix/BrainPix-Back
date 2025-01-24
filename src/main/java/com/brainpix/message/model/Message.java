@@ -30,4 +30,8 @@ public class Message extends BaseTimeEntity {
 	private String title;
 
 	private String content;
+
+	public void readMessage() {
+		this.isRead = true;
+	}
 }
