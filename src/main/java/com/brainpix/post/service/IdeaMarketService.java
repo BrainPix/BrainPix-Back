@@ -78,11 +78,7 @@ public class IdeaMarketService {
 
 		ideaMarket.validateWriter(userId);
 
-		try {
-			ideaMarketRepository.delete(ideaMarket);
-		} catch (Exception e) {
-			throw new BrainPixException(IdeaMarketErrorCode.IDEA_DELETE_FAILED);
-		}
+		ideaMarketRepository.delete(ideaMarket);
 	}
 
 	// 아이디어 메인페이지에서 검색 조건을 적용하여 아이디어 목록을 반환합니다.
