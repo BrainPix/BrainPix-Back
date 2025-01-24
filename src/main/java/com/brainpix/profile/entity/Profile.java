@@ -37,7 +37,8 @@ public abstract class Profile extends BaseTimeEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	private User user;
 
-	public Profile(List<Specialization> specializationList) {
+	public Profile(User user, List<Specialization> specializationList) {
+		this.user = user;
 		this.specializationList = specializationList;
 	}
 }

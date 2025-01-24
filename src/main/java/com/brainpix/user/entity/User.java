@@ -1,7 +1,5 @@
 package com.brainpix.user.entity;
 
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 
 import com.brainpix.jpa.BaseTimeEntity;
@@ -9,7 +7,6 @@ import com.brainpix.profile.entity.Profile;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,7 +37,7 @@ public abstract class User extends BaseTimeEntity {
 	private String email;
 	private String profileImage;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "user")
 	private Profile profile;
 
 	public User(String identifier, String password, String name, String nickName, LocalDate birthday, String email,

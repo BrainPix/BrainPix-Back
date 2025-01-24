@@ -2,6 +2,8 @@ package com.brainpix.profile.entity;
 
 import java.util.List;
 
+import com.brainpix.user.entity.User;
+
 import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +19,10 @@ public class CompanyProfile extends Profile {
 	private Boolean openHomepage;
 
 	@Builder
-	public CompanyProfile(List<Specialization> specializationList, String businessType, String businessInformation,
+	public CompanyProfile(User user, List<Specialization> specializationList, String businessType,
+		String businessInformation,
 		String homepage, Boolean openHomepage) {
-		super(specializationList);
+		super(user, specializationList);
 		this.businessType = businessType;
 		this.businessInformation = businessInformation;
 		this.homepage = homepage;
