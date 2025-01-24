@@ -28,7 +28,9 @@ public class GetRequestTaskListDtoConverter {
 			type = request.getType() != null ? RequestTaskType.valueOf(request.getType().toUpperCase()) : null;
 			category =
 				request.getCategory() != null ? Specialization.valueOf(request.getCategory().toUpperCase()) : null;
-			sortType = request.getSortType() != null ? SortType.valueOf(request.getSortType().toUpperCase()) : null;
+			sortType =
+				request.getSortType() != null ? SortType.valueOf("REQUEST_" + request.getSortType().toUpperCase()) :
+					null;
 		} catch (Exception e) {
 			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
 		}
