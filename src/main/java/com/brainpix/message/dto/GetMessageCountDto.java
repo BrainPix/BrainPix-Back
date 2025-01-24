@@ -1,4 +1,4 @@
-package com.brainpix.message.converter;
+package com.brainpix.message.dto;
 
 import lombok.Builder;
 import lombok.Getter;
