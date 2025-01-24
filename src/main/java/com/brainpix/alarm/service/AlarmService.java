@@ -72,20 +72,6 @@ public class AlarmService {
 	}
 
 	/**
-	 * 알림을 생성합니다
-	 * @param request 알림 생성 요청 정보
-	 * @return CreateAlarmDto.Response
-	 */
-	public CreateAlarmDto.Response createAlarm(CreateAlarmDto.Request request) {
-
-		Alarm alarm = CreateAlarmConverter.convertToAlarm(request);
-
-		alarmRepository.save(alarm);
-
-		return CreateAlarmDto.Response.builder().alarmId(alarm.getId()).build();
-	}
-
-	/**
 	 * 읽지 않은 알림 개수를 조회합니다
 	 * @param userId 알람 수신 사용자 ID
 	 * @return GetUnreadAlarmDto.Response
