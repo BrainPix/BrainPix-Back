@@ -1,13 +1,16 @@
 package com.brainpix.post.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.IdeaMarketErrorCode;
+import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.joining.service.PriceService;
+import com.brainpix.post.converter.CreateIdeaMarketConverter;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
@@ -37,51 +40,58 @@ public class IdeaMarketService {
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
 	private final CommentRepository commentRepository;
+	private final UserRepository userRepository;
+	private final PriceService priceService;
+	private final CreateIdeaMarketConverter createIdeaMarketConverter;
 
-	public Long createIdeaMarket(IdeaMarketCreateDto createDto) {
-		User writer = userRepository.findById(1L)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+	@Transactional
+	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
 
-		Price price = Price.builder()
-			//.totalQuantity(createDto.getTotalQuantity())
-			//.occupiedQuantity(null)
-			.price(createDto.getPrice())
-			.build();
+		User writer = userRepository.findById(userId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.USER_NOT_FOUND));
 
-		IdeaMarket ideaMarket = IdeaMarket.builder()
-			.writer(writer)
-			.title(createDto.getTitle())
-			.content(createDto.getContent())
-			.category(createDto.getCategory())
-			.specialization(createDto.getSpecialization())
-			.ideaMarketType(createDto.getIdeaMarketType())
-			.openMyProfile(createDto.getOpenMyProfile())
-			.viewCount(0L) // 초기 조회수는 0으로 설정
-			.imageList(createDto.getImageList())
-			.attachmentFileList(createDto.getAttachmentFileList())
-			.postAuth(createDto.getPostAuth())
-			.price(price)
-			.build();
+		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
 
-		IdeaMarket savedIdeaMarket = ideaMarketRepository.save(ideaMarket);
-		return savedIdeaMarket.getId();
-	}
+		IdeaMarket ideaMarket = createIdeaMarketConverter.convertToIdeaMarket(createDto, writer, price);
 
-	public void updateIdeaMarket(Long id, IdeaMarketUpdateDto updateDto) {
-		IdeaMarket existingTask = ideaMarketRepository.findById(id)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
-		// CollaborationHub 고유 필드 업데이트
-		existingTask.updateIdeaMarketFields(updateDto);
-
-		ideaMarketRepository.save(existingTask);
-	}
-
-
-	public void deleteIdeaMarket(Long id) {
-		if (!ideaMarketRepository.existsById(id)) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+		try {
+			ideaMarketRepository.save(ideaMarket);
+		} catch (Exception e) {
+			throw new BrainPixException(IdeaMarketErrorCode.IDEA_CREATION_FAILED);
 		}
-		ideaMarketRepository.deleteById(id);
+
+		return ideaMarket.getId();
+	}
+
+	@Transactional
+	public void updateIdeaMarket(Long ideaId, Long userId ,IdeaMarketUpdateDto updateDto) {
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		ideaMarket.validateWriter(userId);
+
+		// CollaborationHub 고유 필드 업데이트
+		ideaMarket.updateIdeaMarketFields(updateDto);
+
+		try {
+			ideaMarketRepository.save(ideaMarket);
+		} catch (Exception e) {
+			throw new BrainPixException(IdeaMarketErrorCode.IDEA_UPDATE_FAILED);
+		}
+	}
+
+	@Transactional
+	public void deleteIdeaMarket(Long ideaId, Long userId) {
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		ideaMarket.validateWriter(userId);
+
+		try {
+			ideaMarketRepository.delete(ideaMarket);
+		} catch (Exception e) {
+			throw new BrainPixException(IdeaMarketErrorCode.IDEA_DELETE_FAILED);
+		}
 	}
 
 	// 아이디어 메인페이지에서 검색 조건을 적용하여 아이디어 목록을 반환합니다.

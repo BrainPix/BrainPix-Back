@@ -22,8 +22,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class IdeaMarket extends Post {
-	@Enumerated(EnumType.STRING)
-	private Specialization specialization;
 
 	@Enumerated(EnumType.STRING)
 	private IdeaMarketType ideaMarketType;
@@ -43,13 +41,11 @@ public class IdeaMarket extends Post {
 
 	public void updateIdeaMarketFields(IdeaMarketUpdateDto updateDto) {
 		// Post의 필드를 업데이트
-		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getCategory(),
+		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getSpecialization(),
 			updateDto.getOpenMyProfile(),
 			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
 
 		// IdeaMarkte 고유 필드 업데이트
-		this.specialization = updateDto.getSpecialization();
 		this.ideaMarketType = updateDto.getIdeaMarketType();
-		this.price.updateIdeaMarketPriceFields(updateDto.getPrice());
 	}
 }

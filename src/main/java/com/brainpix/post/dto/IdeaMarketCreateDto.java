@@ -1,24 +1,22 @@
 package com.brainpix.post.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.brainpix.post.entity.PostAuth;
+import com.brainpix.joining.dto.IdeaMarketPriceDto;
+import com.brainpix.joining.dto.PriceDto;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
-import com.brainpix.profile.entity.Specialization;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class IdeaMarketCreateDto {
-	private String title;
-	private String content;
-	private String category;
-	private Specialization specialization;
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class IdeaMarketCreateDto extends PostDto{
+
+	@NotNull(message = "아이디어 유형 선택은 필수입니다.")
 	private IdeaMarketType ideaMarketType;
-	private Boolean openMyProfile;
-	private List<String> imageList;
-	private List<String> attachmentFileList;
-	private PostAuth postAuth;
-	private Long price;
+
+	@NotNull(message = "가격 및 수량 설정은 필수입니다.")
+	private IdeaMarketPriceDto priceDto;
 }
