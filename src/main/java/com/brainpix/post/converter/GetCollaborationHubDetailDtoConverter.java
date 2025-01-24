@@ -1,0 +1,93 @@
+package com.brainpix.post.converter;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import com.brainpix.joining.entity.purchasing.CollectionGathering;
+import com.brainpix.post.dto.GetCollaborationHubDetailDto;
+import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
+import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
+import com.brainpix.user.entity.Company;
+import com.brainpix.user.entity.User;
+
+public class GetCollaborationHubDetailDtoConverter {
+
+	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId) {
+		return GetCollaborationHubDetailDto.Parameter.builder()
+			.collaborationId(collaborationId)
+			.build();
+	}
+
+	public static GetCollaborationHubDetailDto.Response toResponse(CollaborationHub collaborationHub,
+		List<CollectionGathering> collectionGathering, User writer,
+		Long saveCount,
+		Long totalIdeas, Long totalCollaborations) {
+
+		// 작성자
+		GetCollaborationHubDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
+
+		// 모집 단위
+		List<GetCollaborationHubDetailDto.Recruitment> recruitments = collaborationHub.getCollaborations().stream()
+			.map(GetCollaborationHubDetailDtoConverter::toRecruitment)
+			.toList();
+
+		// 데드라인 계산
+		LocalDateTime deadline = collaborationHub.getDeadline();
+		LocalDateTime now = LocalDateTime.now();
+		Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline);
+
+		// 개최 인원
+		List<GetCollaborationHubDetailDto.OpenMember> openMembers = collectionGathering.stream()
+			.map(GetCollaborationHubDetailDtoConverter::toOpenMember)
+			.toList();
+
+		return GetCollaborationHubDetailDto.Response.builder()
+			.collaborationId(collaborationHub.getId())
+			.thumbnailImageUrl(collaborationHub.getImageList().get(0))
+			.category(collaborationHub.getSpecialization().toString())
+			.auth(collaborationHub.getPostAuth().toString())
+			.title(collaborationHub.getTitle())
+			.content(collaborationHub.getContent())
+			.link(collaborationHub.getLink())
+			.deadline(days)
+			.viewCount(collaborationHub.getViewCount())
+			.saveCount(saveCount)
+			.createdDate(collaborationHub.getCreatedAt().toLocalDate())
+			.writer(writerDto)
+			.attachments(collaborationHub.getImageList())
+			.recruitments(recruitments)
+			.openMembers(openMembers)
+			.build();
+	}
+
+	public static GetCollaborationHubDetailDto.Writer toWriter(User writer, Long totalIdeas, Long totalCollaborations) {
+		return GetCollaborationHubDetailDto.Writer.builder()
+			.writerId(writer.getId())
+			.name(writer.getName())
+			.profileImageUrl(writer.getProfileImage())
+			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
+			.specialization(writer.getProfile().getSpecializationList().get(0).toString())
+			.totalIdeas(totalIdeas)
+			.totalCollaborations(totalCollaborations)
+			.build();
+	}
+
+	public static GetCollaborationHubDetailDto.Recruitment toRecruitment(CollaborationRecruitment recruitment) {
+		return GetCollaborationHubDetailDto.Recruitment.builder()
+			.recruitmentId(recruitment.getId())
+			.domain(recruitment.getDomain())
+			.occupiedQuantity(recruitment.getGathering().getOccupiedQuantity())
+			.totalQuantity(recruitment.getGathering().getTotalQuantity())
+			.build();
+	}
+
+	public static GetCollaborationHubDetailDto.OpenMember toOpenMember(CollectionGathering collectionGathering) {
+		return GetCollaborationHubDetailDto.OpenMember.builder()
+			.userId(collectionGathering.getJoiner().getId())
+			.name(collectionGathering.getJoiner().getName())
+			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
+			// .isOpenPortfolio(?)
+			.build();
+	}
+}
