@@ -2,6 +2,8 @@ package com.brainpix.profile.entity;
 
 import java.util.List;
 
+import com.brainpix.user.entity.User;
+
 import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +19,9 @@ public class IndividualProfile extends Profile {
 	private Boolean stackOpen;
 
 	@Builder
-	public IndividualProfile(List<Specialization> specializationList, String selfIntroduction, Boolean contactOpen,
-		Boolean careerOpen, Boolean stackOpen) {
-		super(specializationList);
+	public IndividualProfile(User user, List<Specialization> specializationList, String selfIntroduction,
+		Boolean contactOpen, Boolean careerOpen, Boolean stackOpen) {
+		super(user, specializationList);
 		this.selfIntroduction = selfIntroduction;
 		this.ContactOpen = contactOpen;
 		this.CareerOpen = careerOpen;
