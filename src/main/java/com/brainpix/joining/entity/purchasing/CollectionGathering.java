@@ -25,12 +25,16 @@ public class CollectionGathering extends BaseTimeEntity {
 
 	private Boolean accepted;
 
+	private Boolean initialGathering;
+
 	@ManyToOne
 	private CollaborationRecruitment collaborationRecruitment;
 
-	public CollectionGathering(User joiner, Boolean accepted, CollaborationRecruitment collaborationRecruitment) {
+	public CollectionGathering(User joiner, Boolean accepted, Boolean initialGathering,
+		CollaborationRecruitment collaborationRecruitment) {
 		this.joiner = joiner;
 		this.accepted = accepted;
+		this.initialGathering = initialGathering;
 		this.collaborationRecruitment = collaborationRecruitment;
 	}
 }
