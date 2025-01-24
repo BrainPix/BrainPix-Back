@@ -1,10 +1,13 @@
 package com.brainpix.user.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.brainpix.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-}
+	Optional<User> findByIdentifier(String identifier);
 
-// 테스트 하려고 임의로 만듬
+	Optional<User> findByNickName(String nickName);
+}
