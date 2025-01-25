@@ -27,15 +27,19 @@ public class GetCollaborationHubDetailDtoConverter {
 		// 작성자
 		GetCollaborationHubDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
 
-		// 모집 단위
-		List<GetCollaborationHubDetailDto.Recruitment> recruitments = collaborationHub.getCollaborations().stream()
-			.map(GetCollaborationHubDetailDtoConverter::toRecruitment)
-			.toList();
-
 		// 데드라인 계산
 		LocalDateTime deadline = collaborationHub.getDeadline();
 		LocalDateTime now = LocalDateTime.now();
 		Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline);
+
+		// 모집 단위 (개최 인원에 속하지 않는 모집 단위만 필터링)
+		List<GetCollaborationHubDetailDto.Recruitment> recruitments = collaborationHub.getCollaborations().stream()
+			.filter(recruitment ->
+				collectionGathering.stream()
+					.noneMatch(gathering -> gathering.getCollaborationRecruitment().equals(recruitment))
+			)
+			.map(GetCollaborationHubDetailDtoConverter::toRecruitment)
+			.toList();
 
 		// 개최 인원
 		List<GetCollaborationHubDetailDto.OpenMember> openMembers = collectionGathering.stream()

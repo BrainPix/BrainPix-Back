@@ -43,8 +43,7 @@ public class CollaborationHubCustomRepositoryImpl implements CollaborationHubCus
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
-
-		// 정렬 조건
+		
 		// 정렬 조건 (기본 값은 최신순)
 		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.COLLABORATION_NEWEST.getOrder();
 

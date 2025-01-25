@@ -16,6 +16,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 	// 개최 인원 등록 정보 조회
 	@Query("SELECT cg FROM CollectionGathering cg " +
 		"JOIN FETCH cg.collaborationRecruitment cr " +
-		"WHERE cr.parentCollaborationHub.id = :collaborationHubId")
+		"WHERE cr.parentCollaborationHub.id = :collaborationHubId " +
+		"AND cg.initialGathering = true")
 	List<CollectionGathering> findByCollaborationHubId(@Param("collaborationHubId") Long collaborationHubId);
 }

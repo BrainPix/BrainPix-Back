@@ -62,7 +62,7 @@ public class CollaborationHubService {
 
 		// 작성자의 협업 횟수
 		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true);
-
+		
 		// 개최 인원
 		List<CollectionGathering> collectionGatherings = collectionGatheringRepository.findByCollaborationHubId(
 			collaborationHub.getId());
