@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brainpix.api.ApiResponse;
 import com.brainpix.joining.dto.AcceptedRequestTaskPurchasingDto;
 import com.brainpix.joining.dto.RejectedRequestTaskPurchasingDto;
 import com.brainpix.joining.service.SupportRequestTaskService;
@@ -24,26 +25,29 @@ public class SupportRequestTaskController {
 	private final SupportRequestTaskService supportRequestTaskService;
 
 	@GetMapping("/rejected")
-	public ResponseEntity<List<RejectedRequestTaskPurchasingDto>> getRejectedList(
+	public ResponseEntity<ApiResponse<List<RejectedRequestTaskPurchasingDto>>> getRejectedList(
 		@RequestParam Long userId) {
 		List<RejectedRequestTaskPurchasingDto> dtos =
 			supportRequestTaskService.getRejectedList(userId);
-		return ResponseEntity.ok(dtos);
+		return ResponseEntity
+			.ok(ApiResponse.success(dtos));
 	}
 
 	@GetMapping("/accepted")
-	public ResponseEntity<List<AcceptedRequestTaskPurchasingDto>> getAcceptedList(
+	public ResponseEntity<ApiResponse<List<AcceptedRequestTaskPurchasingDto>>> getAcceptedList(
 		@RequestParam Long userId) {
 		List<AcceptedRequestTaskPurchasingDto> dtos =
 			supportRequestTaskService.getAcceptedList(userId);
-		return ResponseEntity.ok(dtos);
+		return ResponseEntity
+			.ok(ApiResponse.success(dtos));
 	}
 
 	@DeleteMapping("/{purchasingId}")
-	public ResponseEntity<Void> deleteRejectedPurchasing(
+	public ResponseEntity<ApiResponse<Void>> deleteRejectedPurchasing(
 		@PathVariable Long purchasingId,
 		@RequestParam Long userId) {
 		supportRequestTaskService.deleteRejectedPurchasing(userId, purchasingId);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity
+			.ok(ApiResponse.successWithNoData());
 	}
 }
