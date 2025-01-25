@@ -8,19 +8,19 @@ import org.springframework.data.domain.Pageable;
 import lombok.Builder;
 import lombok.Getter;
 
-public class GetIdeaCommentListDto {
+public class GetCommentListDto {
 
 	@Builder
 	@Getter
 	public static class Parameter {
-		private Long ideaId;	// 아이디어 ID
-		private Pageable pageable;	// 페이징 기준
+		private Long postId;    // 게시글 ID
+		private Pageable pageable;    // 페이징 기준
 	}
 
 	@Builder
 	@Getter
 	public static class Response {
-		private List<Comment> commentList;	// 결과 값 리스트
+		private List<Comment> commentList;    // 결과 값 리스트
 		private Integer totalPages;        // 전체 페이지 수
 		private Integer totalElements;    // 전체 결과의 크기
 		private Integer currentPage;    // 현재 페이지 수

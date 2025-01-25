@@ -6,36 +6,36 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.brainpix.post.dto.GetIdeaCommentListDto;
+import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.entity.Comment;
 
-public class GetIdeaCommentListDtoConverter {
+public class GetCommentListDtoConverter {
 
-	public static GetIdeaCommentListDto.Parameter toParameter(Long ideaId, Pageable pageable) {
-		return GetIdeaCommentListDto.Parameter.builder()
-			.ideaId(ideaId)
+	public static GetCommentListDto.Parameter toParameter(Long postId, Pageable pageable) {
+		return GetCommentListDto.Parameter.builder()
+			.postId(postId)
 			.pageable(pageable)
 			.build();
 	}
 
-	public static GetIdeaCommentListDto.Response toResponse(Page<Comment> comments) {
+	public static GetCommentListDto.Response toResponse(Page<Comment> comments) {
 
-		List<GetIdeaCommentListDto.Comment> commentList = new ArrayList<>();
+		List<GetCommentListDto.Comment> commentList = new ArrayList<>();
 
 		// 댓글의 최대 깊이가 1인 경우만 적용됩니다.
-		for(Comment comment : comments) {
-			GetIdeaCommentListDto.Comment commentDto = toComment(comment);
+		for (Comment comment : comments) {
+			GetCommentListDto.Comment commentDto = toComment(comment);
 
 			// 자식 댓글인 경우 리스트에서 부모를 꺼내 자식 리스트에 추가
-			if(commentDto.getParentCommentId() != null && !commentList.isEmpty()) {
-				GetIdeaCommentListDto.Comment parent = commentList.get(commentList.size() - 1);
+			if (commentDto.getParentCommentId() != null && !commentList.isEmpty()) {
+				GetCommentListDto.Comment parent = commentList.get(commentList.size() - 1);
 				parent.getChildComments().add(commentDto);
 			} else {
 				commentList.add(commentDto);
 			}
 		}
 
-		return GetIdeaCommentListDto.Response.builder()
+		return GetCommentListDto.Response.builder()
 			.commentList(commentList)
 			.totalPages(comments.getTotalPages())
 			.totalElements((int)comments.getTotalElements())
@@ -45,9 +45,9 @@ public class GetIdeaCommentListDtoConverter {
 			.build();
 	}
 
-	public static GetIdeaCommentListDto.Comment toComment(Comment comment) {
+	public static GetCommentListDto.Comment toComment(Comment comment) {
 
-		return GetIdeaCommentListDto.Comment.builder()
+		return GetCommentListDto.Comment.builder()
 			.commentId(comment.getId())
 			.writerId(comment.getWriter().getId())
 			.content(comment.getContent())
