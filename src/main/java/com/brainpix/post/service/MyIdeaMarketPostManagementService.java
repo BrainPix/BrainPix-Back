@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
 import com.brainpix.joining.repository.IdeaMarketPurchasingRepository;
 import com.brainpix.post.converter.MyIdeaMarketPostConverter;
@@ -38,7 +41,7 @@ public class MyIdeaMarketPostManagementService {
 	public List<MyIdeaMarketPostDto> getMyIdeaMarketPosts(Long userId) {
 		// 1) User 조회
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 2) 내가 작성한 IdeaMarket 목록
 		List<IdeaMarket> myMarkets = ideaMarketRepository.findByWriter(currentUser);
@@ -59,15 +62,15 @@ public class MyIdeaMarketPostManagementService {
 	public MyIdeaMarketPostDetailDto getIdeaMarketDetail(Long userId, Long postId) {
 		// 1) 현재 유저
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 2) 게시글 찾기
 		IdeaMarket ideaMarket = ideaMarketRepository.findById(postId)
-			.orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.IDEA_MARKET_NOT_FOUND));
 
 		// (작성자 권한 체크하려면)
 		if (!ideaMarket.getWriter().equals(currentUser)) {
-			throw new RuntimeException("본인이 작성한 게시글이 아닙니다.");
+			throw new BrainPixException(PostErrorCode.NOT_POST_OWNER);
 		}
 
 		// 3) 구매 정보 리스트
