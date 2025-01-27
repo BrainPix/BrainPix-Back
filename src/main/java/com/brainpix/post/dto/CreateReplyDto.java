@@ -1,7 +1,6 @@
 package com.brainpix.post.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,6 @@ public class CreateReplyDto {
 	@Getter
 	@Setter
 	public static class Request {
-		@NotNull(message = "댓글 ID는 필수입니다.")
-		Long commentId;    // 부모 댓글 ID
 		@NotBlank(message = "댓글 내용은 필수입니다.")
 		String content;    // 댓글 내용
 	}

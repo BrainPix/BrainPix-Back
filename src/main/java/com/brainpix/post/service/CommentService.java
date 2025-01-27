@@ -1,5 +1,7 @@
 package com.brainpix.post.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import com.brainpix.post.converter.CreateReplyDtoConverter;
 import com.brainpix.post.converter.GetCommentListDtoConverter;
 import com.brainpix.post.dto.CreateCommentDto;
 import com.brainpix.post.dto.CreateReplyDto;
+import com.brainpix.post.dto.DeleteCommentDto;
 import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.entity.Comment;
 import com.brainpix.post.entity.Post;
@@ -74,6 +77,7 @@ public class CommentService {
 		}
 	}
 
+	// 대댓글 생성
 	@Transactional
 	public void createReply(CreateReplyDto.Parameter parameter) {
 
@@ -102,5 +106,31 @@ public class CommentService {
 			alarmEventService.createQnaCommentReply(parentComment.getWriter().getId(), postType,
 				parentComment.getWriter().getName(), sender.getName());
 		}
+	}
+
+	// 댓글 삭제
+	@Transactional
+	public void deleteComment(DeleteCommentDto.Parameter parameter) {
+
+		// 작성자 조회
+		User writer = userRepository.findById(parameter.getWriterId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 댓글 조회
+		Comment comment = commentRepository.findById(parameter.getCommentId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 댓글 작성자인지 검증
+		if (comment.getWriter() != writer) {
+			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+		}
+
+		// 자식 댓글 삭제
+		List<Comment> childComments = commentRepository.findAllByParentCommentId(comment.getId());
+		childComments
+			.forEach(commentRepository::delete);
+
+		// 댓글
+		commentRepository.delete(comment);
 	}
 }

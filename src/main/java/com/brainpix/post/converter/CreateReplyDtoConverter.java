@@ -7,10 +7,11 @@ import com.brainpix.user.entity.User;
 
 public class CreateReplyDtoConverter {
 
-	public static CreateReplyDto.Parameter toParameter(Long postId, Long userId, CreateReplyDto.Request request) {
+	public static CreateReplyDto.Parameter toParameter(Long postId, Long commentId, Long userId,
+		CreateReplyDto.Request request) {
 		return CreateReplyDto.Parameter.builder()
 			.postId(postId)
-			.commentId(request.getCommentId())
+			.commentId(commentId)
 			.senderId(userId)
 			.content(request.getContent())
 			.build();
