@@ -8,8 +8,10 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.kafka.service.AlarmEventService;
 import com.brainpix.post.converter.CreateCommentDtoConverter;
+import com.brainpix.post.converter.CreateReplyDtoConverter;
 import com.brainpix.post.converter.GetCommentListDtoConverter;
 import com.brainpix.post.dto.CreateCommentDto;
+import com.brainpix.post.dto.CreateReplyDto;
 import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.entity.Comment;
 import com.brainpix.post.entity.Post;
@@ -63,12 +65,42 @@ public class CommentService {
 		// 댓글 등록
 		commentRepository.save(comment);
 
-		// 마지막으로 알람 생성 (게시글 작성자와 댓글 작성자가 다른 경우만 발행)
+		// 마지막으로 알람 생성 (수신자와 송신자가 다른 경우만 발행)
 		if (post.getWriter() != sender) {
 			String postType = post instanceof IdeaMarket ? "IdeaMarket" :
 				(post instanceof RequestTask ? "RequestTask" : "CollaborationHub");
 			alarmEventService.createQnaComment(post.getWriter().getId(), postType, post.getWriter().getName(),
 				sender.getName());
+		}
+	}
+
+	@Transactional
+	public void createReply(CreateReplyDto.Parameter parameter) {
+
+		// 작성자 조회
+		User sender = userRepository.findById(parameter.getSenderId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 게시글 조회
+		Post post = postRepository.findById(parameter.getPostId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 부모 댓글 조회
+		Comment parentComment = commentRepository.findById(parameter.getCommentId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 대댓글 생성
+		Comment reply = CreateReplyDtoConverter.toComment(sender, post, parentComment, parameter.getContent());
+
+		// 대댓글 등록
+		commentRepository.save(reply);
+
+		// 마지막으로 알람 생성 (수신자와 송신자가 다른 경우만 발행)
+		if (parentComment.getWriter() != sender) {
+			String postType = post instanceof IdeaMarket ? "IdeaMarket" :
+				(post instanceof RequestTask ? "RequestTask" : "CollaborationHub");
+			alarmEventService.createQnaCommentReply(parentComment.getWriter().getId(), postType,
+				parentComment.getWriter().getName(), sender.getName());
 		}
 	}
 }

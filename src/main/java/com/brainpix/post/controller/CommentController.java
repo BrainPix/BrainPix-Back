@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.post.converter.CreateCommentDtoConverter;
+import com.brainpix.post.converter.CreateReplyDtoConverter;
 import com.brainpix.post.converter.GetCommentListDtoConverter;
 import com.brainpix.post.dto.CreateCommentDto;
+import com.brainpix.post.dto.CreateReplyDto;
 import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.service.CommentService;
 
@@ -42,6 +44,16 @@ public class CommentController {
 		CreateCommentDto.Request request) {
 		CreateCommentDto.Parameter parameter = CreateCommentDtoConverter.toParameter(postId, userId, request);
 		commentService.createComment(parameter);
+		return ResponseEntity.ok(ApiResponse.createdWithNoData());
+	}
+
+	// 대댓글 (userId : 작성자)
+	@PostMapping("/reply")
+	public ResponseEntity<ApiResponse<Void>> createReply(@PathVariable("postId") Long postId,
+		@RequestParam("userId") Long userId,
+		CreateReplyDto.Request request) {
+		CreateReplyDto.Parameter parameter = CreateReplyDtoConverter.toParameter(postId, userId, request);
+		commentService.createReply(parameter);
 		return ResponseEntity.ok(ApiResponse.createdWithNoData());
 	}
 }
