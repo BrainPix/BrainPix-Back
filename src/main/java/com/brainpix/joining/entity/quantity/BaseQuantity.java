@@ -1,7 +1,5 @@
 package com.brainpix.joining.entity.quantity;
 
-import com.brainpix.api.code.error.CommonErrorCode;
-import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.MappedSuperclass;
@@ -26,5 +24,13 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 
 	public void updateQuantityFields(Long totalQuantity) {
 		this.totalQuantity = totalQuantity;
+	}
+
+	// 모집 인원을 증가시키는 로직
+	public void increaseOccupiedQuantity(Long amount) {
+		if (this.occupiedQuantity + amount > this.totalQuantity) {
+			throw new IllegalStateException("모집 정원을 초과할 수 없습니다.");
+		}
+		this.occupiedQuantity += amount; // 안전하게 증가
 	}
 }

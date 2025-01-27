@@ -41,4 +41,12 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 		this.accepted = accepted;
 		this.requestTaskRecruitment = requestTaskRecruitment;
 	}
+
+	public void accept() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
+	}
 }
