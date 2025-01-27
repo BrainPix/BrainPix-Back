@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CollaborationHubCreateDto extends PostDto{
+public class CollaborationHubCreateDto extends PostDto {
 
 	@Future(message = "마감일은 현재 날짜보다 미래여야 합니다.")
 	@NotNull(message = "마감일은 필수입니다.")
@@ -25,5 +25,5 @@ public class CollaborationHubCreateDto extends PostDto{
 	private List<CollaborationRecruitmentDto> recruitments;
 
 	@NotEmpty(message = "개최 인원 정보는 최소 한 명 이상 등록해야 합니다.")
-	private List<CollaborationHubProjectMemberDto> members;
+	private List<CollaborationHubProjectMemberDto> projectMembers;
 }

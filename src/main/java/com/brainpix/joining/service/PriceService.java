@@ -23,10 +23,4 @@ public class PriceService {
 
 		return priceRepository.save(price);
 	}
-
-	@Transactional
-	public void updatePrice(Price price, PriceDto priceDto) {
-		price.updatePriceFields(priceDto.getPrice(), priceDto.getTotalQuantity(), priceDto.getPaymentDuration());
-		priceRepository.save(price);
-	}
 }

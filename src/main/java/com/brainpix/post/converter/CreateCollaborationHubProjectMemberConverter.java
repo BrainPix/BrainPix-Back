@@ -4,15 +4,17 @@ import org.springframework.stereotype.Component;
 
 import com.brainpix.post.dto.CollaborationHubProjectMemberDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
-import com.brainpix.post.entity.collaboration_hub.CollaborationHubProjectMember;
+import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 
 @Component
 public class CreateCollaborationHubProjectMemberConverter {
 
-	public CollaborationHubProjectMember convertToProjectMember (CollaborationHub collaborationHub, CollaborationHubProjectMemberDto projectMemberDto) {
-		return CollaborationHubProjectMember.builder()
-			.collaborationHub(collaborationHub)
+	public CollaborationRecruitment convertToProjectMember(CollaborationHub collaborationHub,
+		CollaborationHubProjectMemberDto projectMemberDto) {
+		return CollaborationRecruitment.builder()
+			.parentCollaborationHub(collaborationHub)
 			.domain(projectMemberDto.getDomain())
+			.gathering(null)
 			.build();
 	}
 }

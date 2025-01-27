@@ -2,14 +2,12 @@ package com.brainpix.post.service;
 
 import org.springframework.stereotype.Service;
 
-import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
-
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.user.entity.User;
@@ -26,7 +24,7 @@ public class CollaborationHubService {
 	private final CollaborationHubRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubConverter createCollaborationHubConverter;
-	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
+	private final CollaborationHubProjectMemberService projectMemberService;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -34,15 +32,12 @@ public class CollaborationHubService {
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		CollaborationHub collaborationHub = createCollaborationHubConverter.convertToCollaborationHub(createDto, writer);
+		CollaborationHub collaborationHub = createCollaborationHubConverter.convertToCollaborationHub(createDto,
+			writer);
 
-		try {
-			collaborationHubRepository.save(collaborationHub);
-			recruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
-			collaborationHubProjectMemberService.createProjectMembers(collaborationHub, createDto.getMembers());
-		} catch (Exception e) {
-			throw new BrainPixException(CollaborationHubErrorCode.TASK_CREATION_FAILED);
-		}
+		collaborationHubRepository.save(collaborationHub);
+		recruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
+		projectMemberService.createProjectMembers(collaborationHub, createDto.getProjectMembers());
 
 		return collaborationHub.getId();
 	}
@@ -58,11 +53,7 @@ public class CollaborationHubService {
 		// CollaborationHub 고유 필드 업데이트
 		collaboration.updateCollaborationHubFields(updateDto);
 
-		try {
-			collaborationHubRepository.save(collaboration);
-		} catch (Exception e) {
-			throw new BrainPixException(CollaborationHubErrorCode.TASK_UPDATE_FAILED);
-		}
+		collaborationHubRepository.save(collaboration);
 	}
 
 	@Transactional
@@ -75,10 +66,5 @@ public class CollaborationHubService {
 
 		collaborationHubRepository.deleteById(workspaceId);
 
-		try {
-			collaborationHubRepository.deleteById(workspaceId);
-		} catch (Exception e) {
-			throw new BrainPixException(CollaborationHubErrorCode.TASK_DELETE_FAILED);
-		}
 	}
 }

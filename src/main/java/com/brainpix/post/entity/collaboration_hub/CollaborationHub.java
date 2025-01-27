@@ -29,9 +29,6 @@ public class CollaborationHub extends Post {
 	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CollaborationRecruitment> collaborations = new ArrayList<>();
 
-	@OneToMany(mappedBy = "parentCollaborationHub", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CollaborationHubProjectMember> members = new ArrayList<>();
-
 	@Builder
 	public CollaborationHub(User writer, String title, String content, Boolean openMyProfile,
 		Long viewCount, List<String> imageList, List<String> attachmentFileList, LocalDateTime deadline,

@@ -15,8 +15,8 @@ import com.brainpix.api.ApiResponse;
 import com.brainpix.post.dto.CollaborationHubApiResponseDto;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
-import com.brainpix.post.service.CollaborationHubService;
 import com.brainpix.post.service.CollaborationHubProjectMemberService;
+import com.brainpix.post.service.CollaborationHubService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,30 +29,32 @@ public class CollaborationHubController {
 	private final CollaborationHubService collaborationHubService;
 	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
 
-
 	@PostMapping
-	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@RequestParam Long userId, @Valid @RequestBody CollaborationHubCreateDto createDto) {
+	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@RequestParam Long userId,
+		@Valid @RequestBody CollaborationHubCreateDto createDto) {
 		Long workspaceId = collaborationHubService.createCollaborationHub(userId, createDto);
 		return ResponseEntity.ok(ApiResponse.success(new CollaborationHubApiResponseDto("workspaceId", workspaceId)));
 	}
 
 	@PatchMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse<Void>> updateCollaborationHub(@PathVariable("workspaceId") Long workspaceId, @RequestParam Long userId, @Valid @RequestBody CollaborationHubUpdateDto updateDto) {
+	public ResponseEntity<ApiResponse<Void>> updateCollaborationHub(@PathVariable("workspaceId") Long workspaceId,
+		@RequestParam Long userId, @Valid @RequestBody CollaborationHubUpdateDto updateDto) {
 		collaborationHubService.updateCollaborationHub(workspaceId, userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 
 	}
 
 	@DeleteMapping("/{workspaceId}")
-	public ResponseEntity<ApiResponse<Void>> deleteCollaborationHub(@PathVariable("workspaceId") Long workspaceId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> deleteCollaborationHub(@PathVariable("workspaceId") Long workspaceId,
+		@RequestParam Long userId) {
 		collaborationHubService.deleteCollaborationHub(workspaceId, userId);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 
 	}
 
-	@GetMapping("/validate/{userId}")
-	public ResponseEntity<ApiResponse<Void>> validateUserId(@PathVariable Long userId) {
-		collaborationHubProjectMemberService.validateUserId(userId);
+	@GetMapping("/validate/{identifier}")
+	public ResponseEntity<ApiResponse<Void>> validateUserIdentifier(@PathVariable String identifier) {
+		collaborationHubProjectMemberService.validateUserIdentifier(identifier);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 }
