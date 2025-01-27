@@ -1,27 +1,25 @@
 package com.brainpix.post.service;
 
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
+import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
+import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
 import com.brainpix.post.converter.CreateRequestTaskConverter;
+import com.brainpix.post.dto.ApplyRequestTaskDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
-import com.brainpix.post.dto.RequestTaskRecruitmentDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
 import com.brainpix.post.repository.RequestTaskRecruitmentRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
-import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,6 +30,8 @@ public class RequestTaskService {
 	private final RequestTaskRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
 	private final CreateRequestTaskConverter createRequestTaskConverter;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final RequestTaskRecruitmentRepository requestTaskRecruitmentRepository;
 
 	@Transactional
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
@@ -39,7 +39,7 @@ public class RequestTaskService {
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		RequestTask requestTask	= createRequestTaskConverter.convertToRequestTask(createDto, writer);
+		RequestTask requestTask = createRequestTaskConverter.convertToRequestTask(createDto, writer);
 
 		try {
 			requestTaskRepository.save(requestTask);
@@ -82,5 +82,39 @@ public class RequestTaskService {
 		} catch (Exception e) {
 			throw new BrainPixException(RequestTaskErrorCode.TASK_DELETE_FAILED);
 		}
+	}
+
+	@Transactional
+	public void applyRequestTask(ApplyRequestTaskDto.Parameter parameter) {
+
+		// 요청 과제 조회
+		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 지원 분야 조회
+		RequestTaskRecruitment requestTaskRecruitment = requestTaskRecruitmentRepository.findById(
+				parameter.getRequestRecruitmentId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 글 작성자가 신청하는 예외는 필터링
+		if (requestTask.getWriter() == user) {
+			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+		}
+
+		// 요청 과제에 속하는 지원 분야인지 확인
+		if (requestTaskRecruitment.getRequestTask() != requestTask) {
+			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+		}
+
+		// 엔티티 생성
+		RequestTaskPurchasing requestTaskPurchasing = ApplyRequestTaskDtoConverter.toRequestTaskPurchasing(user,
+			requestTaskRecruitment, parameter.getIsOpenProfile(), parameter.getMessage());
+
+		// 지원 신청
+		requestTaskPurchasingRepository.save(requestTaskPurchasing);
 	}
 }
