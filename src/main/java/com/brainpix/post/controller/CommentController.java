@@ -18,6 +18,7 @@ import com.brainpix.post.dto.CreateReplyDto;
 import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.service.CommentService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,7 +42,7 @@ public class CommentController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> createComment(@PathVariable("postId") Long postId,
 		@RequestParam("userId") Long userId,
-		CreateCommentDto.Request request) {
+		@Valid CreateCommentDto.Request request) {
 		CreateCommentDto.Parameter parameter = CreateCommentDtoConverter.toParameter(postId, userId, request);
 		commentService.createComment(parameter);
 		return ResponseEntity.ok(ApiResponse.createdWithNoData());
@@ -51,7 +52,7 @@ public class CommentController {
 	@PostMapping("/reply")
 	public ResponseEntity<ApiResponse<Void>> createReply(@PathVariable("postId") Long postId,
 		@RequestParam("userId") Long userId,
-		CreateReplyDto.Request request) {
+		@Valid CreateReplyDto.Request request) {
 		CreateReplyDto.Parameter parameter = CreateReplyDtoConverter.toParameter(postId, userId, request);
 		commentService.createReply(parameter);
 		return ResponseEntity.ok(ApiResponse.createdWithNoData());
