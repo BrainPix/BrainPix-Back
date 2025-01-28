@@ -3,7 +3,6 @@ package com.brainpix.post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
@@ -89,25 +88,25 @@ public class RequestTaskService {
 
 		// 요청 과제 조회
 		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
 
 		// 유저 조회
 		User user = userRepository.findById(parameter.getUserId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
 		// 지원 분야 조회
 		RequestTaskRecruitment requestTaskRecruitment = requestTaskRecruitmentRepository.findById(
 				parameter.getRequestRecruitmentId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND));
 
 		// 글 작성자가 신청하는 예외는 필터링
 		if (requestTask.getWriter() == user) {
-			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+			throw new BrainPixException(RequestTaskErrorCode.INVALID_RECRUITMENT_OWNER);
 		}
 
 		// 요청 과제에 속하는 지원 분야인지 확인
 		if (requestTaskRecruitment.getRequestTask() != requestTask) {
-			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND);
 		}
 
 		// 엔티티 생성
