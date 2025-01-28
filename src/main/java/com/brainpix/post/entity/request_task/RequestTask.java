@@ -2,7 +2,6 @@ package com.brainpix.post.entity.request_task;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.brainpix.post.dto.RequestTaskUpdateDto;
