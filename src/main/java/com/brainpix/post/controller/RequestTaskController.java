@@ -1,7 +1,5 @@
 package com.brainpix.post.controller;
 
-import jakarta.validation.Valid;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.converter.GetPopularRequestTaskListDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskDetailDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskListDtoConverter;
@@ -26,6 +25,7 @@ import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.service.RequestTaskService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,19 +36,21 @@ public class RequestTaskController {
 	private final RequestTaskService requestTaskService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<GetRequestTaskListDto.Response>> getRequestTaskList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail>>> getRequestTaskList(
 		GetRequestTaskListDto.Request request, Pageable pageable) {
 		GetRequestTaskListDto.Parameter parameter = GetRequestTaskListDtoConverter.toParameter(request, pageable);
-		GetRequestTaskListDto.Response response = requestTaskService.getRequestTaskList(parameter);
+		CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail> response = requestTaskService.getRequestTaskList(
+			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@GetMapping("/popular")
-	public ResponseEntity<ApiResponse<GetPopularRequestTaskListDto.Response>> getPopularRequestTaskList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail>>> getPopularRequestTaskList(
 		GetPopularRequestTaskListDto.Request request, Pageable pageable) {
 		GetPopularRequestTaskListDto.Parameter parameter = GetPopularRequestTaskListDtoConverter.toParameter(request,
 			pageable);
-		GetPopularRequestTaskListDto.Response response = requestTaskService.getPopularRequestTaskList(parameter);
+		CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail> response = requestTaskService.getPopularRequestTaskList(
+			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
