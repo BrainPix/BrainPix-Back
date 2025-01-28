@@ -3,6 +3,8 @@ package com.brainpix.post.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,21 +40,17 @@ public class MyIdeaMarketPostManagementService {
 	 * [목록] 내가 작성한 아이디어마켓 게시글들
 	 */
 	@Transactional(readOnly = true)
-	public List<MyIdeaMarketPostDto> getMyIdeaMarketPosts(Long userId) {
+	public Page<MyIdeaMarketPostDto> getMyIdeaMarketPosts(Long userId, Pageable pageable) {
 		// 1) User 조회
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-		// 2) 내가 작성한 IdeaMarket 목록
-		List<IdeaMarket> myMarkets = ideaMarketRepository.findByWriter(currentUser);
-
-		// 3) SavedPost count & DTO 변환
-		return myMarkets.stream()
+		// 2) 내가 작성한 IdeaMarket 목록 페이징
+		return ideaMarketRepository.findByWriter(currentUser, pageable)
 			.map(ideaMarket -> {
 				long savedCount = savedPostRepository.countByPostId(ideaMarket.getId());
 				return converter.toMyIdeaMarketPostDto(ideaMarket, savedCount);
-			})
-			.collect(Collectors.toList());
+			});
 	}
 
 	/**

@@ -3,6 +3,8 @@ package com.brainpix.post.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,18 +43,15 @@ public class MyRequestTaskPostManagementService {
 	 * 내가 작성한 요청 과제 목록 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<MyRequestTaskPostDto> getMyRequestTasks(Long userId) {
+	public Page<MyRequestTaskPostDto> getMyRequestTasks(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
 
-		List<RequestTask> tasks = requestTaskRepository.findByWriter(currentUser);
-
-		return tasks.stream()
+		return requestTaskRepository.findByWriter(currentUser, pageable)
 			.map(task -> {
 				long savedCount = savedPostRepository.countByPostId(task.getId());
 				return converter.toMyRequestTaskPostDto(task, savedCount);
-			})
-			.collect(Collectors.toList());
+			});
 	}
 
 	/**

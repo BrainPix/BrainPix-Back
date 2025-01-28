@@ -3,6 +3,8 @@ package com.brainpix.post.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +31,11 @@ public class MyCollaborationPostManagementService {
 	private final CollectionGatheringRepository collectionGatheringRepository;
 
 	@Transactional(readOnly = true)
-	public List<MyCollaborationHubListDto> getAllCollaborationHubs(Long userId) {
-		return hubRepository.findByWriterId(userId).stream()
+	public Page<MyCollaborationHubListDto> getAllCollaborationHubs(Long userId, Pageable pageable) {
+		// 1) 해당 작성자의 협업 광장 게시글 목록을 페이징 조회
+		return hubRepository.findByWriterId(userId, pageable)
 			.map(hub -> {
+				// 2) 각 게시글의 저장 횟수, 현재 인원, 전체 인원을 계산
 				long savedCount = savedPostRepository.countByPostId(hub.getId());
 				long currentMembers = hub.getCollaborations().stream()
 					.mapToLong(rec -> rec.getGathering().getOccupiedQuantity())
@@ -39,9 +43,9 @@ public class MyCollaborationPostManagementService {
 				long totalMembers = hub.getCollaborations().stream()
 					.mapToLong(rec -> rec.getGathering().getTotalQuantity())
 					.sum();
+				// 3) DTO로 변환
 				return converter.toCollaborationHubListDto(hub, savedCount, currentMembers, totalMembers);
-			})
-			.collect(Collectors.toList());
+			});
 	}
 
 	@Transactional(readOnly = true)

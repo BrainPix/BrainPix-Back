@@ -2,6 +2,8 @@ package com.brainpix.post.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailDto;
 import com.brainpix.post.dto.mypostdto.MyCollaborationHubListDto;
 import com.brainpix.post.service.MyCollaborationPostManagementService;
@@ -25,13 +28,14 @@ public class MyCollaborationHubPostManagementController {
 
 	/**
 	 * 협업 광장 게시물 전체 보기
-	 */
+	 */	
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<MyCollaborationHubListDto>>> getCollaborationHubList(
-		@RequestParam Long userId
+	public ResponseEntity<ApiResponse<CommonPageResponse<MyCollaborationHubListDto>>> getCollaborationHubList(
+		@RequestParam Long userId,
+		Pageable pageable
 	) {
-		List<MyCollaborationHubListDto> hubs = collaborationHubService.getAllCollaborationHubs(userId);
-		return ResponseEntity.ok(ApiResponse.success(hubs));
+		Page<MyCollaborationHubListDto> hubs = collaborationHubService.getAllCollaborationHubs(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(hubs)));
 	}
 
 	/**

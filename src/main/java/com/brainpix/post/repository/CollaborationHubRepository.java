@@ -1,11 +1,11 @@
 package com.brainpix.post.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 
 public interface CollaborationHubRepository extends JpaRepository<CollaborationHub, Long> {
-	List<CollaborationHub> findByWriterId(Long userId);
+	Page<CollaborationHub> findByWriterId(Long userId, Pageable pageable);
 }
