@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.PostErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.post.converter.MyCollaborationPostConverter;
 import com.brainpix.post.dto.mypostdto.CollaborationCurrentMemberInfo;
@@ -51,7 +53,7 @@ public class MyCollaborationPostManagementService {
 	@Transactional(readOnly = true)
 	public MyCollaborationHubDetailDto getCollaborationHubDetail(Long hubId) {
 		CollaborationHub hub = hubRepository.findById(hubId)
-			.orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다."));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.COLLABORATION_HUB_NOT_FOUND));
 
 		// 모집 정보를 기반으로 지원 현황 조회 (대기 중인 지원자)
 		List<CollaborationSupportInfo> supportInfos = hub.getCollaborations().stream()

@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.PriceRepository;
@@ -45,7 +48,7 @@ public class MyRequestTaskPostManagementService {
 	@Transactional(readOnly = true)
 	public Page<MyRequestTaskPostDto> getMyRequestTasks(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		return requestTaskRepository.findByWriter(currentUser, pageable)
 			.map(task -> {
@@ -61,7 +64,7 @@ public class MyRequestTaskPostManagementService {
 	public MyRequestTaskPostDetailDto getRequestTaskDetail(Long userId, Long postId) {
 		// 게시글 가져오기
 		RequestTask task = requestTaskRepository.findById(postId)
-			.orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.REQUEST_TASK_NOT_FOUND));
 
 		// 모집 정보 가져오기
 		List<RequestTaskRecruitment> recruitments = requestTaskRecruitmentRepository.findByRequestTask(task);
@@ -102,7 +105,7 @@ public class MyRequestTaskPostManagementService {
 	@Transactional
 	public void acceptPurchasing(Long userId, Long purchasingId) {
 		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
-			.orElseThrow(() -> new RuntimeException("지원 정보를 찾을 수 없습니다."));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 작성자 확인
 		RequestTask task = purchasing.getRequestTaskRecruitment().getRequestTask();
@@ -124,7 +127,7 @@ public class MyRequestTaskPostManagementService {
 	@Transactional
 	public void rejectPurchasing(Long userId, Long purchasingId) {
 		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
-			.orElseThrow(() -> new RuntimeException("지원 정보를 찾을 수 없습니다."));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 작성자 확인
 		RequestTask task = purchasing.getRequestTaskRecruitment().getRequestTask();
