@@ -9,8 +9,8 @@ public class GetMessageConverter {
 	public static GetMessageDto.Response toResponse(Message message, User receiver, User sender) {
 		return GetMessageDto.Response.builder()
 			.id(message.getId())
-			.senderNickname(sender.getName())
-			.receiverNickname(receiver.getName())
+			.senderNickname(sender.getNickName())
+			.receiverNickname(receiver.getNickName())
 			.title(message.getTitle())
 			.content(message.getContent())
 			.sendTime(message.getCreatedAt())

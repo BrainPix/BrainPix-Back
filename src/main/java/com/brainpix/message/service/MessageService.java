@@ -65,7 +65,7 @@ public class MessageService {
 
 		Map<Long, String> senderMap = userRepository.findAllByIdIn(senderIdSet)
 			.stream()
-			.collect(Collectors.toMap(User::getId, User::getName));
+			.collect(Collectors.toMap(User::getId, User::getNickName));
 
 		return GetMessageListConverter.toResponse(messages, senderMap);
 	}
