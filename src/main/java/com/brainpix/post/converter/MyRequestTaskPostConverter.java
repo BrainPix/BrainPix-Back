@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.brainpix.post.dto.MyRequestTaskPostDetailDto;
-import com.brainpix.post.dto.MyRequestTaskPostDto;
-import com.brainpix.post.dto.RequestTaskCurrentMember;
-import com.brainpix.post.dto.RequestTaskSupportInfo;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDto;
+import com.brainpix.post.dto.mypostdto.RequestTaskCurrentMember;
+import com.brainpix.post.dto.mypostdto.RequestTaskSupportInfo;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.user.entity.Company;

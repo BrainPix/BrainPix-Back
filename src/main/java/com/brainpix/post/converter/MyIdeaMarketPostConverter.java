@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
-import com.brainpix.post.dto.IdeaMarketPurchaseInfo;
-import com.brainpix.post.dto.MyIdeaMarketPostDetailDto;
-import com.brainpix.post.dto.MyIdeaMarketPostDto;
+import com.brainpix.post.dto.mypostdto.IdeaMarketPurchaseInfo;
+import com.brainpix.post.dto.mypostdto.MyIdeaMarketPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyIdeaMarketPostDto;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.Individual;
@@ -21,7 +24,7 @@ public class MyIdeaMarketPostConverter {
 	public MyIdeaMarketPostDto toMyIdeaMarketPostDto(IdeaMarket ideaMarket, long savedCount) {
 		User writer = ideaMarket.getWriter();
 
-		String writerType = UserDisplayNameUtil.getWriterType(writer);
+		String openScope = UserDisplayNameUtil.parseOpenScope(ideaMarket.getPostAuth());
 		String displayName = UserDisplayNameUtil.getDisplayName(writer);
 
 		String category = "아이디어마켓 > " + ideaMarket.getSpecialization();
@@ -30,7 +33,7 @@ public class MyIdeaMarketPostConverter {
 
 		return MyIdeaMarketPostDto.builder()
 			.postId(ideaMarket.getId())
-			.writerType(writerType)
+			.openScope(openScope)
 			.displayName(displayName)
 			.categoryName(category)
 			.title(ideaMarket.getTitle())
@@ -62,7 +65,6 @@ public class MyIdeaMarketPostConverter {
 	// [상세 페이지 DTO]
 	public MyIdeaMarketPostDetailDto toDetailDto(IdeaMarket ideaMarket, List<IdeaMarketPurchaseInfo> purchaseList) {
 		User writer = ideaMarket.getWriter();
-		String writerType = UserDisplayNameUtil.getWriterType(writer);
 		String displayName = UserDisplayNameUtil.getDisplayName(writer);
 
 		List<String> images = ideaMarket.getImageList();
@@ -80,7 +82,6 @@ public class MyIdeaMarketPostConverter {
 			.title(ideaMarket.getTitle())
 			.price(priceVal)
 			.categoryName(category)
-			.writerType(writerType)
 			.displayName(displayName)
 			.images(images)
 			.purchaseList(purchaseList)
@@ -89,15 +90,13 @@ public class MyIdeaMarketPostConverter {
 
 	public static class UserDisplayNameUtil {
 
-		// "기업/개인" 구분
-		public static String getWriterType(User user) {
-			if (user instanceof Company) {
-				return "기업";
-			} else if (user instanceof Individual) {
-				return "개인";
-			} else {
-				return "개인"; // 혹은 “기타” 등
-			}
+		// 기업/개인 으로 구분
+		private static String parseOpenScope(PostAuth auth) {
+			if (auth == PostAuth.COMPANY)
+				return "기업 공개";
+			if (auth == PostAuth.ME)
+				return "개인 공개";
+			return "전체 공개";
 		}
 
 		// 작성자(User) 엔티티를 받아서, "개인이면 nickName, 기업이면 name"을 반환했어요,,
@@ -109,8 +108,7 @@ public class MyIdeaMarketPostConverter {
 				// 개인 사용자라면 Individual.nickName
 				return writer.getNickName();
 			} else {
-				// 혹시 예외적인 경우가 있다면, 기본 name 사용
-				return writer.getName();
+				throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
 			}
 		}
 	}

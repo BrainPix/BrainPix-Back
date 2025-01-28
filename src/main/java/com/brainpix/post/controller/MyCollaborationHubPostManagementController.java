@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.dto.MyCollaborationHubDetailDto;
-import com.brainpix.post.dto.MyCollaborationHubListDto;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailDto;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubListDto;
 import com.brainpix.post.service.MyCollaborationPostManagementService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/post-management/collaboration-hub")
 @RequiredArgsConstructor
-public class CollaborationHubPostManagementController {
+public class MyCollaborationHubPostManagementController {
 
 	private final MyCollaborationPostManagementService collaborationHubService;
 

@@ -1,4 +1,4 @@
-package com.brainpix.post.dto;
+package com.brainpix.post.dto.mypostdto;
 
 import java.util.List;
 

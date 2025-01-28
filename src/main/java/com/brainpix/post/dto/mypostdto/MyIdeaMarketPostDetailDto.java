@@ -1,4 +1,4 @@
-package com.brainpix.post.dto;
+package com.brainpix.post.dto.mypostdto;
 
 import java.util.List;
 
@@ -18,7 +18,6 @@ public class MyIdeaMarketPostDetailDto {
 	private Long price;           // 단가
 	private String categoryName;  // "아이디어마켓 > 디자인"
 	private List<String> images;  // 게시물 imageList
-	private String writerType;    // 개인/기업
 	private String displayName;   // (개인이면 nickName, 기업이면 name)
 
 	// 구매 현황

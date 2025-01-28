@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.dto.MyIdeaMarketPostDetailDto;
-import com.brainpix.post.dto.MyIdeaMarketPostDto;
+import com.brainpix.post.dto.mypostdto.MyIdeaMarketPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyIdeaMarketPostDto;
 import com.brainpix.post.service.MyIdeaMarketPostManagementService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/post-management/idea-market")
 @RequiredArgsConstructor
-public class IdeaMarketPostManagementController {
+public class MyIdeaMarketPostManagementController {
 
 	private final MyIdeaMarketPostManagementService postManagementService;
 

@@ -10,10 +10,10 @@ import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.PriceRepository;
 import com.brainpix.post.converter.MyRequestTaskPostConverter;
-import com.brainpix.post.dto.MyRequestTaskPostDetailDto;
-import com.brainpix.post.dto.MyRequestTaskPostDto;
-import com.brainpix.post.dto.RequestTaskCurrentMember;
-import com.brainpix.post.dto.RequestTaskSupportInfo;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDto;
+import com.brainpix.post.dto.mypostdto.RequestTaskCurrentMember;
+import com.brainpix.post.dto.mypostdto.RequestTaskSupportInfo;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
 import com.brainpix.post.repository.RequestTaskPurchasingRepository;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RequestTaskPostManagementService {
+public class MyRequestTaskPostManagementService {
 
 	private final RequestTaskRepository requestTaskRepository;
 	private final SavedPostRepository savedPostRepository;

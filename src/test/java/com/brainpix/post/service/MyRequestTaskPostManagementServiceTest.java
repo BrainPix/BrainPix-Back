@@ -14,7 +14,7 @@ import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.PriceRepository;
-import com.brainpix.post.dto.MyRequestTaskPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDetailDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
@@ -28,10 +28,10 @@ import com.brainpix.user.repository.UserRepository;
 
 @SpringBootTest
 @Transactional
-public class RequestTaskPostManagementServiceTest {
+public class MyRequestTaskPostManagementServiceTest {
 
 	@Autowired
-	private RequestTaskPostManagementService service;
+	private MyRequestTaskPostManagementService service;
 
 	@Autowired
 	private RequestTaskRepository requestTaskRepository;

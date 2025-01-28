@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.post.converter.MyCollaborationPostConverter;
-import com.brainpix.post.dto.CollaborationCurrentMemberInfo;
-import com.brainpix.post.dto.CollaborationSupportInfo;
-import com.brainpix.post.dto.MyCollaborationHubDetailDto;
-import com.brainpix.post.dto.MyCollaborationHubListDto;
+import com.brainpix.post.dto.mypostdto.CollaborationCurrentMemberInfo;
+import com.brainpix.post.dto.mypostdto.CollaborationSupportInfo;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailDto;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubListDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.post.repository.SavedPostRepository;

@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.dto.MyRequestTaskPostDetailDto;
-import com.brainpix.post.dto.MyRequestTaskPostDto;
-import com.brainpix.post.service.RequestTaskPostManagementService;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDetailDto;
+import com.brainpix.post.dto.mypostdto.MyRequestTaskPostDto;
+import com.brainpix.post.service.MyRequestTaskPostManagementService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/post-management/request-task")
 @RequiredArgsConstructor
-public class RequestTaskPostManagementController {
+public class MyRequestTaskPostManagementController {
 
-	private final RequestTaskPostManagementService service;
+	private final MyRequestTaskPostManagementService service;
 
 	/**
 	 *  내가 작성한 요청 과제 목록

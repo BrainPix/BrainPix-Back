@@ -1,4 +1,4 @@
-package com.brainpix.post.dto;
+package com.brainpix.post.dto.mypostdto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CollaborationSupportInfo {
+public class CollaborationCurrentMemberInfo {
 	private String userId;
 	private String role;
-	private String currentSlashTotal;
+	private Long memberCount;
 }

@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.brainpix.post.dto.CollaborationCurrentMemberInfo;
-import com.brainpix.post.dto.CollaborationSupportInfo;
-import com.brainpix.post.dto.MyCollaborationHubDetailDto;
-import com.brainpix.post.dto.MyCollaborationHubListDto;
+import com.brainpix.post.dto.mypostdto.CollaborationCurrentMemberInfo;
+import com.brainpix.post.dto.mypostdto.CollaborationSupportInfo;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailDto;
+import com.brainpix.post.dto.mypostdto.MyCollaborationHubListDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.user.entity.User;
