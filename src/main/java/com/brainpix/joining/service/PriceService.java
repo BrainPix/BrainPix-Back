@@ -27,6 +27,7 @@ public class PriceService {
 		return priceRepository.save(price);
 	}
 
+	/*
 	@Transactional
 	public Price createIdeaMarketPrice(IdeaMarketPriceDto priceDto) {
 
@@ -40,4 +41,5 @@ public class PriceService {
 		price.updatePriceFields(priceDto.getPrice(), priceDto.getTotalQuantity(), priceDto.getPaymentDuration());
 		priceRepository.save(price);
 	}
+	 */
 }

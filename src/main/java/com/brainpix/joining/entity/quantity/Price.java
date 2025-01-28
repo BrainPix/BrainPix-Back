@@ -1,8 +1,5 @@
 package com.brainpix.joining.entity.quantity;
 
-import com.brainpix.api.code.error.PriceErrorCode;
-import com.brainpix.api.exception.BrainPixException;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,6 +30,7 @@ public class Price extends BaseQuantity {
 		this.paymentDuration = paymentDuration;
 	}
 
+	/*
 	//기존 참여 인원과 비교하는 로직
 	public void updatePriceFields(Long price, Long totalQuantity, PaymentDuration paymentDuration) {
 
@@ -43,5 +41,6 @@ public class Price extends BaseQuantity {
 		this.paymentDuration = paymentDuration;
 		this.updateQuantityFields(totalQuantity);
 	}
+	 */
 
 }
