@@ -1,7 +1,6 @@
 package com.brainpix.joining.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.joining.dto.AcceptedRequestTaskPurchasingDto;
 import com.brainpix.joining.dto.RejectedRequestTaskPurchasingDto;
 import com.brainpix.joining.service.SupportRequestTaskService;
@@ -25,21 +25,23 @@ public class SupportRequestTaskController {
 	private final SupportRequestTaskService supportRequestTaskService;
 
 	@GetMapping("/rejected")
-	public ResponseEntity<ApiResponse<List<RejectedRequestTaskPurchasingDto>>> getRejectedList(
-		@RequestParam Long userId) {
-		List<RejectedRequestTaskPurchasingDto> dtos =
-			supportRequestTaskService.getRejectedList(userId);
-		return ResponseEntity
-			.ok(ApiResponse.success(dtos));
+	public ResponseEntity<ApiResponse<CommonPageResponse<RejectedRequestTaskPurchasingDto>>> getRejectedList(
+		@RequestParam Long userId,
+		Pageable pageable
+	) {
+		CommonPageResponse<RejectedRequestTaskPurchasingDto> response =
+			supportRequestTaskService.getRejectedList(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@GetMapping("/accepted")
-	public ResponseEntity<ApiResponse<List<AcceptedRequestTaskPurchasingDto>>> getAcceptedList(
-		@RequestParam Long userId) {
-		List<AcceptedRequestTaskPurchasingDto> dtos =
-			supportRequestTaskService.getAcceptedList(userId);
-		return ResponseEntity
-			.ok(ApiResponse.success(dtos));
+	public ResponseEntity<ApiResponse<CommonPageResponse<AcceptedRequestTaskPurchasingDto>>> getAcceptedList(
+		@RequestParam Long userId,
+		Pageable pageable
+	) {
+		CommonPageResponse<AcceptedRequestTaskPurchasingDto> response =
+			supportRequestTaskService.getAcceptedList(userId, pageable);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@DeleteMapping("/{purchasingId}")

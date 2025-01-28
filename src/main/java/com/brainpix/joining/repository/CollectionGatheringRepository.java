@@ -1,7 +1,7 @@
 package com.brainpix.joining.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
@@ -12,7 +12,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 	// 협업 횟수 조회 (승낙된 협업)
 	Long countByJoinerIdAndAccepted(Long joinerId, Boolean accepted);
 
-	List<CollectionGathering> findByJoinerAndAcceptedIsFalse(User joiner);
+	Page<CollectionGathering> findByJoinerAndAcceptedIsFalse(User joiner, Pageable pageable);
 
-	List<CollectionGathering> findByJoinerAndAcceptedIsTrue(User joiner);
+	Page<CollectionGathering> findByJoinerAndAcceptedIsTrue(User joiner, Pageable pageable);
 }

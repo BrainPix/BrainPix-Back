@@ -1,7 +1,7 @@
 package com.brainpix.joining.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +13,9 @@ public interface RequestTaskPurchasingRepository
 	extends JpaRepository<RequestTaskPurchasing, Long> {
 
 	// "수락" 상태(accepted = true) 리스트
-	List<RequestTaskPurchasing> findByBuyerAndAcceptedIsTrue(User buyer);
+	Page<RequestTaskPurchasing> findByBuyerAndAcceptedIsTrue(User buyer, Pageable pageable);
 
 	// "거절" 상태(accepted = false) 리스트
-	List<RequestTaskPurchasing> findByBuyerAndAcceptedIsFalse(User buyer);
+	Page<RequestTaskPurchasing> findByBuyerAndAcceptedIsFalse(User buyer, Pageable pageable);
+
 }

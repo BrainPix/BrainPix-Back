@@ -1,11 +1,15 @@
 package com.brainpix.joining.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CollaborationHubErrorCode;
+import com.brainpix.api.code.error.CollectionErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.converter.CollectionGatheringConverter;
 import com.brainpix.joining.dto.AcceptedCollaborationDto;
 import com.brainpix.joining.dto.RejectedCollaborationDto;
@@ -31,19 +35,16 @@ public class SupportCollaborationService {
 	 * - accepted = false
 	 * - joiner = currentUser
 	 */
+
 	@Transactional(readOnly = true)
-	public List<RejectedCollaborationDto> getRejectedList(Long userId) {
+	public Page<RejectedCollaborationDto> getRejectedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
-		// "거절" 상태: accepted = false
-		List<CollectionGathering> rejectedList =
-			gatheringRepository.findByJoinerAndAcceptedIsFalse(currentUser);
+		Page<CollectionGathering> rejectedPage =
+			gatheringRepository.findByJoinerAndAcceptedIsFalse(currentUser, pageable);
 
-		// 엔티티 -> DTO 변환
-		return rejectedList.stream()
-			.map(converter::toRejectedDto)
-			.collect(Collectors.toList());
+		return rejectedPage.map(converter::toRejectedDto);
 	}
 
 	/**
@@ -53,28 +54,18 @@ public class SupportCollaborationService {
 	 * - 팀원 정보까지 추가
 	 */
 	@Transactional(readOnly = true)
-	public List<AcceptedCollaborationDto> getAcceptedList(Long userId) {
+	public Page<AcceptedCollaborationDto> getAcceptedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
-		// "수락" 상태: accepted = true
-		List<CollectionGathering> acceptedList =
-			gatheringRepository.findByJoinerAndAcceptedIsTrue(currentUser);
+		Page<CollectionGathering> acceptedPage =
+			gatheringRepository.findByJoinerAndAcceptedIsTrue(currentUser, pageable);
 
-		// 각 CollectionGathering 마다,
-		//  -> 해당 CollaborationHub의 teamInfoList를 구성
-		return acceptedList.stream()
-			.map(cg -> {
-				CollaborationHub hub = cg.getCollaborationRecruitment()
-					.getParentCollaborationHub();
-				// 팀원 정보 생성
-				List<TeamMemberInfoDto> teamInfo =
-					converter.createTeamInfoList(hub);
-
-				// 최종 DTO
-				return converter.toAcceptedDto(cg, teamInfo);
-			})
-			.collect(Collectors.toList());
+		return acceptedPage.map(cg -> {
+			CollaborationHub hub = cg.getCollaborationRecruitment().getParentCollaborationHub();
+			List<TeamMemberInfoDto> teamInfo = converter.createTeamInfoList(hub);
+			return converter.toAcceptedDto(cg, teamInfo);
+		});
 	}
 
 	/**
@@ -83,17 +74,16 @@ public class SupportCollaborationService {
 	@Transactional
 	public void deleteRejected(Long userId, Long collectionGatheringId) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
 		CollectionGathering cg = gatheringRepository.findById(collectionGatheringId)
-			.orElseThrow(() -> new RuntimeException("지원 내역이 존재하지 않습니다."));
-
+			.orElseThrow(() -> new BrainPixException(CollectionErrorCode.COLLECTION_NOT_FOUND));
 		// 본인 항목인지 + 거절 상태인지 확인
 		if (!cg.getJoiner().equals(currentUser)) {
-			throw new RuntimeException("본인이 지원한 항목이 아닙니다.");
+			throw new BrainPixException(CollectionErrorCode.NOT_AUTHORIZED);
 		}
 		if (Boolean.TRUE.equals(cg.getAccepted())) {
-			throw new RuntimeException("거절 상태가 아닌 항목은 삭제할 수 없습니다.");
+			throw new BrainPixException(CollectionErrorCode.INVALID_STATUS);
 		}
 
 		gatheringRepository.delete(cg);

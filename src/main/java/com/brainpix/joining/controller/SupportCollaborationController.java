@@ -1,7 +1,7 @@
 package com.brainpix.joining.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,29 +24,21 @@ public class SupportCollaborationController {
 
 	private final SupportCollaborationService supportCollaborationService;
 
-	/**
-	 * [GET] 거절 목록
-	 */
 	@GetMapping("/rejected")
-	public ResponseEntity<ApiResponse<List<RejectedCollaborationDto>>> getRejectedList(
-		@RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Page<RejectedCollaborationDto>>> getRejectedList(
+		@RequestParam Long userId,
+		Pageable pageable) {
 
-		List<RejectedCollaborationDto> dtos =
-			supportCollaborationService.getRejectedList(userId);
-
+		Page<RejectedCollaborationDto> dtos = supportCollaborationService.getRejectedList(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(dtos));
 	}
 
-	/**
-	 * [GET] 수락 목록
-	 */
 	@GetMapping("/accepted")
-	public ResponseEntity<ApiResponse<List<AcceptedCollaborationDto>>> getAcceptedList(
-		@RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Page<AcceptedCollaborationDto>>> getAcceptedList(
+		@RequestParam Long userId,
+		Pageable pageable) {
 
-		List<AcceptedCollaborationDto> dtos =
-			supportCollaborationService.getAcceptedList(userId);
-
+		Page<AcceptedCollaborationDto> dtos = supportCollaborationService.getAcceptedList(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(dtos));
 	}
 
