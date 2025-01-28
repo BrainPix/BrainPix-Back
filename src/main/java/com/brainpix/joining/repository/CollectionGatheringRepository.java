@@ -19,6 +19,10 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 	@Query("SELECT g FROM CollectionGathering g WHERE g.collaborationRecruitment = :recruitment AND g.accepted IS NULL")
 	List<CollectionGathering> findWaitingByRecruitment(CollaborationRecruitment recruitment);
 
-	@Query("SELECT g FROM CollectionGathering g WHERE g.collaborationRecruitment = :recruitment AND g.accepted = true")
-	List<CollectionGathering> findAcceptedByRecruitment(CollaborationRecruitment recruitment);
+	@Query("""
+		    SELECT g FROM CollectionGathering g
+		    WHERE g.collaborationRecruitment = :recruitment
+		    AND (g.accepted = true OR g.initialGathering = true)
+		""")
+	List<CollectionGathering> findByRecruitmentAndAcceptedOrInitialGathering(CollaborationRecruitment recruitment);
 }

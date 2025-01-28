@@ -37,4 +37,12 @@ public class CollectionGathering extends BaseTimeEntity {
 		this.initialGathering = initialGathering;
 		this.collaborationRecruitment = collaborationRecruitment;
 	}
+
+	public void accept() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
+	}
 }
