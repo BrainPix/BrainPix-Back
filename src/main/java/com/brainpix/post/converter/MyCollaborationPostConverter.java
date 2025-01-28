@@ -55,11 +55,11 @@ public class MyCollaborationPostConverter {
 			.build();
 	}
 
-	public CollaborationSupportInfo toSupportInfo(User user, String role, long currentQuantity, long totalQuantity) {
+	public CollaborationSupportInfo toSupportInfo(User user, String role, long acceptedCount, long totalQuantity) {
 		return CollaborationSupportInfo.builder()
 			.userId(user.getIdentifier())
 			.role(role)
-			.currentSlashTotal(currentQuantity + " / " + totalQuantity)
+			.currentSlashTotal(acceptedCount + " / " + totalQuantity)
 			.build();
 	}
 

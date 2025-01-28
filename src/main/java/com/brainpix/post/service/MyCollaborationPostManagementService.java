@@ -2,6 +2,7 @@ package com.brainpix.post.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,8 +66,8 @@ public class MyCollaborationPostManagementService {
 				.map(gathering -> converter.toSupportInfo(
 					gathering.getJoiner(),
 					rec.getDomain(),
-					gathering.getCollaborationRecruitment().getGathering().getOccupiedQuantity(),
-					gathering.getCollaborationRecruitment().getGathering().getTotalQuantity()
+					collectionGatheringRepository.countAcceptedByRecruitment(rec), // 현재 인원 (수락된 인원만)
+					rec.getGathering().getTotalQuantity() // 전체 모집 인원
 				))
 			)
 			.collect(Collectors.toList());
@@ -74,17 +75,26 @@ public class MyCollaborationPostManagementService {
 		// 모집 정보를 기반으로 현재 인원 조회 (수락된 지원자+초기멤버) (어지럽네요)
 		List<CollaborationCurrentMemberInfo> currentMembers = hub.getCollaborations().stream()
 			.flatMap(rec -> {
-				// 1. 수락된 인원과 스타팅 멤버를 모두 가져오기
-				List<CollectionGathering> acceptedAndStartingMembers = collectionGatheringRepository.findByRecruitmentAndAcceptedOrInitialGathering(
-					rec);
-
-				// 2. 변환 로직
-				return acceptedAndStartingMembers.stream()
+				// 수락된 인원
+				Stream<CollaborationCurrentMemberInfo> acceptedMembers = collectionGatheringRepository.findAcceptedByRecruitment(
+						rec).stream()
 					.map(gathering -> converter.toCurrentMemberInfo(
 						gathering.getJoiner(),
 						rec.getDomain(),
-						rec.getGathering().getOccupiedQuantity()
+						gathering.getCollaborationRecruitment().getGathering().getOccupiedQuantity()
 					));
+
+				// 스타팅 멤버
+				Stream<CollaborationCurrentMemberInfo> startingMembers = collectionGatheringRepository.findStartingMembersByRecruitment(
+						rec).stream()
+					.map(gathering -> converter.toCurrentMemberInfo(
+						gathering.getJoiner(),
+						rec.getDomain(),
+						gathering.getCollaborationRecruitment().getGathering().getOccupiedQuantity()
+					));
+
+				// 두 스트림 합치기
+				return Stream.concat(acceptedMembers, startingMembers);
 			})
 			.collect(Collectors.toList());
 
