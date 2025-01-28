@@ -2,6 +2,7 @@ package com.brainpix.joining.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import com.brainpix.joining.converter.IdeaMarketPurchasingConverter;
 import com.brainpix.joining.dto.IdeaMarketPurchaseDto;
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
 import com.brainpix.joining.repository.IdeaMarketPurchasingRepository;
+import com.brainpix.joining.util.PageableUtils;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -31,10 +33,12 @@ public class SupportIdeaMarketService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-		// 구매내역
-		Page<IdeaMarketPurchasing> page = purchasingRepository.findByBuyer(currentUser, pageable);
+		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
-		Page<IdeaMarketPurchaseDto> dtoPage = page.map(converter::toPurchaseDto);
+		// 구매내역
+		Page<IdeaMarketPurchasing> purchasings = purchasingRepository.findByBuyer(currentUser, sortedPageable);
+
+		Page<IdeaMarketPurchaseDto> dtoPage = purchasings.map(converter::toPurchaseDto);
 
 		return CommonPageResponse.of(dtoPage);
 	}

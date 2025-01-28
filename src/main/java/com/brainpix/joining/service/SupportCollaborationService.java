@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import com.brainpix.joining.dto.RejectedCollaborationDto;
 import com.brainpix.joining.dto.TeamMemberInfoDto;
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.joining.util.PageableUtils;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
@@ -41,8 +43,10 @@ public class SupportCollaborationService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
+		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
+
 		Page<CollectionGathering> rejectedPage =
-			gatheringRepository.findByJoinerAndAcceptedIsFalse(currentUser, pageable);
+			gatheringRepository.findByJoinerAndAcceptedIsFalse(currentUser, sortedPageable);
 
 		return rejectedPage.map(converter::toRejectedDto);
 	}
@@ -58,8 +62,10 @@ public class SupportCollaborationService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
+		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
+
 		Page<CollectionGathering> acceptedPage =
-			gatheringRepository.findByJoinerAndAcceptedIsTrue(currentUser, pageable);
+			gatheringRepository.findByJoinerAndAcceptedIsTrue(currentUser, sortedPageable);
 
 		return acceptedPage.map(cg -> {
 			CollaborationHub hub = cg.getCollaborationRecruitment().getParentCollaborationHub();
@@ -76,16 +82,13 @@ public class SupportCollaborationService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
 
-		CollectionGathering cg = gatheringRepository.findById(collectionGatheringId)
+		CollectionGathering collectionGathering = gatheringRepository.findById(collectionGatheringId)
 			.orElseThrow(() -> new BrainPixException(CollectionErrorCode.COLLECTION_NOT_FOUND));
-		// 본인 항목인지 + 거절 상태인지 확인
-		if (!cg.getJoiner().equals(currentUser)) {
-			throw new BrainPixException(CollectionErrorCode.NOT_AUTHORIZED);
-		}
-		if (Boolean.TRUE.equals(cg.getAccepted())) {
-			throw new BrainPixException(CollectionErrorCode.INVALID_STATUS);
-		}
 
-		gatheringRepository.delete(cg);
+		collectionGathering.validateJoiner(currentUser);
+		collectionGathering.validateRejectedStatus();
+
+		gatheringRepository.delete(collectionGathering);
+
 	}
 }

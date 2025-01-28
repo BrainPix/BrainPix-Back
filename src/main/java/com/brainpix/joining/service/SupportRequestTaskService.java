@@ -2,6 +2,7 @@ package com.brainpix.joining.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.brainpix.joining.dto.AcceptedRequestTaskPurchasingDto;
 import com.brainpix.joining.dto.RejectedRequestTaskPurchasingDto;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
+import com.brainpix.joining.util.PageableUtils;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -35,11 +37,11 @@ public class SupportRequestTaskService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		// Fetch paginated list of rejected requests
-		Page<RequestTaskPurchasing> rejectedPage =
-			purchasingRepository.findByBuyerAndAcceptedIsFalse(currentUser, pageable);
+		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
-		// Convert to DTOs and wrap in CommonPageResponse
+		Page<RequestTaskPurchasing> rejectedPage =
+			purchasingRepository.findByBuyerAndAcceptedIsFalse(currentUser, sortedPageable);
+
 		Page<RejectedRequestTaskPurchasingDto> dtoPage = rejectedPage.map(converter::toRejectedDto);
 		return CommonPageResponse.of(dtoPage);
 	}
@@ -49,11 +51,11 @@ public class SupportRequestTaskService {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
 
-		// Fetch paginated list of accepted requests
-		Page<RequestTaskPurchasing> acceptedPage =
-			purchasingRepository.findByBuyerAndAcceptedIsTrue(currentUser, pageable);
+		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
-		// Convert to DTOs and wrap in CommonPageResponse
+		Page<RequestTaskPurchasing> acceptedPage =
+			purchasingRepository.findByBuyerAndAcceptedIsTrue(currentUser, sortedPageable);
+
 		Page<AcceptedRequestTaskPurchasingDto> dtoPage = acceptedPage.map(converter::toAcceptedDto);
 		return CommonPageResponse.of(dtoPage);
 	}
@@ -68,17 +70,12 @@ public class SupportRequestTaskService {
 
 		RequestTaskPurchasing purchasing = purchasingRepository.findById(purchasingId)
 			.orElseThrow(() -> new BrainPixException(PurchasingErrorCode.COLLECTION_NOT_FOUND));
-		// 본인이 지원한 항목인지 확인
-		if (!purchasing.getBuyer().equals(currentUser)) {
-			throw new BrainPixException(PurchasingErrorCode.NOT_AUTHORIZED);
-		}
 
-		// 거절 상태인지 확인
-		if (Boolean.TRUE.equals(purchasing.getAccepted())) {
-			throw new BrainPixException(PurchasingErrorCode.INVALID_STATUS);
-		}
+		purchasing.validateBuyer(currentUser);
+		purchasing.validateRejectedStatus();
 
 		// DB에서 실제 삭제
 		purchasingRepository.delete(purchasing);
 	}
+
 }
