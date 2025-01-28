@@ -99,9 +99,21 @@ public class RequestTaskService {
 				parameter.getRequestRecruitmentId())
 			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND));
 
+		// 지원자가 모두 채워진 경우 예외
+		if (requestTaskRecruitment.getPrice().getOccupiedQuantity() >= requestTaskRecruitment.getPrice()
+			.getTotalQuantity()) {
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_FULL);
+		}
+
 		// 글 작성자가 신청하는 예외는 필터링
 		if (requestTask.getWriter() == user) {
 			throw new BrainPixException(RequestTaskErrorCode.INVALID_RECRUITMENT_OWNER);
+		}
+
+		// 이미 지원한 분야인 경우 예외
+		if (requestTaskPurchasingRepository.existsByBuyerIdAndRequestTaskRecruitmentId(user.getId(),
+			requestTaskRecruitment.getId())) {
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_APPLY);
 		}
 
 		// 요청 과제에 속하는 지원 분야인지 확인

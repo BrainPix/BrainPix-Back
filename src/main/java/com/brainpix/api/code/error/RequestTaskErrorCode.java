@@ -25,6 +25,10 @@ public enum RequestTaskErrorCode implements ErrorCode {
 	RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "REQUESTTASK404", "해당 모집 정보를 찾을 수 없습니다."),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "REQUESTTASK404", "사용자를 찾을 수 없습니다."),
 
+	// 409 Conflict - 리소스의 중복 및 충돌
+	RECRUITMENT_ALREADY_FULL(HttpStatus.CONFLICT, "REQUESTTASK409", "해당 모집은 마감되었습니다."),
+	RECRUITMENT_ALREADY_APPLY(HttpStatus.CONFLICT, "REQUESTTASK409", "이미 지원한 모집입니다."),
+
 	// 500 Internal Server Error - 서버 내부 오류
 	TASK_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REQUESTTASK500", "요청 과제 생성 중 오류가 발생했습니다."),
 	TASK_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REQUESTTASK500", "요청 과제 수정 중 오류가 발생했습니다."),
