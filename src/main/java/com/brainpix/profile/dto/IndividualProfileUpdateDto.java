@@ -9,7 +9,7 @@ import com.brainpix.profile.entity.StackProficiency;
 import lombok.Getter;
 
 @Getter
-public class ProfileUpdateDto {
+public class IndividualProfileUpdateDto {
 
 	private String profileImage; // 프로필 이미지 경로
 	private String selfIntroduction; // 자기소개

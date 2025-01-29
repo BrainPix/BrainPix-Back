@@ -1,10 +1,13 @@
 package com.brainpix.profile.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.brainpix.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +20,15 @@ public class IndividualProfile extends Profile {
 	private Boolean ContactOpen;
 	private Boolean CareerOpen;
 	private Boolean stackOpen;
+
+	@OneToMany(mappedBy = "individualProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Career> careers = new ArrayList<>();
+
+	@OneToMany(mappedBy = "individualProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Contact> contacts = new ArrayList<>();
+
+	@OneToMany(mappedBy = "individualProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Stack> stacks = new ArrayList<>();
 
 	@Builder
 	public IndividualProfile(User user, List<Specialization> specializationList, String selfIntroduction,

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.profile.dto.ProfileUpdateDto;
+import com.brainpix.profile.dto.IndividualProfileUpdateDto;
 import com.brainpix.profile.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,10 @@ public class ProfileController {
 	private final ProfileService profileService;
 
 	@PutMapping("/{userId}")
-	public ResponseEntity<ApiResponse<Void>> updateProfile(
+	public ResponseEntity<ApiResponse<Void>> updateIndividualProfile(
 		@PathVariable Long userId,
-		@RequestBody ProfileUpdateDto updateDto) {
-		profileService.updateProfile(userId, updateDto);
+		@RequestBody IndividualProfileUpdateDto updateDto) {
+		profileService.updateIndividualProfile(userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 

@@ -1,10 +1,12 @@
 package com.brainpix.profile.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -16,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +39,9 @@ public abstract class Profile extends BaseTimeEntity {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private User user;
+
+	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Portfolio> portfolios = new ArrayList<>();
 
 	public Profile(User user, List<Specialization> specializationList) {
 		this.user = user;

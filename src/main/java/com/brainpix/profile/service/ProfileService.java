@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brainpix.api.code.error.ProfileErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.profile.converter.ProfileConverter;
-import com.brainpix.profile.dto.ProfileUpdateDto;
+import com.brainpix.profile.dto.IndividualProfileUpdateDto;
 import com.brainpix.profile.entity.Career;
 import com.brainpix.profile.entity.Contact;
 import com.brainpix.profile.entity.IndividualProfile;
@@ -36,7 +36,7 @@ public class ProfileService {
 
 	private final ProfileConverter converter;
 
-	public void updateProfile(Long userId, ProfileUpdateDto updateDto) {
+	public void updateIndividualProfile(Long userId, IndividualProfileUpdateDto updateDto) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
 
