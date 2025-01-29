@@ -27,4 +27,27 @@ public class IndividualProfile extends Profile {
 		this.CareerOpen = careerOpen;
 		this.stackOpen = stackOpen;
 	}
+
+	public void update(String selfIntroduction, Boolean contactOpen, Boolean careerOpen, Boolean stackOpen) {
+		this.selfIntroduction = selfIntroduction;
+		this.ContactOpen = contactOpen;
+		this.CareerOpen = careerOpen;
+		this.stackOpen = stackOpen;
+	}
+
+	public void updateSpecializations(List<Specialization> newSpecializations) {
+		if (newSpecializations.size() > 2) {
+			throw new IllegalArgumentException("전문 분야는 최대 2개까지만 선택할 수 있습니다.");
+		}
+		// 중복 제거
+		List<Specialization> distinctSpecializations = newSpecializations.stream()
+			.distinct()
+			.toList();
+		if (distinctSpecializations.size() != newSpecializations.size()) {
+			throw new IllegalArgumentException("중복된 전문 분야는 선택할 수 없습니다.");
+		}
+		// 업데이트
+		this.getSpecializationList().clear();
+		this.getSpecializationList().addAll(distinctSpecializations);
+	}
 }

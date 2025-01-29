@@ -41,4 +41,9 @@ public abstract class Profile extends BaseTimeEntity {
 		this.user = user;
 		this.specializationList = specializationList;
 	}
+
+	public void setSpecializations(List<Specialization> specializations) {
+		this.specializationList.clear();
+		this.specializationList.addAll(specializations);
+	}
 }
