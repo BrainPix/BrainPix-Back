@@ -1,8 +1,5 @@
 package com.brainpix.post.service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,18 +42,7 @@ public class RequestTaskQueryService {
 			parameter.getPageable());
 
 		// dto로 변환
-		Page<GetRequestTaskListDto.RequestTaskDetail> response = result
-			.map(requestTask -> {
-					RequestTask task = (RequestTask)requestTask[0];    // 실제 엔티티 객체
-					Long saveCount = (Long)requestTask[1];        // 저장 횟수
-					LocalDateTime deadline = task.getDeadline();    // 마감 기한
-					LocalDateTime now = LocalDateTime.now();    // 현재 시간
-					Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline); // D-DAY 계산
-					return GetRequestTaskListDtoConverter.toRequestTaskDetail(task, saveCount, days);
-				}
-			);
-
-		return CommonPageResponse.of(response);
+		return GetRequestTaskListDtoConverter.toResponse(result);
 	}
 
 	// 저장순으로 요청 과제를 조회합니다.
@@ -68,18 +54,7 @@ public class RequestTaskQueryService {
 			parameter.getPageable());
 
 		// dto로 변환
-		Page<GetPopularRequestTaskListDto.RequestTaskDetail> response = result
-			.map(requestTask -> {
-					RequestTask task = (RequestTask)requestTask[0];    // 실제 엔티티 객체
-					Long saveCount = (Long)requestTask[1];        // 저장 횟수
-					LocalDateTime deadline = task.getDeadline();    // 마감 기한
-					LocalDateTime now = LocalDateTime.now();    // 현재 시간
-					Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline); // D-DAY 계산
-					return GetPopularRequestTaskListDtoConverter.toRequestTaskDetail(task, saveCount, days);
-				}
-			);
-
-		return CommonPageResponse.of(response);
+		return GetPopularRequestTaskListDtoConverter.toResponse(result);
 	}
 
 	// 요청 과제 상세 페이지 내용을 조회합니다.
