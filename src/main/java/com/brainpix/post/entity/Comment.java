@@ -38,4 +38,8 @@ public class Comment extends BaseTimeEntity {
 		this.parentComment = parentComment;
 		this.content = content;
 	}
+
+	public Boolean validateWriter(User user) {
+		return this.writer.equals(user);
+	}
 }

@@ -70,11 +70,9 @@ public class CommentService {
 		// 댓글 등록
 		commentRepository.save(comment);
 
-		// 마지막으로 알람 생성 (수신자와 송신자가 다른 경우만 발행)
+		// 알람 생성 (게시글 작성자에게 전달)
 		if (post.getWriter() != sender) {
-			String postType = post instanceof IdeaMarket ? "IdeaMarket" :
-				(post instanceof RequestTask ? "RequestTask" : "CollaborationHub");
-			alarmEventService.createQnaComment(post.getWriter().getId(), postType, post.getWriter().getName(),
+			alarmEventService.createQnaComment(post.getWriter().getId(), getPostType(post), post.getWriter().getName(),
 				sender.getName());
 		}
 
@@ -103,11 +101,9 @@ public class CommentService {
 		// 대댓글 등록
 		commentRepository.save(reply);
 
-		// 마지막으로 알람 생성 (수신자와 송신자가 다른 경우만 발행)
-		if (parentComment.getWriter() != sender) {
-			String postType = post instanceof IdeaMarket ? "IdeaMarket" :
-				(post instanceof RequestTask ? "RequestTask" : "CollaborationHub");
-			alarmEventService.createQnaCommentReply(parentComment.getWriter().getId(), postType,
+		// 알람 생성 (댓글 작성자에게 전달)
+		if (!parentComment.validateWriter(sender)) {
+			alarmEventService.createQnaCommentReply(parentComment.getWriter().getId(), getPostType(post),
 				parentComment.getWriter().getName(), sender.getName());
 		}
 
@@ -138,5 +134,10 @@ public class CommentService {
 
 		// 댓글
 		commentRepository.delete(comment);
+	}
+
+	private String getPostType(Post post) {
+		return post instanceof IdeaMarket ? "IdeaMarket" :
+			(post instanceof RequestTask ? "RequestTask" : "CollaborationHub");
 	}
 }
