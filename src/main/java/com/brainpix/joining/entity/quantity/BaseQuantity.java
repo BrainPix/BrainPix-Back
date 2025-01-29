@@ -33,4 +33,5 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 		}
 		this.occupiedQuantity += amount; // 안전하게 증가
 	}
+
 }

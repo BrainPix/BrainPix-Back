@@ -1,6 +1,5 @@
 package com.brainpix.post.controller;
 
-import java.util.Map;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
