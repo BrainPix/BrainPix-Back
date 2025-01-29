@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.kafka.service.AlarmEventService;
@@ -38,7 +39,7 @@ public class CommentService {
 
 	// 게시글의 댓글 목록 조회
 	@Transactional(readOnly = true)
-	public GetCommentListDto.Response getCommentList(GetCommentListDto.Parameter parameter) {
+	public CommonPageResponse<GetCommentListDto.Comment> getCommentList(GetCommentListDto.Parameter parameter) {
 
 		// 게시글 조회
 		Post post = postRepository.findById(parameter.getPostId())
@@ -47,7 +48,8 @@ public class CommentService {
 		// 게시글에 연관된 모든 댓글을 조회
 		Page<Comment> comments = commentRepository.findByParentPostId(post.getId(), parameter.getPageable());
 
-		return GetCommentListDtoConverter.toResponse(comments);
+		// dto 변환
+		return GetCommentListDtoConverter.toResponse(comments, parameter.getPageable());
 	}
 
 	// 댓글 생성

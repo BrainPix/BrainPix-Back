@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.GetCommentListDto;
 import com.brainpix.post.entity.Comment;
 
@@ -18,31 +20,26 @@ public class GetCommentListDtoConverter {
 			.build();
 	}
 
-	public static GetCommentListDto.Response toResponse(Page<Comment> comments) {
+	public static CommonPageResponse<GetCommentListDto.Comment> toResponse(Page<Comment> comments, Pageable pageable) {
 
-		List<GetCommentListDto.Comment> commentList = new ArrayList<>();
+		List<GetCommentListDto.Comment> commentDtoList = new ArrayList<>();
 
-		// 댓글의 최대 깊이가 1인 경우만 적용됩니다.
 		for (Comment comment : comments) {
-			GetCommentListDto.Comment commentDto = toComment(comment);
-
+			GetCommentListDto.Comment commentDto = GetCommentListDtoConverter.toComment(comment);
 			// 자식 댓글인 경우 리스트에서 부모를 꺼내 자식 리스트에 추가
-			if (commentDto.getParentCommentId() != null && !commentList.isEmpty()) {
-				GetCommentListDto.Comment parent = commentList.get(commentList.size() - 1);
+			if (commentDto.getParentCommentId() != null && !commentDtoList.isEmpty()) {
+				GetCommentListDto.Comment parent = commentDtoList.get(commentDtoList.size() - 1);
 				parent.getChildComments().add(commentDto);
 			} else {
-				commentList.add(commentDto);
+				commentDtoList.add(commentDto);
 			}
 		}
 
-		return GetCommentListDto.Response.builder()
-			.commentList(commentList)
-			.totalPages(comments.getTotalPages())
-			.totalElements((int)comments.getTotalElements())
-			.currentPage(comments.getNumber())
-			.currentSize(comments.getNumberOfElements())
-			.hasNext(comments.hasNext())
-			.build();
+		// 공통 페이징 응답에 담길 결과
+		PageImpl<GetCommentListDto.Comment> response = new PageImpl<>(commentDtoList, pageable,
+			comments.getTotalElements());
+
+		return CommonPageResponse.of(response);
 	}
 
 	public static GetCommentListDto.Comment toComment(Comment comment) {

@@ -17,17 +17,6 @@ public class GetCommentListDto {
 		private Pageable pageable;    // 페이징 기준
 	}
 
-	@Builder
-	@Getter
-	public static class Response {
-		private List<Comment> commentList;    // 결과 값 리스트
-		private Integer totalPages;        // 전체 페이지 수
-		private Integer totalElements;    // 전체 결과의 크기
-		private Integer currentPage;    // 현재 페이지 수
-		private Integer currentSize;    // 현재 페이지의 크기
-		private Boolean hasNext;    // 다음 페이지 존재 여부
-	}
-
 	@Getter
 	@Builder
 	public static class Comment {

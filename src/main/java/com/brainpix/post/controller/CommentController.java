@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.converter.CreateCommentDtoConverter;
 import com.brainpix.post.converter.CreateReplyDtoConverter;
 import com.brainpix.post.converter.DeleteCommentDtoConverter;
@@ -32,12 +33,12 @@ public class CommentController {
 	private final CommentService commentService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<GetCommentListDto.Response>> getCommentList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetCommentListDto.Comment>>> getCommentList(
 		@PathVariable("postId") Long postId,
 		Pageable pageable
 	) {
 		GetCommentListDto.Parameter parameter = GetCommentListDtoConverter.toParameter(postId, pageable);
-		GetCommentListDto.Response response = commentService.getCommentList(parameter);
+		CommonPageResponse<GetCommentListDto.Comment> response = commentService.getCommentList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
