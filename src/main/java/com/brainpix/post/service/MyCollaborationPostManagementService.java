@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,13 @@ public class MyCollaborationPostManagementService {
 
 	@Transactional(readOnly = true)
 	public Page<MyCollaborationHubListDto> getAllCollaborationHubs(Long userId, Pageable pageable) {
+
+		Pageable sortedPageable = PageRequest.of(
+			pageable.getPageNumber(),
+			pageable.getPageSize(),
+			Sort.by(Sort.Direction.DESC, "createdAt") // 최신순 정렬
+		);
+
 		// 1) 해당 작성자의 협업 광장 게시글 목록을 페이징 조회
 		return hubRepository.findByWriterId(userId, pageable)
 			.map(hub -> {

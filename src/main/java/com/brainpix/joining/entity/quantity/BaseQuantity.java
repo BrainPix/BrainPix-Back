@@ -1,5 +1,7 @@
 package com.brainpix.joining.entity.quantity;
 
+import com.brainpix.api.code.error.PriceErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.MappedSuperclass;
@@ -29,7 +31,7 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 	// 모집 인원을 증가시키는 로직
 	public void increaseOccupiedQuantity(Long amount) {
 		if (this.occupiedQuantity + amount > this.totalQuantity) {
-			throw new IllegalStateException("모집 정원을 초과할 수 없습니다.");
+			throw new BrainPixException(PriceErrorCode.INVALID_QUANTITY_INPUT);
 		}
 		this.occupiedQuantity += amount; // 안전하게 증가
 	}

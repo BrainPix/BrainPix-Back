@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,12 @@ public class MyIdeaMarketPostManagementService {
 		// 1) User 조회
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		Pageable sortedPageable = PageRequest.of(
+			pageable.getPageNumber(),
+			pageable.getPageSize(),
+			Sort.by(Sort.Direction.DESC, "createdAt") // 최신순 정렬
+		);
 
 		// 2) 내가 작성한 IdeaMarket 목록 페이징
 		return ideaMarketRepository.findByWriter(currentUser, pageable)
