@@ -1,7 +1,5 @@
 package com.brainpix.post.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,12 +125,7 @@ public class CommentService {
 			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
 		}
 
-		// 자식 댓글 삭제
-		List<Comment> childComments = commentRepository.findAllByParentCommentId(comment.getId());
-		childComments
-			.forEach(commentRepository::delete);
-
-		// 댓글
+		// 댓글 삭제 (자식은 Cascade.REMOVE)
 		commentRepository.delete(comment);
 	}
 
