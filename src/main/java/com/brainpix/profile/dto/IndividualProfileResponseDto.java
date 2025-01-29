@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MyProfileResponseDto {
+public class IndividualProfileResponseDto {
 	private String userType; // 개인/기업
 	private String specializations; // 전문 분야 (e.g., "IT/디자인")
 	private String name; // 사용자 이름
@@ -44,7 +44,7 @@ public class MyProfileResponseDto {
 	@Builder
 	public static class PortfolioDto {
 		private String title; // 포트폴리오 제목
-		private String content; // 내용
+		private String imageUrl; //포트폴리오 썸네일
 		private String createdDate; // 작성일
 	}
 }

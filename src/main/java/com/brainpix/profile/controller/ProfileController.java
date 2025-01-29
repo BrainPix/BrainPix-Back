@@ -1,6 +1,7 @@
 package com.brainpix.profile.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.profile.dto.CompanyProfileResponseDto;
+import com.brainpix.profile.dto.CompanyProfileUpdateDto;
+import com.brainpix.profile.dto.IndividualProfileResponseDto;
 import com.brainpix.profile.dto.IndividualProfileUpdateDto;
 import com.brainpix.profile.service.ProfileService;
 
@@ -23,11 +27,31 @@ public class ProfileController {
 
 	private final ProfileService profileService;
 
-	@PutMapping("/{userId}")
+	@GetMapping("/individual")
+	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getIndividualProfile(@RequestParam Long userId) {
+		IndividualProfileResponseDto profile = profileService.getMyProfile(userId);
+		return ResponseEntity.ok(ApiResponse.success(profile));
+	}
+
+	@GetMapping("/company")
+	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getCompanyProfile(@RequestParam Long userId) {
+		CompanyProfileResponseDto profile = profileService.getCompanyProfile(userId);
+		return ResponseEntity.ok(ApiResponse.success(profile));
+	}
+
+	@PutMapping("/individual/{userId}")
 	public ResponseEntity<ApiResponse<Void>> updateIndividualProfile(
 		@PathVariable Long userId,
 		@RequestBody IndividualProfileUpdateDto updateDto) {
 		profileService.updateIndividualProfile(userId, updateDto);
+		return ResponseEntity.ok(ApiResponse.success(null));
+	}
+
+	@PutMapping("/company/{userId}")
+	public ResponseEntity<ApiResponse<Void>> updateCompanyProfile(
+		@PathVariable Long userId,
+		@RequestBody CompanyProfileUpdateDto updateDto) {
+		profileService.updateCompanyProfile(userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 
@@ -40,4 +64,5 @@ public class ProfileController {
 		String savedPath = profileService.uploadProfileImage(userId, imagePath);
 		return ResponseEntity.ok(ApiResponse.success(savedPath));
 	}
+
 }

@@ -1,37 +1,37 @@
 package com.brainpix.profile.entity;
 
-import com.brainpix.jpa.BaseTimeEntity;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class Contact extends BaseTimeEntity {
+public class CompanyInformation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private ContactType type;
+	private CompanyInformationType companyInformationType;
 
 	private String value;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private IndividualProfile individualProfile;
+	@ManyToOne
+	private CompanyProfile companyProfile;
 
-	public Contact(ContactType type, String value, IndividualProfile individualProfile) {
-		this.type = type;
+	@Builder
+	public CompanyInformation(CompanyInformationType companyInformationType, String value,
+		CompanyProfile companyProfile) {
+		this.companyInformationType = companyInformationType;
 		this.value = value;
-		this.individualProfile = individualProfile;
+		this.companyProfile = companyProfile;
 	}
 }
