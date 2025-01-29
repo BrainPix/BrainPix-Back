@@ -38,7 +38,6 @@ public abstract class Post extends BaseTimeEntity {
 
 	private String title;
 	private String content;
-	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
 

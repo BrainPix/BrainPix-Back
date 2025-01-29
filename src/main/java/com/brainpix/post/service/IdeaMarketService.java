@@ -5,18 +5,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.joining.service.PriceService;
+import com.brainpix.post.converter.CreateIdeaMarketConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
+import com.brainpix.post.dto.IdeaMarketCreateDto;
+import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
+import com.brainpix.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +34,47 @@ public class IdeaMarketService {
 	private final SavedPostRepository savedPostRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
+	private final UserRepository userRepository;
+	private final PriceService priceService;
+	private final CreateIdeaMarketConverter createIdeaMarketConverter;
+
+	@Transactional
+	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
+
+		User writer = userRepository.findById(userId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.USER_NOT_FOUND));
+
+		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
+
+		IdeaMarket ideaMarket = createIdeaMarketConverter.convertToIdeaMarket(createDto, writer, price);
+
+		ideaMarketRepository.save(ideaMarket);
+
+		return ideaMarket.getId();
+	}
+
+	@Transactional
+	public void updateIdeaMarket(Long ideaId, Long userId, IdeaMarketUpdateDto updateDto) {
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		ideaMarket.validateWriter(userId);
+
+		// CollaborationHub 고유 필드 업데이트
+		ideaMarket.updateIdeaMarketFields(updateDto);
+
+		ideaMarketRepository.save(ideaMarket);
+	}
+
+	@Transactional
+	public void deleteIdeaMarket(Long ideaId, Long userId) {
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		ideaMarket.validateWriter(userId);
+
+		ideaMarketRepository.delete(ideaMarket);
+	}
 
 	// 아이디어 메인페이지에서 검색 조건을 적용하여 아이디어 목록을 반환합니다.
 	@Transactional(readOnly = true)
