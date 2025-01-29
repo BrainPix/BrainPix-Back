@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,23 +45,23 @@ public class CommentController {
 
 	// 부모 댓글 (userId : 작성자)
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> createComment(@PathVariable("postId") Long postId,
+	public ResponseEntity<ApiResponse<CreateCommentDto.Response>> createComment(@PathVariable("postId") Long postId,
 		@RequestParam("userId") Long userId,
-		@Valid CreateCommentDto.Request request) {
+		@Valid @RequestBody CreateCommentDto.Request request) {
 		CreateCommentDto.Parameter parameter = CreateCommentDtoConverter.toParameter(postId, userId, request);
-		commentService.createComment(parameter);
-		return ResponseEntity.ok(ApiResponse.createdWithNoData());
+		CreateCommentDto.Response response = commentService.createComment(parameter);
+		return ResponseEntity.ok(ApiResponse.created(response));
 	}
 
 	// 대댓글 (userId : 작성자)
 	@PostMapping("/{commentId}/reply")
-	public ResponseEntity<ApiResponse<Void>> createReply(@PathVariable("postId") Long postId,
+	public ResponseEntity<ApiResponse<CreateReplyDto.Response>> createReply(@PathVariable("postId") Long postId,
 		@PathVariable("commentId") Long commentId,
 		@RequestParam("userId") Long userId,
-		@Valid CreateReplyDto.Request request) {
+		@Valid @RequestBody CreateReplyDto.Request request) {
 		CreateReplyDto.Parameter parameter = CreateReplyDtoConverter.toParameter(postId, commentId, userId, request);
-		commentService.createReply(parameter);
-		return ResponseEntity.ok(ApiResponse.createdWithNoData());
+		CreateReplyDto.Response response = commentService.createReply(parameter);
+		return ResponseEntity.ok(ApiResponse.created(response));
 	}
 
 	// 댓글 삭제

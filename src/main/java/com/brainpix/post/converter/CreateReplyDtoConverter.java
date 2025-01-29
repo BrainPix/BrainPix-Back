@@ -25,4 +25,10 @@ public class CreateReplyDtoConverter {
 			.content(content)
 			.build();
 	}
+
+	public static CreateReplyDto.Response toResponse(Long commentId) {
+		return CreateReplyDto.Response.builder()
+			.commentId(commentId)
+			.build();
+	}
 }

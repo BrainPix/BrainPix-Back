@@ -22,4 +22,10 @@ public class CreateCommentDtoConverter {
 			.content(content)
 			.build();
 	}
+
+	public static CreateCommentDto.Response toResponse(Long commentId) {
+		return CreateCommentDto.Response.builder()
+			.commentId(commentId)
+			.build();
+	}
 }

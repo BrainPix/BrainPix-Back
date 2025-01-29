@@ -54,7 +54,7 @@ public class CommentService {
 
 	// 댓글 생성
 	@Transactional
-	public void createComment(CreateCommentDto.Parameter parameter) {
+	public CreateCommentDto.Response createComment(CreateCommentDto.Parameter parameter) {
 
 		// 작성자 조회
 		User sender = userRepository.findById(parameter.getSenderId())
@@ -77,11 +77,13 @@ public class CommentService {
 			alarmEventService.createQnaComment(post.getWriter().getId(), postType, post.getWriter().getName(),
 				sender.getName());
 		}
+
+		return CreateCommentDtoConverter.toResponse(comment.getId());
 	}
 
 	// 대댓글 생성
 	@Transactional
-	public void createReply(CreateReplyDto.Parameter parameter) {
+	public CreateReplyDto.Response createReply(CreateReplyDto.Parameter parameter) {
 
 		// 작성자 조회
 		User sender = userRepository.findById(parameter.getSenderId())
@@ -108,6 +110,8 @@ public class CommentService {
 			alarmEventService.createQnaCommentReply(parentComment.getWriter().getId(), postType,
 				parentComment.getWriter().getName(), sender.getName());
 		}
+
+		return CreateReplyDtoConverter.toResponse(reply.getId());
 	}
 
 	// 댓글 삭제
