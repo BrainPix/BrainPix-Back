@@ -3,6 +3,8 @@ package com.brainpix.profile.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.brainpix.api.code.error.ProfileErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -45,7 +47,7 @@ public class CompanyProfile extends Profile {
 
 	public void updateSpecializations(List<Specialization> specializations) {
 		if (specializations.size() > 2) {
-			throw new IllegalArgumentException("최대 2개의 전문 분야만 선택할 수 있습니다.");
+			throw new BrainPixException(ProfileErrorCode.MAX_SPECIALIZATIONS_EXCEEDED);
 		}
 		this.setSpecializations(specializations);
 

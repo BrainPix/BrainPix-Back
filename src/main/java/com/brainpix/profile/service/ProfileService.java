@@ -56,7 +56,7 @@ public class ProfileService {
 
 		// 개인 소속인지 확인
 		if (!(user instanceof Individual)) {
-			throw new IllegalArgumentException("개인 프로필만 수정할 수 있습니다.");
+			throw new BrainPixException(ProfileErrorCode.INVALID_USER_TYPE);
 		}
 
 		IndividualProfile profile = individualProfileRepository.findByUser(user)
@@ -96,7 +96,7 @@ public class ProfileService {
 
 		// 기업 소속인지 확인
 		if (!(user instanceof Company)) {
-			throw new IllegalArgumentException("기업 프로필만 수정할 수 있습니다.");
+			throw new BrainPixException(ProfileErrorCode.INVALID_USER_TYPE);
 		}
 
 		CompanyProfile profile = companyProfileRepository.findByUser(user)
@@ -134,7 +134,7 @@ public class ProfileService {
 			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
 
 		if (!(user instanceof Company)) {
-			throw new IllegalArgumentException("기업 프로필만 조회할 수 있습니다.");
+			throw new BrainPixException(ProfileErrorCode.INVALID_USER_TYPE);
 		}
 
 		return myconverter.toCompanyDto((Company)user);

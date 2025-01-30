@@ -3,6 +3,8 @@ package com.brainpix.profile.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.brainpix.api.code.error.ProfileErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -49,14 +51,14 @@ public class IndividualProfile extends Profile {
 
 	public void updateSpecializations(List<Specialization> newSpecializations) {
 		if (newSpecializations.size() > 2) {
-			throw new IllegalArgumentException("전문 분야는 최대 2개까지만 선택할 수 있습니다.");
+			throw new BrainPixException(ProfileErrorCode.MAX_SPECIALIZATIONS_EXCEEDED);
 		}
 		// 중복 제거
 		List<Specialization> distinctSpecializations = newSpecializations.stream()
 			.distinct()
 			.toList();
 		if (distinctSpecializations.size() != newSpecializations.size()) {
-			throw new IllegalArgumentException("중복된 전문 분야는 선택할 수 없습니다.");
+			throw new BrainPixException(ProfileErrorCode.DUPLICATE_SPECIALIZATION);
 		}
 		// 업데이트
 		this.getSpecializationList().clear();
