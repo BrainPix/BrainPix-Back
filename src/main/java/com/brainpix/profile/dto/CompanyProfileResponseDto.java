@@ -28,6 +28,7 @@ public class CompanyProfileResponseDto {
 	@Builder
 	public static class PortfolioDto {
 		private String title; // 포트폴리오 제목
+		private String imageUrl; //포트폴리오 썸네일
 		private String createdDate; // 작성일
 	}
 }
