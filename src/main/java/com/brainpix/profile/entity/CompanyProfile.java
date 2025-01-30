@@ -48,5 +48,6 @@ public class CompanyProfile extends Profile {
 			throw new IllegalArgumentException("최대 2개의 전문 분야만 선택할 수 있습니다.");
 		}
 		this.setSpecializations(specializations);
+
 	}
 }
