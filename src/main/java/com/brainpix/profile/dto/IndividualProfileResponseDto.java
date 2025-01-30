@@ -18,6 +18,8 @@ public class IndividualProfileResponseDto {
 	private List<CareerDto> careers; // 경력 사항
 	private List<PortfolioDto> portfolios; // 포트폴리오
 
+	private List<PublicProfileResponseDto.PostPreviewDto> postHistory;
+
 	@Getter
 	@Builder
 	public static class ContactDto {

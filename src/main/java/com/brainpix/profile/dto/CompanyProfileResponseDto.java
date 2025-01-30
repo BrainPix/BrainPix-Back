@@ -17,6 +17,8 @@ public class CompanyProfileResponseDto {
 	private List<CompanyInformationDto> companyInformations; // 기업 정보
 	private List<PortfolioDto> portfolios; // 포트폴리오
 
+	private List<PublicProfileResponseDto.PostPreviewDto> postHistory;
+
 	@Getter
 	@Builder
 	public static class CompanyInformationDto {
