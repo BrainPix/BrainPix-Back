@@ -8,4 +8,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 
 	// 협업 횟수 조회 (승낙된 협업)
 	Long countByJoinerIdAndAccepted(Long joinerId, Boolean accepted);
+
+	Long countByJoinerIdAndInitialGathering(Long joinerId, Boolean initialGathering);
 }
+
