@@ -26,7 +26,7 @@ public class GetIdeaListDtoConverter {
 		try {
 			type = request.getType() != null ? IdeaMarketType.valueOf(request.getType().toUpperCase()) : null;
 			category = request.getCategory() != null ? Specialization.valueOf(request.getCategory().toUpperCase()) : null;
-			sortType = request.getSortType() != null ? SortType.valueOf(request.getSortType().toUpperCase()) : null;
+			sortType = request.getSortType() != null ? SortType.valueOf("IDEA_" + request.getSortType().toUpperCase()) : null;
 		} catch (Exception e) {
 			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
 		}

@@ -9,8 +9,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.brainpix.post.entity.QSavedPost;
-import com.brainpix.post.entity.idea_market.IdeaMarketType;
-import com.brainpix.post.entity.idea_market.QIdeaMarket;
+import com.brainpix.post.entity.request_task.QRequestTask;
+import com.brainpix.post.entity.request_task.RequestTaskType;
 import com.brainpix.post.enums.PostBooleanExpression;
 import com.brainpix.post.enums.SortType;
 import com.brainpix.profile.entity.Specialization;
@@ -24,71 +24,24 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepository {
+public class RequestTaskCustomRepositoryImpl implements RequestTaskCustomRepository {
 
 	private final JPAQueryFactory queryFactory;
-	QIdeaMarket ideaMarket = QIdeaMarket.ideaMarket;
+	QRequestTask requestTask = QRequestTask.requestTask;
 	QSavedPost savedPost = QSavedPost.savedPost;
 
-	// 전체 조회 기능입니다.
-	// ideaMarketType으로 아이디어 유형을 구분한 뒤,
-	// 검색 조건을 동적으로 적용하여 아이디어 목록을 조회합니다.
 	@Override
-	public Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword,
-		Specialization category,
-		Boolean onlyCompany, SortType sortType, Pageable pageable) {
+	public Page<Object[]> findRequestTaskListWithSaveCount(RequestTaskType requestTaskType, String keyword,
+		Specialization category, Boolean onlyCompany, SortType sortType, Pageable pageable) {
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
-				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),
-				// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-				PostBooleanExpression.IDEA_TITLE_CONTAINS.get(keyword),    // 3. 검색어 필터
-				PostBooleanExpression.IDEA_CATEGORY_EQ.get(category),    // 4. 카테고리 필터
-				PostBooleanExpression.IDEA_ONLY_COMPANY.get(onlyCompany)    // 5. 기업 공개만, 기업 공개 제외
-			)
-			.reduce(BooleanExpression::and)
-			.orElse(null);
-
-		// 정렬 조건 (기본 값은 최신순)
-		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.IDEA_NEWEST.getOrder();
-
-		// 조회 결과
-		List<Tuple> queryResult = queryFactory
-			.select(ideaMarket, savedPost.count())
-			.from(ideaMarket)
-			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
-			.where(where)
-			.groupBy(ideaMarket)
-			.orderBy(order)
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
-
-		// 카운트 쿼리
-		JPAQuery<Long> countQuery = queryFactory
-			.select(ideaMarket.count())
-			.from(ideaMarket)
-			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
-			.where(where);
-
-		// 게시글-저장수를 쌍으로 저장
-		List<Object[]> result = parsingResult(queryResult);
-
-		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
-	}
-
-	// 인기 아이디어 조회입니다.
-	// ideaMarketType으로 아이디어 유형을 구분한 뒤,
-	// 모든 아이디어에서 저장순으로 조회합니다.
-	@Override
-	public Page<Object[]> findPopularIdeaListWithSaveCount(IdeaMarketType ideaMarketType, Pageable pageable) {
-
-		// 검색 조건
-		BooleanExpression where = Stream.of(
-				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)
-				// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.TASK_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
+				PostBooleanExpression.TASK_EXCLUDE_PAST.get(null),    // 2. 데드라인 지난 게시물 제외
+				PostBooleanExpression.TASK_TYPE_EQ.get(requestTaskType),    // 3. 요청 과제 필터링 (OPEN_IDEA, TECH_ZONE)
+				PostBooleanExpression.TASK_TITLE_CONTAINS.get(keyword),    // 4. 검색어 필터
+				PostBooleanExpression.TASK_CATEGORY_EQ.get(category),    // 5. 카테고리 필터
+				PostBooleanExpression.TASK_ONLY_COMPANY.get(onlyCompany)    // 6. 기업 공개만, 기업 공개 제외
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
@@ -98,11 +51,11 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
-			.select(ideaMarket, savedPost.count())
-			.from(ideaMarket)
-			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
+			.select(requestTask, savedPost.count())
+			.from(requestTask)
+			.leftJoin(savedPost).on(requestTask.eq(savedPost.post))
 			.where(where)
-			.groupBy(ideaMarket)
+			.groupBy(requestTask)
 			.orderBy(order)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -110,8 +63,47 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 
 		// 카운트 쿼리
 		JPAQuery<Long> countQuery = queryFactory
-			.select(ideaMarket.count())
-			.from(ideaMarket)
+			.select(requestTask.count())
+			.from(requestTask)
+			.where(where);
+
+		// 게시글-저장수를 쌍으로 저장
+		List<Object[]> result = parsingResult(queryResult);
+
+		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public Page<Object[]> findPopularRequestTaskListWithSaveCount(RequestTaskType requestTaskType, Pageable pageable) {
+
+		// 검색 조건
+		BooleanExpression where = Stream.of(
+				PostBooleanExpression.TASK_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
+				PostBooleanExpression.TASK_EXCLUDE_PAST.get(null),    // 2. 데드라인 지난 게시물 제외
+				PostBooleanExpression.TASK_TYPE_EQ.get(requestTaskType)    // 2. 요청 과제 필터링 (OPEN_IDEA, TECH_ZONE)
+			)
+			.reduce(BooleanExpression::and)
+			.orElse(null);
+
+		// 정렬 조건
+		OrderSpecifier<?> order = savedPost.count().desc();
+
+		// 조회 결과
+		List<Tuple> queryResult = queryFactory
+			.select(requestTask, savedPost.count())
+			.from(requestTask)
+			.leftJoin(savedPost).on(requestTask.eq(savedPost.post))
+			.where(where)
+			.groupBy(requestTask)
+			.orderBy(order)
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		// 카운트 쿼리
+		JPAQuery<Long> countQuery = queryFactory
+			.select(requestTask.count())
+			.from(requestTask)
 			.where(where);
 
 		// 게시글-저장수를 쌍으로 저장
@@ -124,7 +116,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 		return queryResult.stream()
 			.map(tuple -> {
 				Object[] objects = new Object[2];
-				objects[0] = tuple.get(ideaMarket);
+				objects[0] = tuple.get(requestTask);
 				objects[1] = tuple.get(savedPost.count());
 				return objects;
 			})
