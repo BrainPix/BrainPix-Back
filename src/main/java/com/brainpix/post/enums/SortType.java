@@ -3,6 +3,7 @@ package com.brainpix.post.enums;
 import java.util.function.Supplier;
 
 import com.brainpix.post.entity.QSavedPost;
+import com.brainpix.post.entity.collaboration_hub.QCollaborationHub;
 import com.brainpix.post.entity.idea_market.QIdeaMarket;
 import com.brainpix.post.entity.request_task.QRequestTask;
 import com.querydsl.core.types.OrderSpecifier;
@@ -18,6 +19,11 @@ public enum SortType {
 	IDEA_POPULAR(QSavedPost.savedPost.count()::desc),    // 저장 순
 	IDEA_HIGHEST_PRICE(QIdeaMarket.ideaMarket.price.price::desc),    // 높은 가격 순
 	IDEA_LOWEST_PRICE(QIdeaMarket.ideaMarket.price.price::asc),    // 낮은 가격 순
+
+	// 협업 광장 관련 정렬 조건
+	COLLABORATION_NEWEST(QCollaborationHub.collaborationHub.createdAt::desc),    // 최신 순
+	COLLABORATION_OLDEST(QCollaborationHub.collaborationHub.createdAt::asc),    // 오래된 순
+	COLLABORATION_POPULAR(QSavedPost.savedPost.count()::desc),    // 저장 순
 
 	// 요청 과제 관련 정렬 조건
 	REQUEST_NEWEST(QRequestTask.requestTask.createdAt::desc),    // 최신 순

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.function.Function;
 
 import com.brainpix.post.entity.PostAuth;
+import com.brainpix.post.entity.collaboration_hub.QCollaborationHub;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.entity.idea_market.QIdeaMarket;
 import com.brainpix.post.entity.request_task.QRequestTask;
@@ -31,6 +32,21 @@ public enum PostBooleanExpression {
 		(Boolean)onlyCompany ?
 			QIdeaMarket.ideaMarket.postAuth.eq(PostAuth.COMPANY) :
 			QIdeaMarket.ideaMarket.postAuth.ne(PostAuth.COMPANY) : null
+	),
+
+	// 협업 광장 관련 검색 조건
+	COLLABORATION_EXCLUDE_PRIVATE(obj -> QCollaborationHub.collaborationHub.postAuth.ne(PostAuth.ME)),
+	COLLABORATION_EXCLUDE_PAST(obj -> QCollaborationHub.collaborationHub.deadline.after(LocalDateTime.now())),
+	COLLABORATION_TITLE_CONTAINS(keyword -> keyword instanceof String ?
+		QCollaborationHub.collaborationHub.title.contains((String)keyword) : null
+	),
+	COLLABORATION_CATEGORY_EQ(category -> category instanceof Specialization ?
+		QCollaborationHub.collaborationHub.specialization.eq((Specialization)category) : null
+	),
+	COLLABORATION_ONLY_COMPANY(onlyCompany -> onlyCompany instanceof Boolean ?
+		(Boolean)onlyCompany ?
+			QCollaborationHub.collaborationHub.postAuth.eq(PostAuth.COMPANY) :
+			QCollaborationHub.collaborationHub.postAuth.ne(PostAuth.COMPANY) : null
 	),
 
 	// 요청 과제 관련 조건

@@ -1,9 +1,6 @@
 package com.brainpix.post.repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
@@ -11,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.QSavedPost;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.entity.idea_market.QIdeaMarket;
@@ -38,16 +34,18 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	// ideaMarketType으로 아이디어 유형을 구분한 뒤,
 	// 검색 조건을 동적으로 적용하여 아이디어 목록을 조회합니다.
 	@Override
-	public Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword, Specialization category,
+	public Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword,
+		Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable) {
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
-				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),	// 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
-				PostBooleanExpression.IDEA_TITLE_CONTAINS.get(keyword),	// 3. 검색어 필터
-				PostBooleanExpression.IDEA_CATEGORY_EQ.get(category),	// 4. 카테고리 필터
-				PostBooleanExpression.IDEA_ONLY_COMPANY.get(onlyCompany)	// 5. 기업 공개만, 기업 공개 제외
+				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType),
+				// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.IDEA_TITLE_CONTAINS.get(keyword),    // 3. 검색어 필터
+				PostBooleanExpression.IDEA_CATEGORY_EQ.get(category),    // 4. 카테고리 필터
+				PostBooleanExpression.IDEA_ONLY_COMPANY.get(onlyCompany)    // 5. 기업 공개만, 기업 공개 제외
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
@@ -88,8 +86,9 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
-				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),	// 1. 비공개 제외
-				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)	// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
+				PostBooleanExpression.IDEA_EXCLUDE_PRIVATE.get(null),    // 1. 비공개 제외
+				PostBooleanExpression.IDEA_MARKET_TYPE_EQ.get(ideaMarketType)
+				// 2. 아이디어 필터링 (IDEA_SOLUTION, MARKET_PLACE)
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
