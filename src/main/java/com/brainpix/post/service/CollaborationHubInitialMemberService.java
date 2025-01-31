@@ -25,29 +25,30 @@ public class CollaborationHubInitialMemberService {
 
 	private final CollaborationHubRecruitmentRepository recruitmentRepository;
 	private final UserRepository userRepository;
-	private final CreateCollaborationHubInitialMemberConverter createProjectMemberConverter;
+	private final CreateCollaborationHubInitialMemberConverter createInitialMemberConverter;
 	private final InitialCollectionGatheringService initialCollectionGatheringService;
 
 	@Transactional
 	public void createInitialMembers(CollaborationHub collaborationHub,
 		List<CollaborationHubInitialMemberDto> initialMemberDtos) {
 
-		List<CollaborationRecruitment> projectMembers = new ArrayList<>();
+		List<CollaborationRecruitment> initialMembers = new ArrayList<>();
 
 		for (CollaborationHubInitialMemberDto initialMemberDto : initialMemberDtos) {
 
 			User joiner = userRepository.findByIdentifier(initialMemberDto.getIdentifier())
-				.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+				.orElseThrow(
+					() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND)); // "개최 인원에 해당하는 유저를 찾을 수 없습니다."
 
-			CollaborationRecruitment recruitment = createProjectMemberConverter.convertToInitialMember(
+			CollaborationRecruitment recruitment = createInitialMemberConverter.convertToInitialMember(
 				collaborationHub, initialMemberDto);
 
 			initialCollectionGatheringService.CreateInitialGathering(joiner, recruitment);
 
-			projectMembers.add(recruitment);
+			initialMembers.add(recruitment);
 		}
 
-		recruitmentRepository.saveAll(projectMembers);
+		recruitmentRepository.saveAll(initialMembers);
 
 	}
 
