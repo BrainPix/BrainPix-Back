@@ -53,7 +53,8 @@ public class PortfolioService {
 			specializations,
 			request.startDate(),
 			request.endDate(),
-			request.content()
+			request.content(),
+			request.profileImage()
 		);
 
 		portfolioRepository.save(portfolio);
@@ -82,7 +83,8 @@ public class PortfolioService {
 			specializations,
 			request.startDate(),
 			request.endDate(),
-			request.content()
+			request.content(),
+			request.profileImage()
 		);
 	}
 
