@@ -8,8 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CollectionErrorCode;
+import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.converter.CollectionGatheringConverter;
 import com.brainpix.joining.dto.AcceptedCollaborationDto;
@@ -41,7 +41,7 @@ public class SupportCollaborationService {
 	@Transactional(readOnly = true)
 	public Page<RejectedCollaborationDto> getRejectedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
@@ -60,7 +60,7 @@ public class SupportCollaborationService {
 	@Transactional(readOnly = true)
 	public Page<AcceptedCollaborationDto> getAcceptedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
@@ -80,7 +80,7 @@ public class SupportCollaborationService {
 	@Transactional
 	public void deleteRejected(Long userId, Long collectionGatheringId) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		CollectionGathering collectionGathering = gatheringRepository.findById(collectionGatheringId)
 			.orElseThrow(() -> new BrainPixException(CollectionErrorCode.COLLECTION_NOT_FOUND));
