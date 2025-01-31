@@ -2,7 +2,6 @@ package com.brainpix.post.entity.collaboration_hub;
 
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.jpa.BaseTimeEntity;
-import com.brainpix.post.dto.CollaborationRecruitmentDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,7 +29,7 @@ public class CollaborationRecruitment extends BaseTimeEntity {
 
 	private String domain;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private Gathering gathering;
 
 	@Builder

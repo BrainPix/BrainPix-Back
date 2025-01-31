@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.joining.service.InitialGatheringService;
+import com.brainpix.joining.service.InitialCollectionGatheringService;
 import com.brainpix.post.converter.CreateCollaborationHubProjectMemberConverter;
 import com.brainpix.post.dto.CollaborationHubProjectMemberDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
@@ -27,22 +26,13 @@ public class CollaborationHubProjectMemberService {
 	private final CollaborationHubRecruitmentRepository recruitmentRepository;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubProjectMemberConverter createProjectMemberConverter;
-	private final InitialGatheringService initialGatheringService;
+	private final InitialCollectionGatheringService initialCollectionGatheringService;
 
 	@Transactional
 	public void createProjectMembers(CollaborationHub collaborationHub,
 		List<CollaborationHubProjectMemberDto> projectMemberDtos) {
-		if (projectMemberDtos == null || projectMemberDtos.isEmpty()) {
-			throw new BrainPixException(CollaborationHubErrorCode.INVALID_INPUT);
-		}
 
 		List<CollaborationRecruitment> projectMembers = new ArrayList<>();
-
-		for (CollaborationHubProjectMemberDto projectMemberDto : projectMemberDtos) {
-			if (projectMemberDto.getDomain() == null) {
-				throw new BrainPixException(CollaborationHubErrorCode.INVALID_REQUEST);
-			}
-		}
 
 		for (CollaborationHubProjectMemberDto projectMemberDto : projectMemberDtos) {
 
@@ -52,7 +42,7 @@ public class CollaborationHubProjectMemberService {
 			User joiner = userRepository.findByIdentifier(projectMemberDto.getIdentifier())
 				.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-			initialGatheringService.CreateInitialGathering(joiner, projectMember);
+			initialCollectionGatheringService.CreateInitialGathering(joiner, projectMember);
 
 			projectMembers.add(projectMember);
 		}

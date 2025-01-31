@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.brainpix.api.code.error.RecruitmentErrorCode;
-import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.joining.service.GatheringService;
 import com.brainpix.post.converter.CreateCollaborationHubRecruitmentConverter;
@@ -29,17 +27,8 @@ public class CollaborationHubRecruitmentService {
 	@Transactional
 	public void createRecruitments(CollaborationHub collaborationHub,
 		List<CollaborationRecruitmentDto> recruitmentDtos) {
-		if (recruitmentDtos == null || recruitmentDtos.isEmpty()) {
-			throw new BrainPixException(RecruitmentErrorCode.INVALID_INPUT);
-		}
 
 		List<CollaborationRecruitment> recruitments = new ArrayList<>();
-
-		for (CollaborationRecruitmentDto recruitmentDto : recruitmentDtos) {
-			if (recruitmentDto.getDomain() == null || recruitmentDto.getGatheringDto() == null) {
-				throw new BrainPixException(RecruitmentErrorCode.INVALID_REQUEST);
-			}
-		}
 
 		for (CollaborationRecruitmentDto recruitmentDto : recruitmentDtos) {
 			// 모집 인원 정보 생성

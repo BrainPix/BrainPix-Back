@@ -23,6 +23,7 @@ public class CollectionGathering extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "joiner_id")
 	private User joiner;
 
 	private Boolean accepted;
@@ -30,7 +31,7 @@ public class CollectionGathering extends BaseTimeEntity {
 	private Boolean initialGathering;
 
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "collaboration_recruitment_id")
 	private CollaborationRecruitment collaborationRecruitment;
 
 	@Builder

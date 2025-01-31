@@ -21,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class CollaborationHubService {
 
 	private final CollaborationHubRepository collaborationHubRepository;
-	private final CollaborationHubRecruitmentService recruitmentService;
+	private final CollaborationHubRecruitmentService collaborationHubRecruitmentService;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubConverter createCollaborationHubConverter;
-	private final CollaborationHubProjectMemberService projectMemberService;
+	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -36,15 +36,15 @@ public class CollaborationHubService {
 			writer);
 
 		collaborationHubRepository.save(collaborationHub);
-		recruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
-		projectMemberService.createProjectMembers(collaborationHub, createDto.getProjectMembers());
+		collaborationHubRecruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
+		collaborationHubProjectMemberService.createProjectMembers(collaborationHub, createDto.getProjectMembers());
 
 		return collaborationHub.getId();
 	}
 
 	@Transactional
-	public void updateCollaborationHub(Long workspaceId, Long userId, CollaborationHubUpdateDto updateDto) {
-		CollaborationHub collaboration = collaborationHubRepository.findById(workspaceId)
+	public void updateCollaborationHub(Long collaborationId, Long userId, CollaborationHubUpdateDto updateDto) {
+		CollaborationHub collaboration = collaborationHubRepository.findById(collaborationId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
@@ -57,14 +57,14 @@ public class CollaborationHubService {
 	}
 
 	@Transactional
-	public void deleteCollaborationHub(Long workspaceId, Long userId) {
-		CollaborationHub collaboration = collaborationHubRepository.findById(workspaceId)
+	public void deleteCollaborationHub(Long collaborationId, Long userId) {
+		CollaborationHub collaboration = collaborationHubRepository.findById(collaborationId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		collaboration.validateWriter(userId);
 
-		collaborationHubRepository.deleteById(workspaceId);
+		collaborationHubRepository.deleteById(collaborationId);
 
 	}
 }

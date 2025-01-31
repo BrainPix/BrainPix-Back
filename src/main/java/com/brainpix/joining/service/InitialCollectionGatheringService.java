@@ -13,15 +13,15 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InitialGatheringService {
+public class InitialCollectionGatheringService {
 
 	private final CollectionGatheringRepository collectionGatheringRepository;
 	private final CreateInitialGatheringConverter createInitialGatheringConverter;
 
 	@Transactional
-	public void CreateInitialGathering(User joiner, CollaborationRecruitment recruitment) {
+	public void CreateInitialGathering(User joiner, CollaborationRecruitment collaborationRecruitment) {
 		CollectionGathering collectionGathering = createInitialGatheringConverter.convertToInitialGathering(
-			joiner, recruitment);
+			joiner, collaborationRecruitment);
 
 		collectionGatheringRepository.save(collectionGathering);
 	}
