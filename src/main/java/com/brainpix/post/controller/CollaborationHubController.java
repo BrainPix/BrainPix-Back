@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("collaborations")
+@RequestMapping("/collaborations")
 @RequiredArgsConstructor
 public class CollaborationHubController {
 
