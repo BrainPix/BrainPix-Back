@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/request-tasks")
 @RequiredArgsConstructor
 public class RequestTaskCommandController {
 
