@@ -15,7 +15,7 @@ import com.brainpix.api.ApiResponse;
 import com.brainpix.post.dto.CollaborationHubApiResponseDto;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
-import com.brainpix.post.service.CollaborationHubProjectMemberService;
+import com.brainpix.post.service.CollaborationHubInitialMemberService;
 import com.brainpix.post.service.CollaborationHubService;
 
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class CollaborationHubController {
 
 	private final CollaborationHubService collaborationHubService;
-	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
+	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@RequestParam Long userId,
@@ -55,7 +55,7 @@ public class CollaborationHubController {
 
 	@GetMapping("/validate/{identifier}")
 	public ResponseEntity<ApiResponse<Void>> validateUserIdentifier(@PathVariable String identifier) {
-		collaborationHubProjectMemberService.validateUserIdentifier(identifier);
+		collaborationHubInitialMemberService.validateUserIdentifier(identifier);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 }

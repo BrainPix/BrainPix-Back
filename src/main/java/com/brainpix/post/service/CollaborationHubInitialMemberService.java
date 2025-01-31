@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.service.InitialCollectionGatheringService;
-import com.brainpix.post.converter.CreateCollaborationHubProjectMemberConverter;
-import com.brainpix.post.dto.CollaborationHubProjectMemberDto;
+import com.brainpix.post.converter.CreateCollaborationHubInitialMemberConverter;
+import com.brainpix.post.dto.CollaborationHubInitialMemberDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.post.repository.CollaborationHubRecruitmentRepository;
@@ -21,30 +21,30 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CollaborationHubProjectMemberService {
+public class CollaborationHubInitialMemberService {
 
 	private final CollaborationHubRecruitmentRepository recruitmentRepository;
 	private final UserRepository userRepository;
-	private final CreateCollaborationHubProjectMemberConverter createProjectMemberConverter;
+	private final CreateCollaborationHubInitialMemberConverter createProjectMemberConverter;
 	private final InitialCollectionGatheringService initialCollectionGatheringService;
 
 	@Transactional
-	public void createProjectMembers(CollaborationHub collaborationHub,
-		List<CollaborationHubProjectMemberDto> projectMemberDtos) {
+	public void createInitialMembers(CollaborationHub collaborationHub,
+		List<CollaborationHubInitialMemberDto> initialMemberDtos) {
 
 		List<CollaborationRecruitment> projectMembers = new ArrayList<>();
 
-		for (CollaborationHubProjectMemberDto projectMemberDto : projectMemberDtos) {
+		for (CollaborationHubInitialMemberDto initialMemberDto : initialMemberDtos) {
 
-			CollaborationRecruitment projectMember = createProjectMemberConverter.convertToProjectMember(
-				collaborationHub, projectMemberDto);
-
-			User joiner = userRepository.findByIdentifier(projectMemberDto.getIdentifier())
+			User joiner = userRepository.findByIdentifier(initialMemberDto.getIdentifier())
 				.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-			initialCollectionGatheringService.CreateInitialGathering(joiner, projectMember);
+			CollaborationRecruitment recruitment = createProjectMemberConverter.convertToInitialMember(
+				collaborationHub, initialMemberDto);
 
-			projectMembers.add(projectMember);
+			initialCollectionGatheringService.CreateInitialGathering(joiner, recruitment);
+
+			projectMembers.add(recruitment);
 		}
 
 		recruitmentRepository.saveAll(projectMembers);

@@ -24,7 +24,7 @@ public class CollaborationHubService {
 	private final CollaborationHubRecruitmentService collaborationHubRecruitmentService;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubConverter createCollaborationHubConverter;
-	private final CollaborationHubProjectMemberService collaborationHubProjectMemberService;
+	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -37,7 +37,7 @@ public class CollaborationHubService {
 
 		collaborationHubRepository.save(collaborationHub);
 		collaborationHubRecruitmentService.createRecruitments(collaborationHub, createDto.getRecruitments());
-		collaborationHubProjectMemberService.createProjectMembers(collaborationHub, createDto.getProjectMembers());
+		collaborationHubInitialMemberService.createInitialMembers(collaborationHub, createDto.getInitialMembers());
 
 		return collaborationHub.getId();
 	}

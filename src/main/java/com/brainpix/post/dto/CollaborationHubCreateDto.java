@@ -25,5 +25,5 @@ public class CollaborationHubCreateDto extends PostDto {
 	private List<CollaborationRecruitmentDto> recruitments;
 
 	@NotEmpty(message = "개최 인원 정보는 최소 한 명 이상 등록해야 합니다.")
-	private List<CollaborationHubProjectMemberDto> projectMembers;
+	private List<CollaborationHubInitialMemberDto> initialMembers;
 }
