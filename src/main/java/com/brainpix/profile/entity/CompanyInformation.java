@@ -1,7 +1,5 @@
 package com.brainpix.profile.entity;
 
-import com.brainpix.jpa.BaseTimeEntity;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,23 +13,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Contact extends BaseTimeEntity {
-
+public class CompanyInformation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private ContactType type;
-
-	private String value;
+	private CompanyInformationType companyInformationType;
 
 	@ManyToOne
-	private IndividualProfile individualProfile;
-
-	public Contact(ContactType type, String value, IndividualProfile individualProfile) {
-		this.type = type;
-		this.value = value;
-		this.individualProfile = individualProfile;
-	}
+	private CompanyProfile companyProfile;
 }

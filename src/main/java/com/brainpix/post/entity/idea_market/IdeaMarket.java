@@ -3,11 +3,13 @@ package com.brainpix.post.entity.idea_market;
 import java.util.List;
 
 import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,7 +26,7 @@ public class IdeaMarket extends Post {
 	@Enumerated(EnumType.STRING)
 	private IdeaMarketType ideaMarketType;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Price price;
 
 	@Builder
@@ -35,5 +37,15 @@ public class IdeaMarket extends Post {
 			attachmentFileList);
 		this.ideaMarketType = ideaMarketType;
 		this.price = price;
+	}
+
+	public void updateIdeaMarketFields(IdeaMarketUpdateDto updateDto) {
+		// Post의 필드를 업데이트
+		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getSpecialization(),
+			updateDto.getOpenMyProfile(),
+			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
+
+		// IdeaMarkte 고유 필드 업데이트
+		this.ideaMarketType = updateDto.getIdeaMarketType();
 	}
 }
