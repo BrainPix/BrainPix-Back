@@ -13,4 +13,12 @@ import lombok.RequiredArgsConstructor;
 public class RequestTaskRecruitmentController {
 
 	private final RequestTaskRecruitmentService recruitmentService;
+
+	/*
+	@PutMapping("/{recruitmentId}")
+	public ResponseEntity<ApiResponse> updateRecruitments(@PathVariable Long recruitmentId, @RequestBody List<RequestTaskRecruitmentDto> recruitmentDtos) {
+		recruitmentService.updateRecruitments(recruitmentId, recruitmentDtos);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+	 */
 }

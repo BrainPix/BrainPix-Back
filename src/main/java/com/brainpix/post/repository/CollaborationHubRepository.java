@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 
 @Repository
-public interface CollaborationHubRepository extends JpaRepository<CollaborationHub, Long> {
+public interface CollaborationHubRepository extends JpaRepository<CollaborationHub, Long>, CollaborationHubCustomRepository {
 }
