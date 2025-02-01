@@ -90,5 +90,4 @@ public class SavedPostService {
 			throw new IllegalStateException(SavedPostErrorCode.DUPLICATE_SAVED_POST.getMessage());
 		}
 	}
-
 }

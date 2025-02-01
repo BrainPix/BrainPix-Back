@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriceDto {
+public class RequestTaskPriceDto {
 
 	@NotNull(message = "가격 입력은 필수입니다.")
 	private Long price;
@@ -18,6 +18,6 @@ public class PriceDto {
 	@NotNull(message = "모집 인원 수 입력은 필수입니다.")
 	private Long totalQuantity;
 
-	@NotNull
+	@NotNull(message = "지급 방식/기간을 선택하셔야 합니다.")
 	private PaymentDuration paymentDuration;
 }
