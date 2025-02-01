@@ -25,7 +25,6 @@ import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
