@@ -1,13 +1,13 @@
 package com.brainpix.profile.service;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.ProfileErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
@@ -60,25 +60,7 @@ public class PublicProfileService {
 
 		IndividualProfileResponseDto profileDto = myProfileConverter.toDto(user);
 
-		List<PublicProfileResponseDto.PostPreviewDto> postHistory = postRepository.findByWriter(user).stream()
-			.map(post -> {
-				if (post instanceof RequestTask) {
-					return postConverter.toRequestTaskPreviewDto((RequestTask)post,
-						savedPostRepository.countByPostId(post.getId()));
-				} else if (post instanceof IdeaMarket) {
-					return postConverter.toIdeaMarketPreviewDto((IdeaMarket)post,
-						savedPostRepository.countByPostId(post.getId()));
-				} else if (post instanceof CollaborationHub) {
-					return postConverter.toCollaborationHubPreviewDto((CollaborationHub)post,
-						savedPostRepository.countByPostId(post.getId()));
-				}
-				return null;
-			})
-			.filter(Objects::nonNull)
-			.sorted((p1, p2) -> p2.getCreatedDate().compareTo(p1.getCreatedDate())) // 최신순 정렬
-			.collect(Collectors.toList());
-
-		// 🚨 비공개 항목 처리 (비공개면 빈 값/리스트 반환)
+		// 비공개 항목 처리 (비공개면 빈 값/리스트 반환)
 		return IndividualProfileResponseDto.builder()
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
@@ -87,7 +69,6 @@ public class PublicProfileService {
 			.contacts(profile.getContactOpen() ? profileDto.getContacts() : Collections.emptyList())
 			.stacks(profile.getStackOpen() ? profileDto.getStacks() : Collections.emptyList())
 			.careers(profile.getCareerOpen() ? profileDto.getCareers() : Collections.emptyList())
-			.portfolios(profileDto.getPortfolios())
 			.build();
 	}
 
@@ -115,7 +96,26 @@ public class PublicProfileService {
 			.businessInformation(profile.getOpenInformation() ? profileDto.getBusinessInformation() : "")
 			.companyInformations(profile.getOpenInformation() ? profileDto.getCompanyInformations() :
 				Collections.emptyList())
-			.portfolios(profileDto.getPortfolios())
 			.build();
 	}
+
+	public Page<PublicProfileResponseDto.PostPreviewDto> getPostsByUser(Long userId, Pageable pageable) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new BrainPixException(
+				com.brainpix.api.code.error.CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		return postRepository.findByWriter(user, pageable)
+			.map(post -> {
+				long savedCount = savedPostRepository.countByPostId(post.getId());
+				if (post instanceof RequestTask) {
+					return postConverter.toRequestTaskPreviewDto((RequestTask)post, savedCount);
+				} else if (post instanceof IdeaMarket) {
+					return postConverter.toIdeaMarketPreviewDto((IdeaMarket)post, savedCount);
+				} else if (post instanceof CollaborationHub) {
+					return postConverter.toCollaborationHubPreviewDto((CollaborationHub)post, savedCount);
+				}
+				throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+			});
+	}
+
 }

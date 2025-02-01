@@ -43,13 +43,6 @@ public class MyProfileConverter {
 					.endDate(career.getEndDate().toString())
 					.build())
 				.collect(Collectors.toList()))
-			.portfolios(profile.getPortfolios().stream()
-				.map(portfolio -> IndividualProfileResponseDto.PortfolioDto.builder()
-					.title(portfolio.getTitle())
-					.imageUrl(portfolio.getProfileImage())
-					.createdDate(portfolio.getCreatedAt().toString())
-					.build())
-				.collect(Collectors.toList()))
 			.build();
 	}
 
@@ -68,13 +61,6 @@ public class MyProfileConverter {
 				.map(info -> CompanyProfileResponseDto.CompanyInformationDto.builder()
 					.type(info.getCompanyInformationType().name())
 					.value(info.getValue())
-					.build())
-				.collect(Collectors.toList()))
-			.portfolios(profile.getPortfolios().stream()
-				.map(portfolio -> CompanyProfileResponseDto.PortfolioDto.builder()
-					.title(portfolio.getTitle())
-					.imageUrl(portfolio.getProfileImage())
-					.createdDate(portfolio.getCreatedAt().toString())
 					.build())
 				.collect(Collectors.toList()))
 			.build();

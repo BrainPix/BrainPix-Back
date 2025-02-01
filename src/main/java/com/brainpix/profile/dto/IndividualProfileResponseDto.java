@@ -16,9 +16,6 @@ public class IndividualProfileResponseDto {
 	private List<ContactDto> contacts; // 개별 정보
 	private List<StackDto> stacks; // 보유 기술
 	private List<CareerDto> careers; // 경력 사항
-	private List<PortfolioDto> portfolios; // 포트폴리오
-
-	private List<PublicProfileResponseDto.PostPreviewDto> postHistory;
 
 	@Getter
 	@Builder
@@ -42,11 +39,4 @@ public class IndividualProfileResponseDto {
 		private String endDate; // 종료 날짜
 	}
 
-	@Getter
-	@Builder
-	public static class PortfolioDto {
-		private String title; // 포트폴리오 제목
-		private String imageUrl; //포트폴리오 썸네일
-		private String createdDate; // 작성일
-	}
 }

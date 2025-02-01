@@ -15,9 +15,6 @@ public class CompanyProfileResponseDto {
 	private String businessInformation; // 사업 정보
 
 	private List<CompanyInformationDto> companyInformations; // 기업 정보
-	private List<PortfolioDto> portfolios; // 포트폴리오
-
-	private List<PublicProfileResponseDto.PostPreviewDto> postHistory;
 
 	@Getter
 	@Builder
@@ -26,11 +23,4 @@ public class CompanyProfileResponseDto {
 		private String value; // 기업 정보 값
 	}
 
-	@Getter
-	@Builder
-	public static class PortfolioDto {
-		private String title; // 포트폴리오 제목
-		private String imageUrl; //포트폴리오 썸네일
-		private String createdDate; // 작성일
-	}
 }

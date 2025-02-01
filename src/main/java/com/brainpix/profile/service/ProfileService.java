@@ -140,10 +140,10 @@ public class ProfileService {
 		return myconverter.toCompanyDto((Company)user);
 	}
 
-	public String uploadProfileImage(Long userId, String imagePath) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
-		user.updateProfileImage(imagePath);
-		return imagePath;
-	}
+	// public String uploadProfileImage(Long userId, String imagePath) {
+	// 	User user = userRepository.findById(userId)
+	// 		.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
+	// 	user.updateProfileImage(imagePath);
+	// 	return imagePath;
+	// }
 }
