@@ -32,12 +32,8 @@ public class RequestTaskCommandService {
 
 		RequestTask requestTask = createRequestTaskConverter.convertToRequestTask(createDto, writer);
 
-		try {
-			requestTaskRepository.save(requestTask);
-			recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_CREATION_FAILED);
-		}
+		requestTaskRepository.save(requestTask);
+		recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
 
 		return requestTask.getId();
 	}
@@ -53,11 +49,7 @@ public class RequestTaskCommandService {
 		// RequestTask 고유 필드 업데이트
 		requestTask.updateRequestTaskFields(updateDto);
 
-		try {
-			requestTaskRepository.save(requestTask);
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_UPDATE_FAILED);
-		}
+		requestTaskRepository.save(requestTask);
 	}
 
 	@Transactional
@@ -68,10 +60,6 @@ public class RequestTaskCommandService {
 		// 작성자 검증 로직 추가
 		requestTask.validateWriter(userId);
 
-		try {
-			requestTaskRepository.delete(requestTask);
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_DELETE_FAILED);
-		}
+		requestTaskRepository.delete(requestTask);
 	}
 }
