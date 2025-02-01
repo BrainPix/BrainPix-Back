@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskRecruitmentRepository;
@@ -33,7 +34,7 @@ public class MyPageService {
 
 	public MyPageResponseDto getMyPage(Long userId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
 		// 분야 (최대 2개)
 		List<String> specializations = user.getProfile().getSpecializationList().stream()
@@ -66,7 +67,7 @@ public class MyPageService {
 	}
 
 	private long calculateCollaborationCount(User user) {
-		// CollectionGathering: 초기 멤버 및 승인된 참여자 횟수
+		//  초기 멤버 및 승인된 참여자 횟수
 		long approvedCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(user.getId(), true);
 		long initialGatherings = collectionGatheringRepository.countByJoinerIdAndInitialGathering(user.getId(), true);
 
