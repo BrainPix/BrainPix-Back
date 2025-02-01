@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.brainpix.api.code.error.RecruitmentErrorCode;
-import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateRequestTaskRecruitmentConverter;
@@ -28,17 +26,8 @@ public class RequestTaskRecruitmentService {
 
 	@Transactional
 	public void createRecruitments(RequestTask requestTask, List<RequestTaskRecruitmentDto> recruitmentDtos) {
-		if (recruitmentDtos == null || recruitmentDtos.isEmpty()) {
-			throw new BrainPixException(RecruitmentErrorCode.INVALID_INPUT);
-		}
 
 		List<RequestTaskRecruitment> recruitments = new ArrayList<>();
-
-		for (RequestTaskRecruitmentDto recruitmentDto : recruitmentDtos) {
-			if (recruitmentDto.getDomain() == null || recruitmentDto.getRequestTaskPriceDto() == null) {
-				throw new BrainPixException(RecruitmentErrorCode.INVALID_REQUEST);
-			}
-		}
 
 		for (RequestTaskRecruitmentDto recruitmentDto : recruitmentDtos) {
 			// 가격 정보 생성
