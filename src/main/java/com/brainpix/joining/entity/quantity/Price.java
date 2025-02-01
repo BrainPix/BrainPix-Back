@@ -29,18 +29,4 @@ public class Price extends BaseQuantity {
 		this.price = price;
 		this.paymentDuration = paymentDuration;
 	}
-
-	/*
-	//기존 참여 인원과 비교하는 로직
-	public void updatePriceFields(Long price, Long totalQuantity, PaymentDuration paymentDuration) {
-
-		if (totalQuantity < this.getOccupiedQuantity()) {
-			throw new BrainPixException(PriceErrorCode.INVALID_QUANTITY_INPUT);
-		}
-		this.price = price;
-		this.paymentDuration = paymentDuration;
-		this.updateQuantityFields(totalQuantity);
-	}
-	 */
-
 }
