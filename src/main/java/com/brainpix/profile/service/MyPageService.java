@@ -1,8 +1,9 @@
 package com.brainpix.profile.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +48,6 @@ public class MyPageService {
 		// 협업 경험 계산
 		long collaborationCount = calculateCollaborationCount(user);
 
-		// 내 아이디어 (게시물 제목 리스트)
-		List<IdeaMarket> myIdeaMarkets = ideaMarketRepository.findByWriter(user);
-		List<String> myIdeas = myIdeaMarkets.stream()
-			.map(IdeaMarket::getTitle)
-			.collect(Collectors.toList());
-
 		String selfIntroduction = getSelfIntroduction(user);
 
 		return MyPageResponseDto.builder()
@@ -62,8 +57,14 @@ public class MyPageService {
 			.ideaCount(ideaCount)
 			.collaborationCount(collaborationCount)
 			.selfIntroduction(selfIntroduction)
-			.myIdeas(myIdeas)
 			.build();
+	}
+
+	public Page<String> getMyIdeas(Long userId, Pageable pageable) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+		return ideaMarketRepository.findByWriter(user, pageable)
+			.map(IdeaMarket::getTitle);
 	}
 
 	private long calculateCollaborationCount(User user) {

@@ -1,7 +1,7 @@
 package com.brainpix.post.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +14,7 @@ public interface IdeaMarketRepository extends JpaRepository<IdeaMarket, Long>, I
 	// 사용자의 아이디어 등록 횟수 카운트
 	Long countByWriterId(Long writerId);
 
-	List<IdeaMarket> findByWriter(User writer);
-
+	Page<IdeaMarket> findByWriter(User writer, Pageable pageable);
 }
+
+

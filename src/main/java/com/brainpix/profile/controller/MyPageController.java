@@ -1,5 +1,6 @@
 package com.brainpix.profile.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.profile.dto.MyPageResponseDto;
 import com.brainpix.profile.service.MyPageService;
 
@@ -23,5 +25,13 @@ public class MyPageController {
 	public ResponseEntity<ApiResponse<MyPageResponseDto>> getMyPage(@RequestParam Long userId) {
 		MyPageResponseDto responseDto = myPageService.getMyPage(userId);
 		return ResponseEntity.ok(ApiResponse.success(responseDto));
+	}
+
+	@GetMapping("/ideas")
+	public ResponseEntity<ApiResponse<CommonPageResponse<String>>> getMyIdeas(
+		@RequestParam Long userId,
+		Pageable pageable) {
+		return ResponseEntity.ok(
+			ApiResponse.success(CommonPageResponse.of(myPageService.getMyIdeas(userId, pageable))));
 	}
 }
