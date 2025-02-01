@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.post.converter.CreateCollaborationHubConverter;
-import com.brainpix.post.dto.CollaborationHubCreateDto;
-import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
+import com.brainpix.post.dto.CollaborationHubCreateDto;
+import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
@@ -25,7 +25,6 @@ import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
