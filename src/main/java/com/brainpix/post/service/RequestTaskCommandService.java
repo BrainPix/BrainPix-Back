@@ -3,7 +3,7 @@ package com.brainpix.post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.converter.CreateRequestTaskConverter;
 import com.brainpix.post.dto.RequestTaskCreateDto;
@@ -28,7 +28,7 @@ public class RequestTaskCommandService {
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
 
 		User writer = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		RequestTask requestTask = createRequestTaskConverter.convertToRequestTask(createDto, writer);
 
@@ -41,7 +41,7 @@ public class RequestTaskCommandService {
 	@Transactional
 	public void updateRequestTask(Long taskId, Long userId, RequestTaskUpdateDto updateDto) {
 		RequestTask requestTask = requestTaskRepository.findById(taskId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		requestTask.validateWriter(userId);
@@ -55,7 +55,7 @@ public class RequestTaskCommandService {
 	@Transactional
 	public void deleteRequestTask(Long taskId, Long userId) {
 		RequestTask requestTask = requestTaskRepository.findById(taskId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		requestTask.validateWriter(userId);
