@@ -1,8 +1,6 @@
 package com.brainpix.post.dto;
 
-import com.brainpix.joining.dto.PriceDto;
-import com.brainpix.joining.entity.quantity.PaymentDuration;
-import com.brainpix.joining.entity.quantity.Price;
+import com.brainpix.joining.dto.GatheringDto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,9 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestTaskRecruitmentDto {
+public class CollaborationRecruitmentDto {
 
 	@NotBlank(message = "역할은 필수 입력 값입니다.")
 	private String domain;
-	private PriceDto priceDto;
+
+	private GatheringDto gatheringDto;
 }

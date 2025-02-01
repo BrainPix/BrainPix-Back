@@ -10,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,7 @@ public class CollectionGathering extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "joiner_id")
 	private User joiner;
 
 	private Boolean accepted;
@@ -30,8 +33,10 @@ public class CollectionGathering extends BaseTimeEntity {
 	private Boolean initialGathering;
 
 	@ManyToOne
+	@JoinColumn(name = "collaboration_recruitment_id")
 	private CollaborationRecruitment collaborationRecruitment;
 
+	@Builder
 	public CollectionGathering(User joiner, Boolean accepted, Boolean initialGathering,
 		CollaborationRecruitment collaborationRecruitment) {
 		this.joiner = joiner;
