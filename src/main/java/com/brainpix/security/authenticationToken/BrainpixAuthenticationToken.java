@@ -9,9 +9,9 @@ public class BrainpixAuthenticationToken extends UsernamePasswordAuthenticationT
 
 	private final Long id;
 
-	public BrainpixAuthenticationToken(Object principal, Object credentials, Long id) {
+	public BrainpixAuthenticationToken(Object principal, Object credentials) {
 		super(principal, credentials);
-		this.id = id;
+		id = null;
 	}
 
 	public BrainpixAuthenticationToken(Object principal, Object credentials,
