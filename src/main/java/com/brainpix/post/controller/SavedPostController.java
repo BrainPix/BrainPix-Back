@@ -14,6 +14,7 @@ import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.SavedPostCollaborationResponse;
 import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
 import com.brainpix.post.dto.SavedPostRequestTaskResponse;
+import com.brainpix.post.dto.ToggleSavedPostResponse;
 import com.brainpix.post.service.SavedPostService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,14 @@ public class SavedPostController {
 
 	private final SavedPostService savedPostService;
 
-	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> savePost(@RequestParam long userId, @RequestParam long postId) {
-		savedPostService.savePost(userId, postId);
-		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	@PostMapping("/toggle")
+	public ResponseEntity<ApiResponse<ToggleSavedPostResponse>> toggleSavedPost(
+		@RequestParam long userId,
+		@RequestParam long postId
+	) {
+		boolean isSaved = savedPostService.toggleSavedPost(userId, postId);
+		ToggleSavedPostResponse body = new ToggleSavedPostResponse(isSaved);
+		return ResponseEntity.ok(ApiResponse.success(body));
 	}
 
 	@GetMapping("/request-tasks")
@@ -45,7 +50,7 @@ public class SavedPostController {
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
-	@GetMapping("/collaboration-hubs")
+	@GetMapping("/collaboration")
 	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
 		@RequestParam long userId, Pageable pageable) {
 		Page<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId, pageable);
