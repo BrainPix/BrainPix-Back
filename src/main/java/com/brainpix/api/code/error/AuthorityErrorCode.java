@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum AuthorityErrorCode implements ErrorCode {
 	PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "AUTHORITY400", "비밀번호가 일치하지 않습니다."),
+	AUTHORITY_ERROR_CODE(HttpStatus.FORBIDDEN, "AUTHORITY403", "권한이 없습니다."),
 	;
 
 	private final HttpStatus httpStatus;
