@@ -8,8 +8,6 @@ import com.brainpix.user.entity.User;
 
 public interface SavedPostRepository extends JpaRepository<SavedPost, Long>, SavedPostRepositoryCustom {
 
-	boolean existsByUserAndPost(User user, Post post);
-
 	Long countByPostId(Long postId);
 
 	SavedPost findByUserAndPost(User user, Post post);
