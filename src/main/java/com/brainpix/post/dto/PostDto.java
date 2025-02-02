@@ -21,7 +21,7 @@ public class PostDto {
 	@NotBlank(message = "내용은 비워둘 수 없습니다.")
 	private String content;
 
-	@NotBlank(message = "분야 카테고리는 비워둘 수 없습니다.")
+	@NotNull(message = "분야 카테고리는 비워둘 수 없습니다.")
 	private Specialization specialization;
 
 	@NotNull(message = "프로필 공개 여부는 설정은 필수입니다.")
