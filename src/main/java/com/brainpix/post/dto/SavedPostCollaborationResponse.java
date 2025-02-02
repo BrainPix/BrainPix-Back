@@ -1,9 +1,8 @@
 package com.brainpix.post.dto;
 
-import java.time.LocalDateTime;
-
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
+import com.brainpix.post.utils.DeadlineUtils;
 import com.brainpix.profile.entity.Specialization;
 
 public record SavedPostCollaborationResponse(
@@ -13,7 +12,7 @@ public record SavedPostCollaborationResponse(
 	String writerName,
 	String thumbnailImageUrl,
 	String title,
-	LocalDateTime deadline,
+	String dDay,
 	Specialization specialization,
 	Long saveCount,
 	Long viewCount,
@@ -22,6 +21,8 @@ public record SavedPostCollaborationResponse(
 ) {
 	public static SavedPostCollaborationResponse from(CollaborationHub collaborationHub, Long saveCount,
 		Long totalQuantity, Long occupiedQuantity) {
+		String dDayString = DeadlineUtils.toDDayFormat(collaborationHub.getDeadline());
+
 		return new SavedPostCollaborationResponse(
 			collaborationHub.getId(),
 			collaborationHub.getPostAuth(),
@@ -29,7 +30,7 @@ public record SavedPostCollaborationResponse(
 			collaborationHub.getWriter().getName(),
 			collaborationHub.getFirstImage(),
 			collaborationHub.getTitle(),
-			collaborationHub.getDeadline(),
+			dDayString,
 			collaborationHub.getSpecialization(),
 			saveCount,
 			collaborationHub.getViewCount(),
