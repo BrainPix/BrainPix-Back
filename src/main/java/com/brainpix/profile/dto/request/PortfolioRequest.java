@@ -21,7 +21,7 @@ public record PortfolioRequest(
 	 */
 	public Portfolio toEntity(Profile profile) {
 		List<Specialization> specs = specializations.stream()
-			.map(SpecializationRequest::toDomain)  // ex) Specialization.of(...)
+			.map(SpecializationRequest::toDomain)
 			.toList();
 
 		return Portfolio.create(
