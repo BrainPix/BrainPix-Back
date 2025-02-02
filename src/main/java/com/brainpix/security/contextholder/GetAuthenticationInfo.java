@@ -3,6 +3,8 @@ package com.brainpix.security.contextholder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.brainpix.api.code.error.AuthorityErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.security.authority.BrainpixAuthority;
 
 public class GetAuthenticationInfo {
@@ -17,6 +19,6 @@ public class GetAuthenticationInfo {
 		return authentication.getAuthorities().stream()
 			.map(BrainpixAuthority.class::cast)
 			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("권한이 없습니다."));
+			.orElseThrow(() -> new BrainPixException(AuthorityErrorCode.AUTHORITY_ERROR_CODE));
 	}
 }
