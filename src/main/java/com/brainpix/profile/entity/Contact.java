@@ -5,6 +5,7 @@ import com.brainpix.jpa.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class Contact extends BaseTimeEntity {
 
 	private String value;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private IndividualProfile individualProfile;
 
 	public Contact(ContactType type, String value, IndividualProfile individualProfile) {

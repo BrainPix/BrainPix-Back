@@ -55,4 +55,8 @@ public abstract class User extends BaseTimeEntity {
 	public long getProfileId() {
 		return profile.getId();
 	}
+
+	public void updateProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
 }
