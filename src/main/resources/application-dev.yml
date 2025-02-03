@@ -23,3 +23,6 @@ jasypt:
   encryptor:
     password: jasyptKey
     bean: jasyptEncryptor
+
+jwt:
+  secret: ENC(IM7p+pHVt55x2ugo5fWNu03bDw76hiCwRRWk/Os7r3Cvpcbk1lKtLccdbaWmCI+bOTsjepwpIpbHSVorbDTd0t0JfKMuskq75YfF9ehPzjw/4nEkK5Pli/FnDqeiT6fiFSnVvlGrsswp3BVR0YOzwbxMTAz06cGEu+fNqW3DzLBpv3WGIzcMP4BodGohaoct)
