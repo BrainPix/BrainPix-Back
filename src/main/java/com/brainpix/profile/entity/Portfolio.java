@@ -42,20 +42,23 @@ public class Portfolio extends BaseTimeEntity {
 	@ManyToOne
 	private Profile profile;
 
+	private String profileImage;
+
 	@Builder
 	public Portfolio(String title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
-		String content, Profile profile) {
+		String content, Profile profile, String profileImage) {
 		this.title = title;
 		this.specializationList = specializationList;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
 		this.profile = profile;
+		this.profileImage = profileImage;
 	}
 
 	// 팩토리 메서드
 	public static Portfolio create(Profile profile, String title, List<Specialization> specializationList,
-		YearMonth startDate, YearMonth endDate, String content) {
+		YearMonth startDate, YearMonth endDate, String content, String profileImage) {
 		return Portfolio.builder()
 			.title(title)
 			.specializationList(specializationList)
@@ -63,17 +66,19 @@ public class Portfolio extends BaseTimeEntity {
 			.endDate(endDate)
 			.content(content)
 			.profile(profile)
+			.profileImage(profileImage)
 			.build();
 	}
 
 	// 상태 업데이트 메서드
 	public void update(String title, List<Specialization> specializationList, YearMonth startDate,
-		YearMonth endDate, String content) {
+		YearMonth endDate, String content, String profileImage) {
 		this.title = title;
 		this.specializationList = specializationList;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
+		this.profileImage = profileImage;
 	}
 
 	public void validateOwnership(User user) {

@@ -10,16 +10,21 @@ import lombok.RequiredArgsConstructor;
 public enum CollaborationHubErrorCode implements ErrorCode {
 
 	// 400 Bad Request - 잘못된 요청
-	INVALID_RECRUITMENT_OWNER(HttpStatus.BAD_REQUEST, "REQUESTTASK400", "글 작성자는 요청 과제에 참여할 수 없습니다."),
+	INVALID_RECRUITMENT_OWNER(HttpStatus.BAD_REQUEST, "COLLABORATIONHUB400", "글 작성자는 요청 과제에 참여할 수 없습니다."),
 
 	// 404 Not Found - 리소스를 찾을 수 없음
-	COLLABORATION_NOT_FOUND(HttpStatus.NOT_FOUND,"COLLABORATION404", "요청한 협업을 찾을 수 없습니다."),
-	RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COLLABORATION404", "해당 모집 정보를 찾을 수 없습니다."),
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND,"COLLABORATION404", "사용자를 찾을 수 없습니다."),
+	RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COLLABORATIONHUB404", "해당 모집 정보를 찾을 수 없습니다."),
+	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "COLLABORATIONHUB404", "사용자를 찾을 수 없습니다."),
+	COLLABORATION_NOT_FOUND(HttpStatus.NOT_FOUND, "COLLABORATION404", "요청한 협업을 찾을 수 없습니다."),
 
 	// 409 Conflict - 리소스의 중복 및 충돌
 	RECRUITMENT_ALREADY_FULL(HttpStatus.CONFLICT, "COLLABORATION409", "해당 모집은 마감되었습니다."),
 	RECRUITMENT_ALREADY_APPLY(HttpStatus.CONFLICT, "COLLABORATION409", "이미 지원한 모집입니다."),
+
+	// 500 Internal Server Error - 서버 내부 오류
+	TASK_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 생성 중 오류가 발생했습니다."),
+	TASK_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 수정 중 오류가 발생했습니다."),
+	TASK_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 삭제 중 오류가 발생했습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;
