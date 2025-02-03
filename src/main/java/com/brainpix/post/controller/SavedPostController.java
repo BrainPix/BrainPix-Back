@@ -15,6 +15,8 @@ import com.brainpix.post.dto.SavedPostCollaborationResponse;
 import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
 import com.brainpix.post.dto.SavedPostRequestTaskResponse;
 import com.brainpix.post.service.SavedPostService;
+import com.brainpix.security.authorization.AllUser;
+import com.brainpix.security.authorization.UserId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,29 +27,33 @@ public class SavedPostController {
 
 	private final SavedPostService savedPostService;
 
+	@AllUser
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> savePost(@RequestParam long userId, @RequestParam long postId) {
+	public ResponseEntity<ApiResponse<Void>> savePost(@UserId Long userId, @RequestParam long postId) {
 		savedPostService.savePost(userId, postId);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@AllUser
 	@GetMapping("/request-tasks")
 	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostRequestTaskResponse>>> getSavedRequestTasks(
-		@RequestParam long userId, Pageable pageable) {
+		@UserId Long userId, Pageable pageable) {
 		Page<SavedPostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
+	@AllUser
 	@GetMapping("/idea-markets")
 	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostIdeaMarketResponse>>> getSavedIdeaMarkets(
-		@RequestParam long userId, Pageable pageable) {
+		@UserId Long userId, Pageable pageable) {
 		Page<SavedPostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
+	@AllUser
 	@GetMapping("/collaboration-hubs")
 	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
-		@RequestParam long userId, Pageable pageable) {
+		@UserId Long userId, Pageable pageable) {
 		Page<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
