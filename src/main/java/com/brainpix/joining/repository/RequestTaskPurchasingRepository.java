@@ -18,4 +18,6 @@ public interface RequestTaskPurchasingRepository
 	// "거절" 상태(accepted = false) 리스트
 	Page<RequestTaskPurchasing> findByBuyerAndAcceptedIsFalse(User buyer, Pageable pageable);
 
+	// 이미 지원했는지 여부 확인
+	boolean existsByBuyerIdAndRequestTaskRecruitmentId(Long buyerId, Long requestTaskRecruitmentId);
 }
