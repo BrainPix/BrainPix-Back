@@ -45,12 +45,13 @@ public class CollaborationHubController {
 	}
 
 	@PostMapping("/{collaborationId}/apply")
-	public ResponseEntity<ApiResponse<Void>> applyCollaboration(@PathVariable("collaborationId") Long collaborationId,
+	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
+		@PathVariable("collaborationId") Long collaborationId,
 		@RequestParam("userId") Long userId, ApplyCollaborationDto.Request request) {
 		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
 			request);
-		collaborationHubService.applyCollaboration(parameter);
-		return ResponseEntity.ok(ApiResponse.createdWithNoData());
+		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@PutMapping("/{collaborationId}")

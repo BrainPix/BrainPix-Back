@@ -127,7 +127,7 @@ public class CollaborationHubService {
 	}
 
 	@Transactional
-	public void applyCollaboration(ApplyCollaborationDto.Parameter parameter) {
+	public ApplyCollaborationDto.Response applyCollaboration(ApplyCollaborationDto.Parameter parameter) {
 
 		// 협업 게시글 조회
 		CollaborationHub collaboration = collaborationHubRepository.findById(parameter.getCollaborationId())
@@ -171,6 +171,8 @@ public class CollaborationHubService {
 
 		// 지원 신청
 		collectionGatheringRepository.save(collectionGathering);
+
+		return ApplyCollaborationDtoConverter.toResponse(collectionGathering);
 	}
 
 }

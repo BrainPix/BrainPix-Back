@@ -31,4 +31,11 @@ public class ApplyCollaborationDtoConverter {
 			.collaborationRecruitment(recruitment)
 			.build();
 	}
+
+	public static ApplyCollaborationDto.Response toResponse(CollectionGathering collectionGathering) {
+
+		return ApplyCollaborationDto.Response.builder()
+			.CollectionGatheringId(collectionGathering.getId())
+			.build();
+	}
 }
