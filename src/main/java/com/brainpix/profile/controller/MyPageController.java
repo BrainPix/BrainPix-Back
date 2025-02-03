@@ -10,6 +10,8 @@ import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.profile.dto.MyPageResponseDto;
 import com.brainpix.profile.service.MyPageService;
+import com.brainpix.security.authorization.AllUser;
+import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
