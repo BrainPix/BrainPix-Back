@@ -1,17 +1,14 @@
 package com.brainpix.profile.entity;
 
 import java.time.YearMonth;
-import java.util.List;
 
 import com.brainpix.api.code.error.PortfolioErrorCode;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,9 +27,8 @@ public class Portfolio extends BaseTimeEntity {
 
 	private String title;
 
-	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
-	private List<Specialization> specializationList;
+	private Specialization specialization;
 
 	private YearMonth startDate;
 	private YearMonth endDate;
@@ -45,10 +41,10 @@ public class Portfolio extends BaseTimeEntity {
 	private String profileImage;
 
 	@Builder
-	public Portfolio(String title, List<Specialization> specializationList, YearMonth startDate, YearMonth endDate,
+	public Portfolio(String title, Specialization specialization, YearMonth startDate, YearMonth endDate,
 		String content, Profile profile, String profileImage) {
 		this.title = title;
-		this.specializationList = specializationList;
+		this.specialization = specialization;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
@@ -57,11 +53,11 @@ public class Portfolio extends BaseTimeEntity {
 	}
 
 	// 팩토리 메서드
-	public static Portfolio create(Profile profile, String title, List<Specialization> specializationList,
+	public static Portfolio create(Profile profile, String title, Specialization specialization,
 		YearMonth startDate, YearMonth endDate, String content, String profileImage) {
 		return Portfolio.builder()
 			.title(title)
-			.specializationList(specializationList)
+			.specialization(specialization)
 			.startDate(startDate)
 			.endDate(endDate)
 			.content(content)
@@ -71,10 +67,10 @@ public class Portfolio extends BaseTimeEntity {
 	}
 
 	// 상태 업데이트 메서드
-	public void update(String title, List<Specialization> specializationList, YearMonth startDate,
+	public void update(String title, Specialization specialization, YearMonth startDate,
 		YearMonth endDate, String content, String profileImage) {
 		this.title = title;
-		this.specializationList = specializationList;
+		this.specialization = specialization;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.content = content;
