@@ -21,11 +21,6 @@ public enum CollaborationHubErrorCode implements ErrorCode {
 	RECRUITMENT_ALREADY_FULL(HttpStatus.CONFLICT, "COLLABORATION409", "해당 모집은 마감되었습니다."),
 	RECRUITMENT_ALREADY_APPLY(HttpStatus.CONFLICT, "COLLABORATION409", "이미 지원한 모집입니다."),
 
-	// 500 Internal Server Error - 서버 내부 오류
-	TASK_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 생성 중 오류가 발생했습니다."),
-	TASK_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 수정 중 오류가 발생했습니다."),
-	TASK_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "COLLABORATIONHUB500", "협업 광장 게시글 삭제 중 오류가 발생했습니다.");
-
 	private final HttpStatus httpStatus;
 	private final String code;
 	private final String message;
