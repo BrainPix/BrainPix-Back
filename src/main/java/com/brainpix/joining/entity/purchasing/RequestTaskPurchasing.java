@@ -1,5 +1,7 @@
 package com.brainpix.joining.entity.purchasing;
 
+import com.brainpix.api.code.error.PurchasingErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
@@ -46,5 +48,17 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 		this.openProfile = openProfile;
 		this.message = message;
 		this.requestTaskRecruitment = requestTaskRecruitment;
+	}
+
+	public void validateBuyer(User user) {
+		if (!this.buyer.equals(user)) {
+			throw new BrainPixException(PurchasingErrorCode.NOT_AUTHORIZED);
+		}
+	}
+
+	public void validateRejectedStatus() {
+		if (Boolean.TRUE.equals(this.accepted)) {
+			throw new BrainPixException(PurchasingErrorCode.INVALID_STATUS);
+		}
 	}
 }

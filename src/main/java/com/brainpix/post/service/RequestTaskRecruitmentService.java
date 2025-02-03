@@ -2,13 +2,11 @@ package com.brainpix.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.RecruitmentErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.service.PriceService;
@@ -32,14 +30,14 @@ public class RequestTaskRecruitmentService {
 	@Transactional
 	public void createRecruitments(RequestTask requestTask, List<RequestTaskRecruitmentDto> recruitmentDtos) {
 		if (recruitmentDtos == null || recruitmentDtos.isEmpty()) {
-			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);//INVALID_INPUT, "모집 정보가 필요합니다.");
+			throw new BrainPixException(RecruitmentErrorCode.INVALID_INPUT);
 		}
 
 		List<RequestTaskRecruitment> recruitments = new ArrayList<>();
 
 		for (RequestTaskRecruitmentDto recruitmentDto : recruitmentDtos) {
 			if (recruitmentDto.getDomain() == null || recruitmentDto.getPriceDto() == null) {
-				throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER); //INVALID_REQUEST, "도메인과 가격 정보를 정확히 입력해야 합니다.");
+				throw new BrainPixException(RecruitmentErrorCode.INVALID_REQUEST);
 			}
 		}
 
@@ -47,7 +45,8 @@ public class RequestTaskRecruitmentService {
 			// 가격 정보 생성
 			Price price = priceService.createPrice(recruitmentDto.getPriceDto());
 
-			RequestTaskRecruitment recruitment = createRequestTaskRecruitmentConverter.convertToRequestTaskRecruitment(requestTask, recruitmentDto, price);
+			RequestTaskRecruitment recruitment = createRequestTaskRecruitmentConverter.convertToRequestTaskRecruitment(
+				requestTask, recruitmentDto, price);
 
 			recruitments.add(recruitment);
 
@@ -55,6 +54,7 @@ public class RequestTaskRecruitmentService {
 		recruitmentRepository.saveAll(recruitments);
 	}
 
+	/*
 	@Transactional
 	public void updateRecruitments(Long taskId, List<RequestTaskRecruitmentDto> recruitmentDtos) {
 		if (recruitmentDtos == null || recruitmentDtos.isEmpty()) {
@@ -100,4 +100,6 @@ public class RequestTaskRecruitmentService {
 			recruitmentRepository.deleteAll(existingRecruitmentMap.values());
 		}
 	}
+
+	 */
 }

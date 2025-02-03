@@ -13,6 +13,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,12 +33,11 @@ public abstract class Post extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User writer;
 
 	private String title;
 	private String content;
-	private String category;
 	private Boolean openMyProfile;
 	private Long viewCount;
 
@@ -54,7 +54,7 @@ public abstract class Post extends BaseTimeEntity {
 	private List<String> attachmentFileList;
 
 	public Post(User writer, String title, String content, Boolean openMyProfile, Long viewCount,
-		PostAuth postAuth, Specialization specialization,List<String> imageList, List<String> attachmentFileList) {
+		PostAuth postAuth, Specialization specialization, List<String> imageList, List<String> attachmentFileList) {
 		this.writer = writer;
 		this.title = title;
 		this.content = content;
@@ -66,7 +66,7 @@ public abstract class Post extends BaseTimeEntity {
 		this.attachmentFileList = attachmentFileList;
 	}
 
-	public void updateBaseFields(String title, String content, Specialization specialization,Boolean openMyProfile,
+	public void updateBaseFields(String title, String content, Specialization specialization, Boolean openMyProfile,
 		PostAuth postAuth, List<String> imageList, List<String> attachmentFileList) {
 		this.title = title;
 		this.content = content;

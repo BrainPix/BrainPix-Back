@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RequestTaskService {
+public class RequestTaskCommandService {
 
 	private final RequestTaskRepository requestTaskRepository;
 	private final RequestTaskRecruitmentService recruitmentService;

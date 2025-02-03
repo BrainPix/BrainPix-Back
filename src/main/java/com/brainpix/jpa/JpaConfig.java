@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.brainpix.alarm.repository.AlarmRepository;
+import com.brainpix.message.repository.MessageRepository;
 
 @Configuration
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"com.brainpix"}, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AlarmRepository.class))
+@EnableJpaRepositories(basePackages = {"com.brainpix"}, excludeFilters = {
+	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AlarmRepository.class),
+	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MessageRepository.class)})
 public class JpaConfig {
 
 }

@@ -12,7 +12,8 @@ public record PortfolioRequest(
 	List<SpecializationRequest> specializations,
 	YearMonth startDate,
 	YearMonth endDate,
-	String content
+	String content,
+	String profileImage
 ) {
 
 	/**
@@ -29,7 +30,8 @@ public record PortfolioRequest(
 			specs,
 			startDate,
 			endDate,
-			content
+			content,
+			profileImage
 		);
 	}
 
@@ -46,7 +48,8 @@ public record PortfolioRequest(
 			specs,
 			startDate,
 			endDate,
-			content
+			content,
+			profileImage
 		);
 	}
 }
