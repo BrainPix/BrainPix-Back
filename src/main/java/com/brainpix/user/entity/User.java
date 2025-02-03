@@ -55,4 +55,6 @@ public abstract class User extends BaseTimeEntity {
 	public long getProfileId() {
 		return profile.getId();
 	}
+
+	public abstract String getUserType();
 }

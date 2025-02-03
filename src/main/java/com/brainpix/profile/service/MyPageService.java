@@ -52,7 +52,7 @@ public class MyPageService {
 
 		return MyPageResponseDto.builder()
 			.name(user.getName())
-			.userType(user instanceof Company ? "기업" : "개인")
+			.userType(user.getUserType())
 			.specializations(specializations)
 			.ideaCount(ideaCount)
 			.collaborationCount(collaborationCount)
