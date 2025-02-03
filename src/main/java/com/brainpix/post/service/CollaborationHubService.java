@@ -45,7 +45,6 @@ public class CollaborationHubService {
 	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
 	private final SavedPostRepository savedPostRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
-	private final CollectionGatheringRepository collectionGatheringRepository;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
