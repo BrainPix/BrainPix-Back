@@ -21,6 +21,7 @@ import com.brainpix.security.authorization.Company;
 import com.brainpix.security.authorization.Individual;
 import com.brainpix.security.authorization.UserId;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,6 +31,7 @@ public class ProfileController {
 
 	private final ProfileService profileService;
 
+	@Operation(summary = "개인 사용자 프로필 조회", description = "현재 로그인한 개인 사용자의 프로필을 조회합니다")
 	@Individual
 	@GetMapping("/individual")
 	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getIndividualProfile(@UserId Long userId) {
@@ -37,6 +39,7 @@ public class ProfileController {
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
 
+	@Operation(summary = "기업 사용자 프로필 조회", description = "현재 로그인한 기업 사용자의 프로필을 조회합니다.")
 	@Company
 	@GetMapping("/company")
 	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getCompanyProfile(@UserId Long userId) {
@@ -44,6 +47,7 @@ public class ProfileController {
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
 
+	@Operation(summary = "개인 사용자 프로필 수정", description = "현재 로그인한 개인 사용자의 프로필 정보를 업데이트합니다.")
 	@Individual
 	@PutMapping("/individual/{userId}")
 	public ResponseEntity<ApiResponse<Void>> updateIndividualProfile(
@@ -53,6 +57,7 @@ public class ProfileController {
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 
+	@Operation(summary = "기업 사용자 프로필 수정", description = "현재 로그인한 기업 사용자의 프로필 정보를 업데이트합니다.")
 	@Company
 	@PutMapping("/company/{userId}")
 	public ResponseEntity<ApiResponse<Void>> updateCompanyProfile(
@@ -62,6 +67,7 @@ public class ProfileController {
 		return ResponseEntity.ok(ApiResponse.success(null));
 	}
 
+	@Operation(summary = "프로필 이미지 업로드", description = "현재 로그인한 사용자의 프로필 이미지를 업로드합니다.")
 	@AllUser
 	@PostMapping("/{userId}/upload-profile-image")
 	public ResponseEntity<ApiResponse<String>> uploadProfileImage(

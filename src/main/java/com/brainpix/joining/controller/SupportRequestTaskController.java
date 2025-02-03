@@ -16,6 +16,7 @@ import com.brainpix.joining.service.SupportRequestTaskService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,6 +26,7 @@ public class SupportRequestTaskController {
 
 	private final SupportRequestTaskService supportRequestTaskService;
 
+	@Operation(summary = "지원 거절된 요청 과제 게시글", description = "본인이 지원한 요청과제 게시글 중 거절된 목록들을 조회합니다.")
 	@AllUser
 	@GetMapping("/rejected")
 	public ResponseEntity<ApiResponse<CommonPageResponse<RejectedRequestTaskPurchasingDto>>> getRejectedList(
@@ -36,6 +38,7 @@ public class SupportRequestTaskController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
+	@Operation(summary = "지원 승낙된 요청 과제 게시글", description = "본인이 지원한 요청과제 게시글 중 승낙된 목록들을 조회합니다.")
 	@AllUser
 	@GetMapping("/accepted")
 	public ResponseEntity<ApiResponse<CommonPageResponse<AcceptedRequestTaskPurchasingDto>>> getAcceptedList(
@@ -47,6 +50,7 @@ public class SupportRequestTaskController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
+	@Operation(summary = "지원 거절된 요청 과제 게시글 삭제", description = "본인이 지원한 요청과제 게시글 중 거절된 게시글을 삭제합니다.")
 	@AllUser
 	@DeleteMapping("/{purchasingId}")
 	public ResponseEntity<ApiResponse<Void>> deleteRejectedPurchasing(

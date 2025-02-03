@@ -13,6 +13,7 @@ import com.brainpix.joining.service.SupportIdeaMarketService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -22,6 +23,7 @@ public class SupportIdeaMarketController {
 
 	private final SupportIdeaMarketService supportIdeaMarketService;
 
+	@Operation(summary = "구매 내역 조회", description = "현재 로그인한 사용자의 아이디어 마켓 구매 내역을 조회합니다.")
 	@AllUser
 	@GetMapping("/purchases")
 	public ResponseEntity<ApiResponse<CommonPageResponse<IdeaMarketPurchaseDto>>> getPurchases(
