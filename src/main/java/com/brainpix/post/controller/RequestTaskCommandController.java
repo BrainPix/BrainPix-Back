@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
+import com.brainpix.post.dto.ApplyRequestTaskDto;
 import com.brainpix.post.dto.RequestTaskApiResponseDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
@@ -45,5 +47,16 @@ public class RequestTaskCommandController {
 		@RequestParam Long userId) {
 		requestTaskCommandService.deleteRequestTask(taskid, userId);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
+	@PostMapping("/{taskId}/apply")
+	public ResponseEntity<ApiResponse<ApplyRequestTaskDto.Response>> applyRequestTask(
+		@PathVariable("taskId") Long taskId,
+		@RequestParam("userId") Long userId,
+		@Valid ApplyRequestTaskDto.Request request
+	) {
+		ApplyRequestTaskDto.Parameter parameter = ApplyRequestTaskDtoConverter.toParameter(taskId, userId, request);
+		ApplyRequestTaskDto.Response response = requestTaskCommandService.applyRequestTask(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }

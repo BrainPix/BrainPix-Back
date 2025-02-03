@@ -5,4 +5,5 @@ public enum CompanyInformationType {
 	EMAIL,
 	PHONE_NUMBER,
 	OTHERS;
+
 }
