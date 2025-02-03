@@ -1,8 +1,5 @@
 package com.brainpix.profile.converter;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import org.springframework.stereotype.Component;
 
 import com.brainpix.post.entity.PostAuth;
@@ -20,7 +17,7 @@ public class ProfilePostConverter {
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toRequestTaskPreviewDto(RequestTask task, long savedCount) {
 		String openScope = parseOpenScope(task.getPostAuth());
-		String dDayString = calcDDay(task.getDeadline());
+		String dDayString = task.getDeadline().toString();
 		String writerName = getDisplayName(task.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
@@ -31,7 +28,7 @@ public class ProfilePostConverter {
 			.writerName(writerName)
 			.savedCount(savedCount)
 			.viewCount(task.getViewCount())
-			.dDay(dDayString)
+			.deadline(dDayString)
 			.thumbnailImage(task.getFirstImage())
 			.writerImageUrl(task.getWriter().getProfileImage())
 			.build();
@@ -68,7 +65,7 @@ public class ProfilePostConverter {
 		long totalMembers = hub.getCollaborations().stream()
 			.mapToLong(rec -> rec.getGathering().getTotalQuantity())
 			.sum();
-
+		String dDayString = hub.getDeadline().toString();
 		String openScope = parseOpenScope(hub.getPostAuth());
 		String writerName = getDisplayName(hub.getWriter());
 
@@ -80,7 +77,7 @@ public class ProfilePostConverter {
 			.writerName(writerName)
 			.savedCount(savedCount)
 			.viewCount(hub.getViewCount())
-			.dDay(calcDDay(hub.getDeadline()))
+			.deadline(dDayString)
 			.thumbnailImage(hub.getFirstImage())
 			.currentMembers(currentMembers)
 			.totalMembers(totalMembers)
@@ -104,12 +101,4 @@ public class ProfilePostConverter {
 		return "전체 공개";
 	}
 
-	private String calcDDay(LocalDateTime deadline) {
-		if (deadline == null)
-			return "D-Day 없음";
-		long diff = ChronoUnit.DAYS.between(LocalDateTime.now(), deadline);
-		if (diff < 0)
-			return "모집 마감 (D+" + Math.abs(diff) + ")";
-		return "모집 마감 (D-" + diff + ")";
-	}
 }

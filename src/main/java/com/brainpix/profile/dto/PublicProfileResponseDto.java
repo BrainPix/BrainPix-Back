@@ -25,7 +25,7 @@ public class PublicProfileResponseDto {
 		private String writerName;     // 작성자 이름
 		private Long savedCount;       // 스크랩/즐겨찾기 횟수
 		private Long viewCount;        // 조회수
-		private String dDay;           // 마감일 (D-3 등)
+		private String deadline;           // 마감일 (D-3 등)
 		private String thumbnailImage; // 썸네일 이미지
 		private String writerImageUrl; // 작성자 이미지 URL
 		private Long price;            // (아이디어 마켓 전용)
