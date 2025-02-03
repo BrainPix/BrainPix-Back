@@ -16,6 +16,7 @@ import com.brainpix.profile.dto.IndividualProfileResponseDto;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
 import com.brainpix.profile.service.PublicProfileService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,6 +29,7 @@ public class PublicProfileController {
 	/**
 	 * 개인 프로필 공개 조회
 	 */
+	@Operation(summary = "개인 공개 프로필 조회", description = "특정 사용자에게 공개 개인 프로필을 조회합니다.")
 	@GetMapping("/individual")
 	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getPublicIndividualProfile(
 		@RequestParam Long userId) {
@@ -38,12 +40,14 @@ public class PublicProfileController {
 	/**
 	 * 기업 프로필 공개 조회
 	 */
+	@Operation(summary = "기업 공개 프로필 조회", description = "특정 사용자에게 공개 기업 프로필을 조회합니다.")
 	@GetMapping("/company")
 	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getPublicCompanyProfile(@RequestParam Long userId) {
 		CompanyProfileResponseDto profile = publicProfileService.getPublicCompanyProfile(userId);
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
 
+	@Operation(summary = "사용자 게시글 조회", description = "특정 사용자가 작성한 공개 게시글을 조회합니다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
 		@RequestParam Long userId,
