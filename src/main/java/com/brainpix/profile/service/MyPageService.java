@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
-import com.brainpix.joining.repository.RequestTaskRecruitmentRepository;
+import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.profile.dto.MyPageResponseDto;
@@ -31,7 +31,7 @@ public class MyPageService {
 	private final UserRepository userRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
-	private final RequestTaskRecruitmentRepository requestTaskRecruitmentRepository;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepositoryl;
 
 	public MyPageResponseDto getMyPage(Long userId) {
 		User user = userRepository.findById(userId)
@@ -73,7 +73,7 @@ public class MyPageService {
 		long initialGatherings = collectionGatheringRepository.countByJoinerIdAndInitialGathering(user.getId(), true);
 
 		// RequestTaskRecruitment: 요청 과제에서 승인된 횟수
-		long approvedRequestTasks = requestTaskRecruitmentRepository.countByJoinerIdAndAccepted(user.getId(), true);
+		long approvedRequestTasks = requestTaskPurchasingRepositoryl.countByBuyerIdAndAccepted(user.getId(), true);
 
 		return approvedCollaborations + initialGatherings + approvedRequestTasks;
 	}
