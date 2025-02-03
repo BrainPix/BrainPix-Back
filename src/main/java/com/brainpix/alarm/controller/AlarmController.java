@@ -27,7 +27,7 @@ public class AlarmController {
 
 	// 알림 읽음 처리 API
 	@PatchMapping("/read/{alarmId}")
-	public ResponseEntity<?> readAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> readAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.readAlarm(alarmId, userId);
 
@@ -37,7 +37,7 @@ public class AlarmController {
 	// 일반 알림 조회 API
 	// 시큐리티 적용 전까지 임시로 userId를 RequestParam 으로 받아서 사용
 	@GetMapping
-	public ResponseEntity<?> getAlarmList(Pageable pageable, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<GetAlarmDto.Response>> getAlarmList(Pageable pageable, @RequestParam Long userId) {
 
 		GetAlarmDto.Response data = alarmService.getAlarm(pageable, userId);
 
@@ -47,7 +47,7 @@ public class AlarmController {
 	// 휴지통 알림 조회 API
 	// 시큐리티 적용 전까지 임시로 userId를 RequestParam 으로 받아서 사용
 	@GetMapping("/trash")
-	public ResponseEntity<?> getTrashAlarmList(Pageable pageable, @RequestPart Long userId) {
+	public ResponseEntity<ApiResponse<GetAlarmDto.Response>> getTrashAlarmList(Pageable pageable, @RequestPart Long userId) {
 
 		GetAlarmDto.Response data = alarmService.getTrashAlarm(pageable, userId);
 
@@ -56,7 +56,7 @@ public class AlarmController {
 
 	// 알림 수 조회 API
 	@GetMapping("/count")
-	public ResponseEntity<?> getUnreadAlarmCount(@RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<GetUnreadAlarmDto.Response>> getUnreadAlarmCount(@RequestParam Long userId) {
 
 		GetUnreadAlarmDto.Response data = alarmService.getUnreadAlarmCount(userId);
 
@@ -65,7 +65,7 @@ public class AlarmController {
 
 	// 알림 휴지통으로 보내기 API
 	@PatchMapping("/trash/{alarmId}")
-	public ResponseEntity<?> addTrashAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> addTrashAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.addTrashAlarm(alarmId, userId);
 
@@ -74,7 +74,7 @@ public class AlarmController {
 
 	// 알림 휴지통에서 복구 API
 	@PatchMapping("/restore/{alarmId}")
-	public ResponseEntity<?> restoreAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> restoreAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.restoreAlarm(alarmId, userId);
 
@@ -83,7 +83,7 @@ public class AlarmController {
 
 	// 알림 삭제 API
 	@DeleteMapping("/delete/{alarmId}")
-	public ResponseEntity<?> deleteAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> deleteAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.deleteOneAlarm(alarmId, userId);
 
@@ -92,7 +92,7 @@ public class AlarmController {
 
 	// 알림 전체 삭제 API
 	@DeleteMapping("/delete")
-	public ResponseEntity<?> deleteAllAlarm(@RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> deleteAllAlarm(@RequestParam Long userId) {
 
 		alarmService.deleteAllAlarm(userId);
 
