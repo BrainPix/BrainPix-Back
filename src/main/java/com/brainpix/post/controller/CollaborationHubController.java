@@ -13,14 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
+import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
+import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
+import com.brainpix.post.dto.ApplyCollaborationDto;
 import com.brainpix.post.dto.CollaborationHubApiResponseDto;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
-import com.brainpix.post.service.CollaborationHubInitialMemberService;
-import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
-import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
+import com.brainpix.post.service.CollaborationHubInitialMemberService;
 import com.brainpix.post.service.CollaborationHubService;
 
 import jakarta.validation.Valid;
@@ -40,6 +42,16 @@ public class CollaborationHubController {
 		Long collaborationId = collaborationHubService.createCollaborationHub(userId, createDto);
 		return ResponseEntity.ok(
 			ApiResponse.success(new CollaborationHubApiResponseDto("collaborationId", collaborationId)));
+	}
+
+	@PostMapping("/{collaborationId}/apply")
+	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
+		@PathVariable("collaborationId") Long collaborationId,
+		@RequestParam("userId") Long userId, ApplyCollaborationDto.Request request) {
+		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
+			request);
+		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
 	@PutMapping("/{collaborationId}")

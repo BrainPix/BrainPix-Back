@@ -29,4 +29,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 		"AND cg.initialGathering = true")
 	List<CollectionGathering> findByCollaborationHubId(@Param("collaborationHubId") Long collaborationHubId);
 
+
+	// 이미 지원했던 분야인지 확인
+	boolean existsByJoinerIdAndCollaborationRecruitmentId(Long joinerId, Long collaborationRecruitmentId);
 }

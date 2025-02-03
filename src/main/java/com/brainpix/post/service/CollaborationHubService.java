@@ -6,20 +6,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.post.converter.CreateCollaborationHubConverter;
-import com.brainpix.post.dto.CollaborationHubCreateDto;
-import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
+import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
+import com.brainpix.post.dto.ApplyCollaborationDto;
+import com.brainpix.post.dto.CollaborationHubCreateDto;
+import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
+import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.post.repository.CollaborationHubRepository;
+import com.brainpix.post.repository.CollaborationRecruitmentRepository;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
@@ -33,6 +38,8 @@ public class CollaborationHubService {
 
 	private final CollaborationHubRepository collaborationHubRepository;
 	private final CollaborationHubRecruitmentService collaborationHubRecruitmentService;
+	private final CollaborationRecruitmentRepository collaborationRecruitmentRepository;
+	private final CollectionGatheringRepository collectionGatheringRepository;
 	private final UserRepository userRepository;
 	private final CreateCollaborationHubConverter createCollaborationHubConverter;
 	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
@@ -56,7 +63,6 @@ public class CollaborationHubService {
 		return collaborationHub.getId();
 	}
 
-	@Transactional
 	public void updateCollaborationHub(Long collaborationId, Long userId, CollaborationHubUpdateDto updateDto) {
 		CollaborationHub collaboration = collaborationHubRepository.findById(collaborationId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
@@ -102,7 +108,6 @@ public class CollaborationHubService {
 
 		// 작성자 조회
 		User writer = collaborationHub.getWriter();
-		System.out.println(writer.getId());
 
 		// 아이디어의 저장 횟수
 		Long saveCount = savedPostRepository.countByPostId(collaborationHub.getId());
@@ -120,4 +125,54 @@ public class CollaborationHubService {
 		return GetCollaborationHubDetailDtoConverter.toResponse(collaborationHub, collectionGatherings, writer,
 			saveCount, totalIdeas, totalCollaborations);
 	}
+
+	@Transactional
+	public ApplyCollaborationDto.Response applyCollaboration(ApplyCollaborationDto.Parameter parameter) {
+
+		// 협업 게시글 조회
+		CollaborationHub collaboration = collaborationHubRepository.findById(parameter.getCollaborationId())
+			.orElseThrow(() -> new BrainPixException(
+				CollaborationHubErrorCode.COLLABORATION_NOT_FOUND));
+
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
+
+		// 지원 분야 조회
+		CollaborationRecruitment recruitment = collaborationRecruitmentRepository.findById(
+				parameter.getCollaborationRecruitmentId())
+			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_NOT_FOUND));
+
+		// 지원자가 모두 채워진 경우 예외
+		if (recruitment.getGathering().getOccupiedQuantity() >= recruitment.getGathering().getTotalQuantity()) {
+			throw new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_ALREADY_FULL);
+		}
+
+		// 글 작성자가 신청하는 예외는 필터링
+		if (collaboration.getWriter() == user) {
+			throw new BrainPixException(CollaborationHubErrorCode.INVALID_RECRUITMENT_OWNER);
+		}
+
+		// 이미 지원한 분야인 경우 예외
+		if (collectionGatheringRepository.existsByJoinerIdAndCollaborationRecruitmentId(user.getId(),
+			recruitment.getId())) {
+			throw new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_ALREADY_APPLY);
+		}
+
+		// 협업 게시글에 속하는 지원 분야인지 확인
+		if (recruitment.getParentCollaborationHub() != collaboration) {
+			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+		}
+
+		// 엔티티 생성
+		CollectionGathering collectionGathering = ApplyCollaborationDtoConverter.toCollectionGathering(user,
+			recruitment, parameter.getIsOpenProfile(),
+			parameter.getMessage());
+
+		// 지원 신청
+		collectionGatheringRepository.save(collectionGathering);
+
+		return ApplyCollaborationDtoConverter.toResponse(collectionGathering);
+	}
+
 }
