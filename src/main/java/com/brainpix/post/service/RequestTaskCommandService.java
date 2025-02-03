@@ -84,7 +84,7 @@ public class RequestTaskCommandService {
 	}
 
 	@Transactional
-	public void applyRequestTask(ApplyRequestTaskDto.Parameter parameter) {
+	public ApplyRequestTaskDto.Response applyRequestTask(ApplyRequestTaskDto.Parameter parameter) {
 
 		// 요청 과제 조회
 		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
@@ -127,5 +127,7 @@ public class RequestTaskCommandService {
 
 		// 지원 신청
 		requestTaskPurchasingRepository.save(requestTaskPurchasing);
+
+		return ApplyRequestTaskDtoConverter.toResponse(requestTaskPurchasing);
 	}
 }

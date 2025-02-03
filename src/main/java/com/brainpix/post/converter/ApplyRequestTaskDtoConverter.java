@@ -29,4 +29,10 @@ public class ApplyRequestTaskDtoConverter {
 			.message(message)
 			.build();
 	}
+
+	public static ApplyRequestTaskDto.Response toResponse(RequestTaskPurchasing requestTaskPurchasing) {
+		return ApplyRequestTaskDto.Response.builder()
+			.requestTaskPurchasingId(requestTaskPurchasing.getId())
+			.build();
+	}
 }

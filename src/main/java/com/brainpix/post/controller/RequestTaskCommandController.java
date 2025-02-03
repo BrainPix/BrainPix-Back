@@ -50,12 +50,13 @@ public class RequestTaskCommandController {
 	}
 
 	@PostMapping("/{taskId}/apply")
-	public ResponseEntity<ApiResponse<Void>> applyRequestTask(@PathVariable("taskId") Long taskId,
+	public ResponseEntity<ApiResponse<ApplyRequestTaskDto.Response>> applyRequestTask(
+		@PathVariable("taskId") Long taskId,
 		@RequestParam("userId") Long userId,
 		@Valid ApplyRequestTaskDto.Request request
 	) {
 		ApplyRequestTaskDto.Parameter parameter = ApplyRequestTaskDtoConverter.toParameter(taskId, userId, request);
-		requestTaskCommandService.applyRequestTask(parameter);
-		return ResponseEntity.ok(ApiResponse.successWithNoData());
+		ApplyRequestTaskDto.Response response = requestTaskCommandService.applyRequestTask(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }

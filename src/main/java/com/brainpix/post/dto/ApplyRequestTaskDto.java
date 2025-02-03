@@ -29,4 +29,10 @@ public class ApplyRequestTaskDto {
 		Boolean isOpenProfile;    // 자기소개 및 포트폴리오 공개 여부
 		String message;    // 추가 메시지
 	}
+
+	@Builder
+	@Getter
+	public static class Response {
+		Long requestTaskPurchasingId;        // 요청 과제 구매 식별자 ID
+	}
 }
