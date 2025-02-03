@@ -27,14 +27,24 @@ public class IdeaMarketPurchasing extends BaseTimeEntity {
 	private Long price;
 	private PaymentDuration paymentDuration;
 
+	private Payment payment;    // 결제 방식
+	private Long vat;    // 수수료
+	private Long quantity;    // 구매 수량
+
 	@ManyToOne
 	private IdeaMarket ideaMarket;
 
 	@Builder
-	public IdeaMarketPurchasing(User buyer, Long price, PaymentDuration paymentDuration, IdeaMarket ideaMarket) {
+	public IdeaMarketPurchasing(Long id, User buyer, Long price, PaymentDuration paymentDuration, Payment payment,
+		Long vat,
+		Long quantity, IdeaMarket ideaMarket) {
+		this.id = id;
 		this.buyer = buyer;
 		this.price = price;
 		this.paymentDuration = paymentDuration;
+		this.payment = payment;
+		this.vat = vat;
+		this.quantity = quantity;
 		this.ideaMarket = ideaMarket;
 	}
 }
