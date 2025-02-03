@@ -19,6 +19,10 @@ spring:
   data:
     mongodb:
       uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
+  mail:
+    host: smtp.gmail.com
+    username: example12345@gmail.com
+    password: example12345
 jasypt:
   encryptor:
     password: jasyptKey
