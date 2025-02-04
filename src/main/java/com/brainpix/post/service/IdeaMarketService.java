@@ -11,19 +11,15 @@ import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateIdeaMarketConverter;
-import com.brainpix.post.converter.GetIdeaCommentListDtoConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
-import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
-import com.brainpix.post.entity.Comment;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
-import com.brainpix.post.repository.CommentRepository;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
@@ -38,7 +34,6 @@ public class IdeaMarketService {
 	private final SavedPostRepository savedPostRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
-	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
 	private final PriceService priceService;
 	private final CreateIdeaMarketConverter createIdeaMarketConverter;
@@ -114,20 +109,6 @@ public class IdeaMarketService {
 		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true);
 
 		return GetIdeaDetailDtoConverter.toResponse(ideaMarket, writer, saveCount, totalIdeas, totalCollaborations);
-	}
-
-	// 아이디어 식별자 값을 입력받아 댓글 목록을 조회합니다.
-	@Transactional(readOnly = true)
-	public GetIdeaCommentListDto.Response getIdeaCommentList(GetIdeaCommentListDto.Parameter parameter) {
-
-		// 아이디어 조회
-		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-		// 게시글에 연관된 모든 댓글을 조회
-		Page<Comment> comments = commentRepository.findByParentPostId(ideaMarket.getId(), parameter.getPageable());
-
-		return GetIdeaCommentListDtoConverter.toResponse(comments);
 	}
 
 	// 저장순으로 아이디어를 조회합니다.

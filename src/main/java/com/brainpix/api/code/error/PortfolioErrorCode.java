@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 public enum PortfolioErrorCode implements ErrorCode {
 
 	// Portfolio 관련 에러
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO404", "사용자를 찾을 수 없습니다."),
 	RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO404", "리소스를 찾을 수 없습니다."),
 	PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO404", "포트폴리오를 찾을 수 없습니다."),
 	NOT_OWNED_PORTFOLIO(HttpStatus.FORBIDDEN, "PORTFOLIO403", "본인 소유의 포트폴리오가 아닙니다."),

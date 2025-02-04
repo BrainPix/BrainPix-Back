@@ -25,10 +25,9 @@ public class CompanySignUpService extends SignUpService {
 		CompanyProfile profile = CompanyProfile.builder()
 			.user(user)
 			.specializationList(null)
-			.businessType(null)
 			.businessInformation(null)
-			.homepage(null)
 			.openHomepage(true)
+			.companyInformations(null)
 			.build();
 
 		profileRepository.save(profile);

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.brainpix.joining.entity.quantity.Gathering;
+import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.profile.entity.Specialization;
@@ -36,6 +37,18 @@ public class CollaborationHub extends Post {
 			attachmentFileList);
 		this.deadline = deadline;
 		this.link = link;
+	}
+
+	public void updateCollaborationHubFields(CollaborationHubUpdateDto updateDto) {
+		// BasePost의 필드를 업데이트
+		updateBaseFields(updateDto.getTitle(), updateDto.getContent(), updateDto.getSpecialization(),
+			updateDto.getOpenMyProfile(),
+			updateDto.getPostAuth(), updateDto.getImageList(), updateDto.getAttachmentFileList());
+
+		// CollaborationHub 고유 필드 업데이트
+		this.deadline = updateDto.getDeadline();
+		this.link = updateDto.getLink();
+
 	}
 
 	public long getTotalQuantity() {

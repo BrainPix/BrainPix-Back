@@ -5,6 +5,7 @@ import java.time.YearMonth;
 import com.brainpix.jpa.BaseTimeEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class Career extends BaseTimeEntity {
 	private YearMonth startDate;
 	private YearMonth endDate;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private IndividualProfile individualProfile;
 
 	@Builder

@@ -2,9 +2,6 @@ package com.brainpix.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -48,7 +45,8 @@ public class RequestTaskRecruitmentService {
 			// 가격 정보 생성
 			Price price = priceService.createPrice(recruitmentDto.getPriceDto());
 
-			RequestTaskRecruitment recruitment = createRequestTaskRecruitmentConverter.convertToRequestTaskRecruitment(requestTask, recruitmentDto, price);
+			RequestTaskRecruitment recruitment = createRequestTaskRecruitmentConverter.convertToRequestTaskRecruitment(
+				requestTask, recruitmentDto, price);
 
 			recruitments.add(recruitment);
 
