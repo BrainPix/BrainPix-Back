@@ -52,7 +52,7 @@ public class MyIdeaMarketService {
 		List<PurchaseInfoResponse> purchaseHistory = ideaMarketPurchasingRepository.findByIdeaMarket(ideaMarket)
 			.stream()
 			.map(purchase -> new PurchaseInfoResponse(
-				purchase.getBuyer().getId(),
+				purchase.getBuyer().getIdentifier(),
 				purchase.getPayment(),
 				purchase.getPrice()
 			))
