@@ -41,14 +41,14 @@ public class SignUpController {
 
 	@GetMapping("/duplicate/id")
 	public ResponseEntity<ApiResponse<Void>> checkDuplicateId(@RequestParam("id") String id) {
-		individualSignUpService.isDuplicated(id);
+		individualSignUpService.checkDuplicated(id);
 		return ResponseEntity.ok()
 			.body(ApiResponse.successWithNoData());
 	}
 
 	@GetMapping("/duplicate/nickname")
 	public ResponseEntity<ApiResponse<Void>> checkDuplicateNickName(@RequestParam("nickName") String nickName) {
-		individualSignUpService.isDuplicatedNickName(nickName);
+		individualSignUpService.checkDuplicatedNickName(nickName);
 		return ResponseEntity.ok()
 			.body(ApiResponse.successWithNoData());
 	}
