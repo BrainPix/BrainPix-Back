@@ -26,8 +26,6 @@ import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.service.IdeaMarketService;
 import com.brainpix.security.authorization.AllUser;
-import com.brainpix.security.authorization.Company;
-import com.brainpix.security.authorization.Individual;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,7 +62,6 @@ public class IdeaMarketController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@AllUser
 	@Operation(summary = "아이디어 전체 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 검색 조건, page, size를 입력받아 전체 조회합니다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetIdeaListDto.IdeaDetail>>> getIdeaList(
@@ -75,8 +72,7 @@ public class IdeaMarketController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
-	@Individual
-	@Company
+	@AllUser
 	@Operation(summary = "아이디어 상세 조회", description = "경로 변수로 아이디어 마켓 식별자 ID를 입력받아 상세 조회합니다.")
 	@GetMapping("/{ideaId}")
 	public ResponseEntity<ApiResponse<GetIdeaDetailDto.Response>> getIdeaDetail(
@@ -87,8 +83,7 @@ public class IdeaMarketController {
 		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
-
-	@AllUser
+	
 	@Operation(summary = "인기 아이디어 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 page, size를 입력받아 인기 아이디어를 조회합니다.")
 	@GetMapping("/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularIdeaListDto.IdeaDetail>>> getPopularIdeaList(
