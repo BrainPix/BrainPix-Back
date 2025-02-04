@@ -3,9 +3,9 @@ package com.brainpix.joining.service;
 import org.springframework.stereotype.Service;
 
 import com.brainpix.joining.converter.CreateIdeaMarketPriceConverter;
-import com.brainpix.joining.converter.CreatePriceConverter;
+import com.brainpix.joining.converter.CreateRequestTaskPriceConverter;
 import com.brainpix.joining.dto.IdeaMarketPriceDto;
-import com.brainpix.joining.dto.PriceDto;
+import com.brainpix.joining.dto.RequestTaskPriceDto;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.PriceRepository;
 
@@ -16,30 +16,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PriceService {
 	private final PriceRepository priceRepository;
-	private final CreatePriceConverter createPriceConverter;
+	private final CreateRequestTaskPriceConverter createRequestTaskPriceConverter;
 	private final CreateIdeaMarketPriceConverter createIdeaMarketPriceConverter;
 
 	@Transactional
-	public Price createPrice(PriceDto priceDto) {
+	public Price createRequestTaskPrice(RequestTaskPriceDto requestTaskPriceDto) {
 
-		Price price = createPriceConverter.convertToPrice(priceDto);
+		Price price = createRequestTaskPriceConverter.convertToRequestTaskPrice(requestTaskPriceDto);
 
 		return priceRepository.save(price);
 	}
 
 	@Transactional
-	public Price createIdeaMarketPrice(IdeaMarketPriceDto priceDto) {
+	public Price createIdeaMarketPrice(IdeaMarketPriceDto ideaMarketPriceDto) {
 
-		Price price = createIdeaMarketPriceConverter.convertToIdeaMarketPrice(priceDto);
+		Price price = createIdeaMarketPriceConverter.convertToIdeaMarketPrice(ideaMarketPriceDto);
 
 		return priceRepository.save(price);
 	}
-
-	/*
-	@Transactional
-	public void updatePrice(Price price, PriceDto priceDto) {
-		price.updatePriceFields(priceDto.getPrice(), priceDto.getTotalQuantity(), priceDto.getPaymentDuration());
-		priceRepository.save(price);
-	}
-	 */
 }
