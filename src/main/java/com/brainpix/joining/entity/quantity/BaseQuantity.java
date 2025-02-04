@@ -21,10 +21,4 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 		this.totalQuantity = totalQuantity;
 		this.occupiedQuantity = occupiedQuantity;
 	}
-
-	/*
-	public void updateQuantityFields(Long totalQuantity) {
-		this.totalQuantity = totalQuantity;
-	}
-	 */
 }

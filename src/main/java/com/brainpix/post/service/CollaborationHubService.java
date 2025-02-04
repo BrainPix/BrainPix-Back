@@ -9,18 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.post.converter.CreateCollaborationHubConverter;
+import com.brainpix.post.dto.CollaborationHubCreateDto;
+import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
-import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
 import com.brainpix.post.dto.ApplyCollaborationDto;
-import com.brainpix.post.dto.CollaborationHubCreateDto;
-import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
 import com.brainpix.post.entity.PostAuth;
@@ -55,7 +55,7 @@ public class CollaborationHubService {
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
 
 		User writer = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		CollaborationHub collaborationHub = createCollaborationHubConverter.convertToCollaborationHub(createDto,
 			writer);
@@ -67,9 +67,10 @@ public class CollaborationHubService {
 		return collaborationHub.getId();
 	}
 
+	@Transactional
 	public void updateCollaborationHub(Long collaborationId, Long userId, CollaborationHubUpdateDto updateDto) {
 		CollaborationHub collaboration = collaborationHubRepository.findById(collaborationId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		collaboration.validateWriter(userId);
@@ -83,7 +84,7 @@ public class CollaborationHubService {
 	@Transactional
 	public void deleteCollaborationHub(Long collaborationId, Long userId) {
 		CollaborationHub collaboration = collaborationHubRepository.findById(collaborationId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		collaboration.validateWriter(userId);

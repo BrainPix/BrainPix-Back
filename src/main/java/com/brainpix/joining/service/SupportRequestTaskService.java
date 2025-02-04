@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.code.error.PurchasingErrorCode;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.converter.RequestTaskPurchasingConverter;
 import com.brainpix.joining.dto.AcceptedRequestTaskPurchasingDto;
@@ -35,7 +35,7 @@ public class SupportRequestTaskService {
 	@Transactional(readOnly = true)
 	public CommonPageResponse<RejectedRequestTaskPurchasingDto> getRejectedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
@@ -49,7 +49,7 @@ public class SupportRequestTaskService {
 	@Transactional(readOnly = true)
 	public CommonPageResponse<AcceptedRequestTaskPurchasingDto> getAcceptedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		Pageable sortedPageable = PageableUtils.withSort(pageable, "createdAt", Sort.Direction.DESC);
 
@@ -66,7 +66,7 @@ public class SupportRequestTaskService {
 	@Transactional
 	public void deleteRejectedPurchasing(Long userId, Long purchasingId) {
 		User currentUser = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		RequestTaskPurchasing purchasing = purchasingRepository.findById(purchasingId)
 			.orElseThrow(() -> new BrainPixException(PurchasingErrorCode.COLLECTION_NOT_FOUND));
