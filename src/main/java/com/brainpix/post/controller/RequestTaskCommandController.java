@@ -17,34 +17,45 @@ import com.brainpix.post.dto.ApplyRequestTaskDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.service.RequestTaskCommandService;
+import com.brainpix.security.authorization.AllUser;
+import com.brainpix.security.authorization.UserId;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/request-tasks")
 @RequiredArgsConstructor
+@Tag(name = "RequestTask API", description = "요청 과제 관련 API")
 public class RequestTaskCommandController {
 
 	private final RequestTaskCommandService requestTaskCommandService;
 
+	@AllUser
+	@Operation(summary = "요청 과제 글 생성", description = "요청 과제 글 내용, 모집 정보를 포함하여 요청 과제 게시글을 생성합니다.")
 	@PostMapping
-	public ResponseEntity<ApiResponse<PostApiResponseDto>> createRequestTask(@RequestParam Long userId,
+	public ResponseEntity<ApiResponse<PostApiResponseDto>> createRequestTask(@UserId Long userId,
 		@Valid @RequestBody RequestTaskCreateDto createDto) {
 		Long taskId = requestTaskCommandService.createRequestTask(userId, createDto); // 컨버터행
 		return ResponseEntity.ok(ApiResponse.success(new PostApiResponseDto("taskId", taskId)));
 	}
 
+	@AllUser
+	@Operation(summary = "요청 과제 글 수정", description = "요청 과제 게시글 내용을 수정합니다, 모집 분야는 수정할 수 없습니다.")
 	@PutMapping("/{taskId}")
 	public ResponseEntity<ApiResponse<Void>> updateRequestTask(@PathVariable("taskId") Long taskid,
-		@RequestParam Long userId, @Valid @RequestBody RequestTaskUpdateDto updateDto) {
+		@UserId Long userId, @Valid @RequestBody RequestTaskUpdateDto updateDto) {
 		requestTaskCommandService.updateRequestTask(taskid, userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@AllUser
+	@Operation(summary = "요청 과제 글 삭제", description = "요청 과제 게시글을 삭제합니다.")
 	@DeleteMapping("/{taskId}")
 	public ResponseEntity<ApiResponse<Void>> deleteRequestTask(@PathVariable("taskId") Long taskid,
-		@RequestParam Long userId) {
+		@UserId Long userId) {
 		requestTaskCommandService.deleteRequestTask(taskid, userId);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}

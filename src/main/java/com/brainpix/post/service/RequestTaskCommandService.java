@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.PostErrorCode;
+import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
