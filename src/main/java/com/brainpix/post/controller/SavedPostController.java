@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
-import com.brainpix.post.dto.SavedPostCollaborationResponse;
-import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
-import com.brainpix.post.dto.SavedPostRequestTaskResponse;
+import com.brainpix.post.dto.PostCollaborationResponse;
+import com.brainpix.post.dto.PostIdeaMarketResponse;
+import com.brainpix.post.dto.PostRequestTaskResponse;
 import com.brainpix.post.service.SavedPostService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
@@ -39,27 +39,27 @@ public class SavedPostController {
 	@Operation(summary = "저장된 요청 과제 조회", description = "현재 로그인한 사용자가 저장한 요청 과제를 조회합니다.")
 	@AllUser
 	@GetMapping("/request-tasks")
-	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostRequestTaskResponse>>> getSavedRequestTasks(
+	public ResponseEntity<ApiResponse<CommonPageResponse<PostRequestTaskResponse>>> getSavedRequestTasks(
 		@UserId Long userId, Pageable pageable) {
-		Page<SavedPostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId, pageable);
+		Page<PostRequestTaskResponse> result = savedPostService.findSavedRequestTasks(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
 	@Operation(summary = "저장된 아이디어 마켓 조회", description = "현재 로그인한 사용자가 저장한 아이디어 마켓을 조회합니다.")
 	@AllUser
 	@GetMapping("/idea-markets")
-	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostIdeaMarketResponse>>> getSavedIdeaMarkets(
+	public ResponseEntity<ApiResponse<CommonPageResponse<PostIdeaMarketResponse>>> getSavedIdeaMarkets(
 		@UserId Long userId, Pageable pageable) {
-		Page<SavedPostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId, pageable);
+		Page<PostIdeaMarketResponse> result = savedPostService.findSavedIdeaMarkets(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 
 	@Operation(summary = "저장된 협업 광장 조회", description = "현재 로그인한 사용자가 저장한 협업 광장을 조회합니다.")
 	@AllUser
 	@GetMapping("/collaboration-hubs")
-	public ResponseEntity<ApiResponse<CommonPageResponse<SavedPostCollaborationResponse>>> getSavedCollaborationHubs(
+	public ResponseEntity<ApiResponse<CommonPageResponse<PostCollaborationResponse>>> getSavedCollaborationHubs(
 		@UserId Long userId, Pageable pageable) {
-		Page<SavedPostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId, pageable);
+		Page<PostCollaborationResponse> result = savedPostService.findSavedCollaborationHubs(userId, pageable);
 		return ResponseEntity.ok(ApiResponse.success(CommonPageResponse.of(result)));
 	}
 

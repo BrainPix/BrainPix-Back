@@ -6,7 +6,7 @@ import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.profile.entity.Specialization;
 
-public record SavedPostCollaborationResponse(
+public record PostCollaborationResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
@@ -20,9 +20,9 @@ public record SavedPostCollaborationResponse(
 	Long totalQuantity,
 	Long occupiedQuantity
 ) {
-	public static SavedPostCollaborationResponse from(CollaborationHub collaborationHub, Long saveCount,
+	public static PostCollaborationResponse from(CollaborationHub collaborationHub, Long saveCount,
 		Long totalQuantity, Long occupiedQuantity) {
-		return new SavedPostCollaborationResponse(
+		return new PostCollaborationResponse(
 			collaborationHub.getId(),
 			collaborationHub.getPostAuth(),
 			collaborationHub.getWriter().getProfileImage(),

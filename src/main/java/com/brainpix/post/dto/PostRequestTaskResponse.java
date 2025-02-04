@@ -6,7 +6,7 @@ import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.profile.entity.Specialization;
 
-public record SavedPostRequestTaskResponse(
+public record PostRequestTaskResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
@@ -18,8 +18,8 @@ public record SavedPostRequestTaskResponse(
 	Long saveCount,
 	Long viewCount
 ) {
-	public static SavedPostRequestTaskResponse from(RequestTask requestTask, Long saveCount) {
-		return new SavedPostRequestTaskResponse(
+	public static PostRequestTaskResponse from(RequestTask requestTask, Long saveCount) {
+		return new PostRequestTaskResponse(
 			requestTask.getId(),
 			requestTask.getPostAuth(),
 			requestTask.getWriter().getProfileImage(),
