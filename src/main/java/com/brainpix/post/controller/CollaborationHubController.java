@@ -17,12 +17,12 @@ import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
 import com.brainpix.post.dto.ApplyCollaborationDto;
-import com.brainpix.post.dto.CollaborationHubApiResponseDto;
 import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
 import com.brainpix.post.service.CollaborationHubInitialMemberService;
+import com.brainpix.post.dto.PostApiResponseDto;
 import com.brainpix.post.service.CollaborationHubService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
@@ -44,11 +44,11 @@ public class CollaborationHubController {
 	@AllUser
 	@Operation(summary = "협업 광장 글 생성", description = "협업 광장 글 내용, 모집 분야와 개최 인원 정보를 포함하여 협업 광장 게시글을 생성합니다.")
 	@PostMapping
-	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@UserId Long userId,
+	public ResponseEntity<ApiResponse<PostApiResponseDto>> createCollaborationHub(@UserId Long userId,
 		@Valid @RequestBody CollaborationHubCreateDto createDto) {
 		Long collaborationId = collaborationHubService.createCollaborationHub(userId, createDto);
 		return ResponseEntity.ok(
-			ApiResponse.success(new CollaborationHubApiResponseDto("collaborationId", collaborationId)));
+			ApiResponse.success(new PostApiResponseDto("collaborationId", collaborationId)));
 	}
 
 	@PostMapping("/{collaborationId}/apply")

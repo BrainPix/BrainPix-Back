@@ -18,9 +18,9 @@ import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
-import com.brainpix.post.dto.IdeaMarketApiResponseDto;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
+import com.brainpix.post.dto.PostApiResponseDto;
 import com.brainpix.post.service.IdeaMarketService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
@@ -43,10 +43,10 @@ public class IdeaMarketController {
 	@AllUser
 	@Operation(summary = "아이디어 마켓 글 생성", description = "아이디어 마켓 게시글을 생성합니다.")
 	@PostMapping
-	public ResponseEntity<ApiResponse<IdeaMarketApiResponseDto>> createIdeaMarket(@UserId Long userId,
+	public ResponseEntity<ApiResponse<PostApiResponseDto>> createIdeaMarket(@UserId Long userId,
 		@Valid @RequestBody IdeaMarketCreateDto createDto) {
 		Long ideaId = ideaMarketService.createIdeaMarket(userId, createDto);
-		return ResponseEntity.ok(ApiResponse.success(new IdeaMarketApiResponseDto("ideaId", ideaId)));
+		return ResponseEntity.ok(ApiResponse.success(new PostApiResponseDto("ideaId", ideaId)));
 	}
 
 	@AllUser

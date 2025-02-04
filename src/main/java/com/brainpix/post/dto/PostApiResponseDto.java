@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestTaskApiResponseDto {
+public class PostApiResponseDto {
 
 	private String message;
-	private Long taskId;
+	private Long postId;
 }
