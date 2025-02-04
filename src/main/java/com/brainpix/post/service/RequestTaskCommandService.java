@@ -3,6 +3,7 @@ package com.brainpix.post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
@@ -36,16 +37,12 @@ public class RequestTaskCommandService {
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
 
 		User writer = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		RequestTask requestTask = createRequestTaskConverter.convertToRequestTask(createDto, writer);
 
-		try {
-			requestTaskRepository.save(requestTask);
-			recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_CREATION_FAILED);
-		}
+		requestTaskRepository.save(requestTask);
+		recruitmentService.createRecruitments(requestTask, createDto.getRecruitments());
 
 		return requestTask.getId();
 	}
@@ -53,7 +50,7 @@ public class RequestTaskCommandService {
 	@Transactional
 	public void updateRequestTask(Long taskId, Long userId, RequestTaskUpdateDto updateDto) {
 		RequestTask requestTask = requestTaskRepository.findById(taskId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		requestTask.validateWriter(userId);
@@ -61,26 +58,18 @@ public class RequestTaskCommandService {
 		// RequestTask 고유 필드 업데이트
 		requestTask.updateRequestTaskFields(updateDto);
 
-		try {
-			requestTaskRepository.save(requestTask);
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_UPDATE_FAILED);
-		}
+		requestTaskRepository.save(requestTask);
 	}
 
 	@Transactional
 	public void deleteRequestTask(Long taskId, Long userId) {
 		RequestTask requestTask = requestTaskRepository.findById(taskId)
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 검증 로직 추가
 		requestTask.validateWriter(userId);
 
-		try {
-			requestTaskRepository.delete(requestTask);
-		} catch (Exception e) {
-			throw new BrainPixException(RequestTaskErrorCode.TASK_DELETE_FAILED);
-		}
+		requestTaskRepository.delete(requestTask);
 	}
 
 	@Transactional

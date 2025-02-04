@@ -21,7 +21,7 @@ public enum CollaborationHubErrorCode implements ErrorCode {
 	RECRUITMENT_ALREADY_FULL(HttpStatus.CONFLICT, "COLLABORATION409", "해당 모집은 마감되었습니다."),
 	RECRUITMENT_ALREADY_APPLY(HttpStatus.CONFLICT, "COLLABORATION409", "이미 지원한 모집입니다."),
 	;
-	
+
 	private final HttpStatus httpStatus;
 	private final String code;
 	private final String message;

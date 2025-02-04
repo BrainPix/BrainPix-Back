@@ -7,11 +7,11 @@ import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.user.entity.User;
 
 @Component
-public class CreateInitialGatheringConverter {
-	public CollectionGathering convertToInitialGathering(User joiner, CollaborationRecruitment recruitment) {
+public class CreateInitialCollectionGatheringConverter {
+	public CollectionGathering convertToInitialCollectionGathering(User joiner, CollaborationRecruitment recruitment) {
 		return CollectionGathering.builder()
 			.joiner(joiner)
-			.accepted(false)
+			.accepted(true)
 			.initialGathering(true)
 			.collaborationRecruitment(recruitment)
 			.build();

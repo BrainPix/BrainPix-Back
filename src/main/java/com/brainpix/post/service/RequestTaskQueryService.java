@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.CommonPageResponse;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.post.converter.GetPopularRequestTaskListDtoConverter;
@@ -63,7 +63,7 @@ public class RequestTaskQueryService {
 
 		// 요청 과제 조회
 		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 작성자 조회
 		User writer = requestTask.getWriter();

@@ -3,6 +3,7 @@ package com.brainpix.post.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +23,10 @@ public class CollaborationHubCreateDto extends PostDto {
 	private String link;
 
 	@NotEmpty(message = "모집 정보는 최소 하나 이상 필요합니다.")
+	@Valid
 	private List<CollaborationRecruitmentDto> recruitments;
 
 	@NotEmpty(message = "개최 인원 정보는 최소 한 명 이상 등록해야 합니다.")
+	@Valid
 	private List<CollaborationHubInitialMemberDto> initialMembers;
 }
