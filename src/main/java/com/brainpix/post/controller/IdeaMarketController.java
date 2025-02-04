@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/ideas")
+@RequestMapping("/idea-markets")
 @RequiredArgsConstructor
 @Slf4j
 public class IdeaMarketController {

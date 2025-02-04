@@ -6,11 +6,14 @@ import java.util.List;
 import com.brainpix.profile.entity.Portfolio;
 import com.brainpix.profile.entity.Profile;
 import com.brainpix.profile.entity.Specialization;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record PortfolioRequest(
 	String title,
 	List<SpecializationRequest> specializations,
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 	YearMonth startDate,
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 	YearMonth endDate,
 	String content,
 	String profileImage
@@ -21,7 +24,7 @@ public record PortfolioRequest(
 	 */
 	public Portfolio toEntity(Profile profile) {
 		List<Specialization> specs = specializations.stream()
-			.map(SpecializationRequest::toDomain)  // ex) Specialization.of(...)
+			.map(SpecializationRequest::toDomain)
 			.toList();
 
 		return Portfolio.create(

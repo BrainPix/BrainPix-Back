@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Profile;
+import com.brainpix.security.authority.BrainpixAuthority;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -55,4 +56,14 @@ public abstract class User extends BaseTimeEntity {
 	public long getProfileId() {
 		return profile.getId();
 	}
+
+
+	public abstract String getUserType();
+
+	public abstract BrainpixAuthority getAuthority();
+ 
+	public void updateProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
 }

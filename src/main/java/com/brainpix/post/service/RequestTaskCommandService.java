@@ -5,10 +5,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
+import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
+import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
 import com.brainpix.post.converter.CreateRequestTaskConverter;
+import com.brainpix.post.dto.ApplyRequestTaskDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.entity.request_task.RequestTask;
+import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
+import com.brainpix.post.repository.RequestTaskRecruitmentRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
@@ -23,6 +29,8 @@ public class RequestTaskCommandService {
 	private final RequestTaskRecruitmentService recruitmentService;
 	private final UserRepository userRepository;
 	private final CreateRequestTaskConverter createRequestTaskConverter;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final RequestTaskRecruitmentRepository requestTaskRecruitmentRepository;
 
 	@Transactional
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
@@ -61,5 +69,53 @@ public class RequestTaskCommandService {
 		requestTask.validateWriter(userId);
 
 		requestTaskRepository.delete(requestTask);
+	}
+
+	@Transactional
+	public ApplyRequestTaskDto.Response applyRequestTask(ApplyRequestTaskDto.Parameter parameter) {
+
+		// 요청 과제 조회
+		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+
+		// 지원 분야 조회
+		RequestTaskRecruitment requestTaskRecruitment = requestTaskRecruitmentRepository.findById(
+				parameter.getRequestRecruitmentId())
+			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND));
+
+		// 지원자가 모두 채워진 경우 예외
+		if (requestTaskRecruitment.getPrice().getOccupiedQuantity() >= requestTaskRecruitment.getPrice()
+			.getTotalQuantity()) {
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_FULL);
+		}
+
+		// 글 작성자가 신청하는 예외는 필터링
+		if (requestTask.getWriter() == user) {
+			throw new BrainPixException(RequestTaskErrorCode.INVALID_RECRUITMENT_OWNER);
+		}
+
+		// 이미 지원한 분야인 경우 예외
+		if (requestTaskPurchasingRepository.existsByBuyerIdAndRequestTaskRecruitmentId(user.getId(),
+			requestTaskRecruitment.getId())) {
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_APPLY);
+		}
+
+		// 요청 과제에 속하는 지원 분야인지 확인
+		if (requestTaskRecruitment.getRequestTask() != requestTask) {
+			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND);
+		}
+
+		// 엔티티 생성
+		RequestTaskPurchasing requestTaskPurchasing = ApplyRequestTaskDtoConverter.toRequestTaskPurchasing(user,
+			requestTaskRecruitment, parameter.getIsOpenProfile(), parameter.getMessage());
+
+		// 지원 신청
+		requestTaskPurchasingRepository.save(requestTaskPurchasing);
+
+		return ApplyRequestTaskDtoConverter.toResponse(requestTaskPurchasing);
 	}
 }

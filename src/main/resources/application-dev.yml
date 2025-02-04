@@ -19,7 +19,17 @@ spring:
   data:
     mongodb:
       uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
+  mail:
+    host: smtp.gmail.com
+    username: example12345@gmail.com
+    password: example12345
 jasypt:
   encryptor:
     password: jasyptKey
     bean: jasyptEncryptor
+
+jwt:
+  secret: ENC(IM7p+pHVt55x2ugo5fWNu03bDw76hiCwRRWk/Os7r3Cvpcbk1lKtLccdbaWmCI+bOTsjepwpIpbHSVorbDTd0t0JfKMuskq75YfF9ehPzjw/4nEkK5Pli/FnDqeiT6fiFSnVvlGrsswp3BVR0YOzwbxMTAz06cGEu+fNqW3DzLBpv3WGIzcMP4BodGohaoct)
+
+springdoc:
+  use-fqn: true

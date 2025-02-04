@@ -17,6 +17,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 	// 협업 횟수 조회 (승낙된 협업)
 	Long countByJoinerIdAndAccepted(Long joinerId, Boolean accepted);
 
+	Long countByJoinerIdAndInitialGathering(Long joinerId, Boolean initialGathering);
 
 	Page<CollectionGathering> findByJoinerAndAcceptedIsFalse(User joiner, Pageable pageable);
 
@@ -29,4 +30,9 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 		"AND cg.initialGathering = true")
 	List<CollectionGathering> findByCollaborationHubId(@Param("collaborationHubId") Long collaborationHubId);
 
+
+	// 이미 지원했던 분야인지 확인
+	boolean existsByJoinerIdAndCollaborationRecruitmentId(Long joinerId, Long collaborationRecruitmentId);
+
 }
+
