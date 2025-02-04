@@ -1,5 +1,7 @@
 package com.brainpix.joining.entity.purchasing;
 
+import com.brainpix.api.code.error.PurchasingErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
@@ -28,17 +30,35 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 	private PaymentDuration paymentDuration;
 
 	private Boolean accepted;
+	
+	private Boolean openProfile;
+	private String message;
 
 	@ManyToOne
 	private RequestTaskRecruitment requestTaskRecruitment;
 
 	@Builder
-	public RequestTaskPurchasing(User buyer, Long price, PaymentDuration paymentDuration, Boolean accepted,
-		RequestTaskRecruitment requestTaskRecruitment) {
+	public RequestTaskPurchasing(Long id, User buyer, Long price, PaymentDuration paymentDuration, Boolean accepted,
+		Boolean openProfile, String message, RequestTaskRecruitment requestTaskRecruitment) {
+		this.id = id;
 		this.buyer = buyer;
 		this.price = price;
 		this.paymentDuration = paymentDuration;
 		this.accepted = accepted;
+		this.openProfile = openProfile;
+		this.message = message;
 		this.requestTaskRecruitment = requestTaskRecruitment;
+	}
+
+	public void validateBuyer(User user) {
+		if (!this.buyer.equals(user)) {
+			throw new BrainPixException(PurchasingErrorCode.NOT_AUTHORIZED);
+		}
+	}
+
+	public void validateRejectedStatus() {
+		if (Boolean.TRUE.equals(this.accepted)) {
+			throw new BrainPixException(PurchasingErrorCode.INVALID_STATUS);
+		}
 	}
 }

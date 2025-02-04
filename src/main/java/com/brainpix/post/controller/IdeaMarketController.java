@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.converter.GetIdeaCommentListDtoConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
-import com.brainpix.post.dto.GetIdeaCommentListDto;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
@@ -31,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/ideas")
+@RequestMapping("/idea-markets")
 @RequiredArgsConstructor
 @Slf4j
 public class IdeaMarketController {
@@ -73,16 +71,6 @@ public class IdeaMarketController {
 	) {
 		GetIdeaDetailDto.Parameter parameter = GetIdeaDetailDtoConverter.toParameter(ideaId);
 		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(parameter);
-		return ResponseEntity.ok(ApiResponse.success(response));
-	}
-
-	@GetMapping("/{ideaId}/comments")
-	public ResponseEntity<ApiResponse<GetIdeaCommentListDto.Response>> getIdeaCommentList(
-		@PathVariable("ideaId") Long ideaId,
-		Pageable pageable
-	) {
-		GetIdeaCommentListDto.Parameter parameter = GetIdeaCommentListDtoConverter.toParameter(ideaId, pageable);
-		GetIdeaCommentListDto.Response response = ideaMarketService.getIdeaCommentList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
