@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.exception.BrainPixException;
@@ -82,7 +83,7 @@ public class IdeaMarketService {
 
 	// 아이디어 메인페이지에서 검색 조건을 적용하여 아이디어 목록을 반환합니다.
 	@Transactional(readOnly = true)
-	public GetIdeaListDto.Response getIdeaList(GetIdeaListDto.Parameter parameter) {
+	public CommonPageResponse<GetIdeaListDto.IdeaDetail> getIdeaList(GetIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
 		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(parameter.getType(),
@@ -129,7 +130,8 @@ public class IdeaMarketService {
 
 	// 저장순으로 아이디어를 조회합니다.
 	@Transactional(readOnly = true)
-	public GetPopularIdeaListDto.Response getPopularIdeaList(GetPopularIdeaListDto.Parameter parameter) {
+	public CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> getPopularIdeaList(
+		GetPopularIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
 		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getType(),

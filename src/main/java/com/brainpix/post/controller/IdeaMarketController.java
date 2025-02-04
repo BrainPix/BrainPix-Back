@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
@@ -66,10 +67,11 @@ public class IdeaMarketController {
 	@AllUser
 	@Operation(summary = "아이디어 전체 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 검색 조건, page, size를 입력받아 전체 조회합니다.")
 	@GetMapping
-	public ResponseEntity<ApiResponse<GetIdeaListDto.Response>> getIdeaList(GetIdeaListDto.Request request,
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetIdeaListDto.IdeaDetail>>> getIdeaList(
+		GetIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
 		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(request, pageable);
-		GetIdeaListDto.Response response = ideaMarketService.getIdeaList(parameter);
+		CommonPageResponse<GetIdeaListDto.IdeaDetail> response = ideaMarketService.getIdeaList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
@@ -89,12 +91,13 @@ public class IdeaMarketController {
 	@AllUser
 	@Operation(summary = "인기 아이디어 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 page, size를 입력받아 인기 아이디어를 조회합니다.")
 	@GetMapping("/popular")
-	public ResponseEntity<ApiResponse<GetPopularIdeaListDto.Response>> getPopularIdeaList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularIdeaListDto.IdeaDetail>>> getPopularIdeaList(
 		GetPopularIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 3) Pageable pageable
 	) {
 		GetPopularIdeaListDto.Parameter parameter = GetPopularIdeaListDtoConverter.toParameter(request, pageable);
-		GetPopularIdeaListDto.Response response = ideaMarketService.getPopularIdeaList(parameter);
+		CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> response = ideaMarketService.getPopularIdeaList(
+			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }
