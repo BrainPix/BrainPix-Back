@@ -12,14 +12,14 @@ public record MyRequestTaskDetailResponse(
 	String title,
 	LocalDateTime deadLine,
 	String thumbnailImage,
-	List<ApplicationStatusResponse> applicationStatus,
-	List<CurrentMemberResponse> currentMembers
+	List<RequestTaskApplicationStatusResponse> applicationStatus,
+	List<RequestTaskCurrentMemberResponse> currentMembers
 
 ) {
 	public static MyRequestTaskDetailResponse from(
 		RequestTask requestTask,
-		List<ApplicationStatusResponse> applicationStatus,
-		List<CurrentMemberResponse> currentMembers
+		List<RequestTaskApplicationStatusResponse> applicationStatus,
+		List<RequestTaskCurrentMemberResponse> currentMembers
 	) {
 		return new MyRequestTaskDetailResponse(
 			requestTask.getId(),

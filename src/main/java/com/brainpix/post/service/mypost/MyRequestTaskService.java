@@ -13,9 +13,9 @@ import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.post.dto.PostRequestTaskResponse;
-import com.brainpix.post.dto.mypostdto.ApplicationStatusResponse;
-import com.brainpix.post.dto.mypostdto.CurrentMemberResponse;
 import com.brainpix.post.dto.mypostdto.MyRequestTaskDetailResponse;
+import com.brainpix.post.dto.mypostdto.RequestTaskApplicationStatusResponse;
+import com.brainpix.post.dto.mypostdto.RequestTaskCurrentMemberResponse;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.post.repository.SavedPostRepository;
@@ -52,14 +52,14 @@ public class MyRequestTaskService {
 		requestTask.validateWriter(userId);
 
 		//  지원 현황 조회
-		List<ApplicationStatusResponse> applicationStatus = requestTaskPurchasingRepository
+		List<RequestTaskApplicationStatusResponse> applicationStatus = requestTaskPurchasingRepository
 			.findByRequestTaskRecruitmentInAndAcceptedIsNull(requestTask.getRecruitments()) // null 값만 가져오기
 			.stream()
-			.map(ApplicationStatusResponse::from)
+			.map(RequestTaskApplicationStatusResponse::from)
 			.collect(Collectors.toList());
 
 		// 현재 승인된 멤버 목록 조회 (역할별 그룹화)
-		List<CurrentMemberResponse> currentMembers = requestTaskPurchasingRepository
+		List<RequestTaskCurrentMemberResponse> currentMembers = requestTaskPurchasingRepository
 			.findByRequestTaskRecruitmentInAndAcceptedTrue(requestTask.getRecruitments())
 			.stream()
 			.collect(Collectors.groupingBy(
@@ -69,7 +69,7 @@ public class MyRequestTaskService {
 			))
 			.entrySet()
 			.stream()
-			.map(entry -> CurrentMemberResponse.from(entry.getKey(), entry.getValue()))
+			.map(entry -> RequestTaskCurrentMemberResponse.from(entry.getKey(), entry.getValue()))
 			.collect(Collectors.toList());
 
 		return MyRequestTaskDetailResponse.from(requestTask, applicationStatus, currentMembers);
