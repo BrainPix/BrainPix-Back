@@ -31,7 +31,7 @@ jobs:
 
       # 현재 브랜치 기준 빌드 테스트
       - name: Build jar
-        run: ./gradlew compileJava -x test
+        run: ./gradlew clean compileJava -x test
 
       # develop 브랜치와의 병합 시뮬레이션
       - name: Test mergeability with develop branch
@@ -41,4 +41,4 @@ jobs:
 
       # 병합 시뮬레이션 후 빌드 테스트
       - name: Build jar
-        run: ./gradlew compileJava -x test
+        run: ./gradlew clean compileJava -x test
