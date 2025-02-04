@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +18,14 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.code.error.KakaoPayErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
+import com.brainpix.joining.entity.quantity.PaymentDuration;
+import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.IdeaMarketPurchasingRepository;
 import com.brainpix.kafka.service.AlarmEventService;
+import com.brainpix.kakaopay.converter.KakaoPayApproveDtoConverter;
 import com.brainpix.kakaopay.converter.KakaoPayReadyDtoConverter;
+import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
 import com.brainpix.kakaopay.entity.KakaoPaymentData;
 import com.brainpix.kakaopay.repository.KakaoPaymentDataRepository;
@@ -106,6 +112,68 @@ public class KakaoPayService {
 
 		// 6. 최종 응답
 		return KakaoPayReadyDtoConverter.toResponse(kakaoApiResponse, orderId);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public KakaoPayApproveDto.Response kakaoPayApprove(KakaoPayApproveDto.Parameter parameter) {
+
+		// 1. DB에서 결제 정보 조회
+		KakaoPaymentData kakaoPaymentData = kakaoPaymentDataRepository.findByOrderId(parameter.getOrderId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 2. 엔티티 검색
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(kakaoPaymentData.getIdeaMarket().getId())
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		// 3. API 호출 전 검증 로직
+		if (kakaoPaymentData.getQuantity() > ideaMarket.getPrice().getRemainingQuantity()) {
+			throw new BrainPixException(KakaoPayErrorCode.QUANTITY_INVALID);    // 주문 수량이 재고를 초과한 경우
+		}
+		if (user != kakaoPaymentData.getBuyer()) {
+			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);    // API 호출자와 실 구매자가 일치하지 않는 경우
+		}
+
+		// 4. 파라미터 및 헤더 설정
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("cid", cid);
+		parameters.put("tid", kakaoPaymentData.getTid());
+		parameters.put("partner_order_id", parameter.getOrderId());
+		parameters.put("partner_user_id", String.valueOf(kakaoPaymentData.getBuyer().getId()));
+		parameters.put("pg_token", parameter.getPgToken());
+
+		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(parameters, getRequestHeaders());
+
+		// 5. 최종 승인 API 호출
+		RestTemplate restTemplate = new RestTemplate();
+		String approveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
+		ResponseEntity<KakaoPayApproveDto.KakaoApiResponse> result = restTemplate.postForEntity(approveUrl,
+			requestEntity, KakaoPayApproveDto.KakaoApiResponse.class);
+
+		KakaoPayApproveDto.KakaoApiResponse kakaoApiResponse = Optional.ofNullable(result.getBody())
+			.orElseThrow(() -> new BrainPixException(KakaoPayErrorCode.API_RESPONSE_ERROR));
+
+		log.info("카카오페이 결제 최종 승인 API 성공");
+
+		// 6. 재고 감소 (변경 감지)
+		Price price = ideaMarket.getPrice();
+		price.increaseOccupiedQuantity(kakaoPaymentData.getQuantity());    // 차지된 수량을 증가
+
+		// 7. 결제 내역 생성 및 결제 정보 삭제
+		IdeaMarketPurchasing ideaMarketPurchasing = KakaoPayApproveDtoConverter.toIdeaMarketPurchasing(
+			kakaoApiResponse,
+			user,
+			ideaMarket, PaymentDuration.ONCE);
+
+		ideaMarketPurchasingRepository.save(ideaMarketPurchasing);
+		kakaoPaymentDataRepository.delete(kakaoPaymentData);
+
+		// 8. 판매자에게 알람 생성
+		alarmEventService.publishIdeaSold(ideaMarket.getWriter().getId(), ideaMarket.getWriter().getName());
+
+		// 9. 최종 응답
+		return KakaoPayApproveDtoConverter.toResponse(ideaMarketPurchasing);
 	}
 
 	private HttpHeaders getRequestHeaders() {

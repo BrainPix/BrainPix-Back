@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.kakaopay.converter.KakaoPayApproveDtoConverter;
 import com.brainpix.kakaopay.converter.KakaoPayReadyDtoConverter;
+import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
 import com.brainpix.kakaopay.service.KakaoPayService;
 
@@ -30,6 +32,16 @@ public class KakaoPayController {
 		log.info("카카오페이 결제 준비 API 호출");
 		KakaoPayReadyDto.Parameter parameter = KakaoPayReadyDtoConverter.toParameter(userId, request);
 		KakaoPayReadyDto.Response response = kakaoPayService.kakaoPayReady(parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
+
+	@PostMapping("/approve")
+	public ResponseEntity<ApiResponse<KakaoPayApproveDto.Response>> kakaoPayApprove(
+		@RequestParam("userId") Long userId,
+		@RequestBody KakaoPayApproveDto.Request request) {
+		log.info("카카오페이 결제 최종 승인 API 호출");
+		KakaoPayApproveDto.Parameter parameter = KakaoPayApproveDtoConverter.toParameter(userId, request);
+		KakaoPayApproveDto.Response response = kakaoPayService.kakaoPayApprove(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }

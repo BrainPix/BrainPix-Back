@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
 import com.brainpix.kakaopay.repository.NamedLockRepository;
 
@@ -22,6 +23,17 @@ public class KakaoPayFacadeService {
 	@Transactional
 	public KakaoPayReadyDto.Response kakaoPayReady(KakaoPayReadyDto.Parameter parameter) {
 		return kakaoPayService.kakaoPayReady(parameter);
+	}
+
+	@Transactional
+	public KakaoPayApproveDto.Response kakaoPayApprove(KakaoPayApproveDto.Parameter parameter) {
+		String lockName = "LOCK_KAKAO_PAY_APPROVE";
+		try {
+			acquireLock(lockName);
+			return kakaoPayService.kakaoPayApprove(parameter);
+		} finally {
+			releaseLock(lockName);
+		}
 	}
 
 	private void acquireLock(String lockName) {
