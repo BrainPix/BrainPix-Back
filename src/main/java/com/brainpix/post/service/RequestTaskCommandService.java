@@ -3,6 +3,8 @@ package com.brainpix.post.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CollectionErrorCode;
+import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
@@ -76,37 +78,37 @@ public class RequestTaskCommandService {
 
 		// 요청 과제 조회
 		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 유저 조회
 		User user = userRepository.findById(parameter.getUserId())
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 지원 분야 조회
 		RequestTaskRecruitment requestTaskRecruitment = requestTaskRecruitmentRepository.findById(
 				parameter.getRequestRecruitmentId())
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CollectionErrorCode.COLLECTION_NOT_FOUND));
 
 		// 지원자가 모두 채워진 경우 예외
 		if (requestTaskRecruitment.getPrice().getOccupiedQuantity() >= requestTaskRecruitment.getPrice()
 			.getTotalQuantity()) {
-			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_FULL);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_ALREADY_FULL);
 		}
 
 		// 글 작성자가 신청하는 예외는 필터링
 		if (requestTask.getWriter() == user) {
-			throw new BrainPixException(RequestTaskErrorCode.INVALID_RECRUITMENT_OWNER);
+			throw new BrainPixException(PostErrorCode.FORBIDDEN_ACCESS);
 		}
 
 		// 이미 지원한 분야인 경우 예외
 		if (requestTaskPurchasingRepository.existsByBuyerIdAndRequestTaskRecruitmentId(user.getId(),
 			requestTaskRecruitment.getId())) {
-			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_ALREADY_APPLY);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_ALREADY_APPLY);
 		}
 
 		// 요청 과제에 속하는 지원 분야인지 확인
 		if (requestTaskRecruitment.getRequestTask() != requestTask) {
-			throw new BrainPixException(RequestTaskErrorCode.RECRUITMENT_NOT_FOUND);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_NOT_FOUND);
 		}
 
 		// 엔티티 생성
