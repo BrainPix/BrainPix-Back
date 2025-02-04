@@ -29,7 +29,6 @@ public class RequestTask extends Post {
 	@Enumerated(EnumType.STRING)
 	private RequestTaskType requestTaskType;
 
-
 	@OneToMany(mappedBy = "requestTask", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RequestTaskRecruitment> recruitments = new ArrayList<>();
 
@@ -53,6 +52,4 @@ public class RequestTask extends Post {
 		this.deadline = updateDto.getDeadline();
 		this.requestTaskType = updateDto.getRequestTaskType();
 	}
-
-
 }
