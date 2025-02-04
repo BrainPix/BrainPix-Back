@@ -30,7 +30,7 @@ public class MessageController {
 	private final MessageService messageService;
 
 	@GetMapping
-	public ResponseEntity<?> getMessageList(@RequestParam String status, Pageable pageable, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<GetMessageListDto.Response>> getMessageList(@RequestParam String status, Pageable pageable, @RequestParam Long userId) {
 
 		GetMessageListDto.Parameter parameter = GetMessageListConverter.toParameter(userId, status, pageable);
 
@@ -40,7 +40,7 @@ public class MessageController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> sendMessage(@RequestParam Long userId, @RequestBody SendMessageDto.Request request) {
+	public ResponseEntity<ApiResponse<SendMessageDto.Response>> sendMessage(@RequestParam Long userId, @RequestBody SendMessageDto.Request request) {
 
 		SendMessageDto.Parameter parameter = SendMessageConverter.toParameter(request, userId);
 
@@ -50,7 +50,7 @@ public class MessageController {
 	}
 
 	@PatchMapping("/{messageId}")
-	public ResponseEntity<?> readMessage(@PathVariable String messageId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<Void>> readMessage(@PathVariable String messageId, @RequestParam Long userId) {
 
 		messageService.readMessage(messageId, userId);
 
@@ -58,7 +58,7 @@ public class MessageController {
 	}
 
 	@GetMapping("/{messageId}")
-	public ResponseEntity<?> getMessage(@PathVariable String messageId, @RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<GetMessageDto.Response>> getMessage(@PathVariable String messageId, @RequestParam Long userId) {
 
 		GetMessageDto.Response data = messageService.getMessage(messageId, userId);
 
@@ -66,7 +66,7 @@ public class MessageController {
 	}
 
 	@GetMapping("/count")
-	public ResponseEntity<?> getMessageCount(@RequestParam Long userId) {
+	public ResponseEntity<ApiResponse<GetMessageCountDto.Response>> getMessageCount(@RequestParam Long userId) {
 
 		GetMessageCountDto.Response data = messageService.getMessageCount(userId);
 
