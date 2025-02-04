@@ -16,8 +16,6 @@ public class GetPopularIdeaListDto {
 	@Setter
 	public static class Request {
 		private String type;    // 아이디어 타입 (IDEA_SOLUTION, MARKET_PLACE)
-		private Integer page;        // 페이지 수
-		private Integer size;        // 조회 개수
 	}
 
 	@Builder

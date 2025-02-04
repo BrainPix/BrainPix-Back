@@ -62,10 +62,10 @@ public class IdeaMarketController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@Operation(summary = "아이디어 전체 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 검색 조건, page, size를 입력받아 전체 조회합니다.")
-	@GetMapping
+	@Operation(summary = "아이디어 전체 조회 [POST]", description = "json body로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 검색 조건을 입력 받습니다.<br>페이징을 위한 page, size는 쿼리 파라미터로 입력받아 전체 조회합니다.")
+	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetIdeaListDto.IdeaDetail>>> getIdeaList(
-		GetIdeaListDto.Request request,
+		@RequestBody GetIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
 		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(request, pageable);
 		CommonPageResponse<GetIdeaListDto.IdeaDetail> response = ideaMarketService.getIdeaList(parameter);
@@ -73,7 +73,7 @@ public class IdeaMarketController {
 	}
 
 	@AllUser
-	@Operation(summary = "아이디어 상세 조회", description = "경로 변수로 아이디어 마켓 식별자 ID를 입력받아 상세 조회합니다.")
+	@Operation(summary = "아이디어 상세 조회 [GET]", description = "경로 변수로 아이디어 마켓 식별자 ID를 입력받아 상세 조회합니다.")
 	@GetMapping("/{ideaId}")
 	public ResponseEntity<ApiResponse<GetIdeaDetailDto.Response>> getIdeaDetail(
 		@UserId Long userId,
@@ -83,9 +83,9 @@ public class IdeaMarketController {
 		GetIdeaDetailDto.Response response = ideaMarketService.getIdeaDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
-	
-	@Operation(summary = "인기 아이디어 조회", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 page, size를 입력받아 인기 아이디어를 조회합니다.")
-	@GetMapping("/popular")
+
+	@Operation(summary = "인기 아이디어 조회 [GET]", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 페이징을 위한 page, size를 입력받아 인기 아이디어를 조회합니다.")
+	@GetMapping("/search/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularIdeaListDto.IdeaDetail>>> getPopularIdeaList(
 		GetPopularIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 3) Pageable pageable
