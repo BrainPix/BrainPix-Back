@@ -3,10 +3,6 @@ package com.brainpix.post.dto;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.brainpix.post.entity.PostAuth;
-import com.brainpix.post.entity.idea_market.IdeaMarketType;
-import com.brainpix.profile.entity.Specialization;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +11,8 @@ public class GetIdeaDetailDto {
 	@Builder
 	@Getter
 	public static class Parameter {
-		private Long ideaId;	// 아이디어 ID
+		private Long ideaId;    // 아이디어 ID
+		private Long userId;    // 유저 ID
 	}
 
 	@Builder

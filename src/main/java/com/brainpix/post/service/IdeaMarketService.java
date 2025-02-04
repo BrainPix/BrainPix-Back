@@ -9,6 +9,7 @@ import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateIdeaMarketConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
@@ -19,9 +20,11 @@ import com.brainpix.post.dto.GetIdeaListDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -37,6 +40,7 @@ public class IdeaMarketService {
 	private final UserRepository userRepository;
 	private final PriceService priceService;
 	private final CreateIdeaMarketConverter createIdeaMarketConverter;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
 
 	@Transactional
 	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
@@ -92,9 +96,19 @@ public class IdeaMarketService {
 	@Transactional(readOnly = true)
 	public GetIdeaDetailDto.Response getIdeaDetail(GetIdeaDetailDto.Parameter parameter) {
 
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
+
 		// 아이디어 조회
 		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+
+		// 개인이 기업 게시물을 상세보기 하는 경우 처리
+		if (ideaMarket.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
+			.equals(BrainpixAuthority.INDIVIDUAL)) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
 
 		// 작성자 조회
 		User writer = ideaMarket.getWriter();
@@ -105,8 +119,10 @@ public class IdeaMarketService {
 		// 작성자의 아이디어 개수
 		Long totalIdeas = ideaMarketRepository.countByWriterId(writer.getId());
 
-		// 작성자의 협업 횟수
-		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true);
+		// 작성자의 협업 횟수 (협업 승인수 + 협업 초기 멤버 + 요청 과제 승인수)
+		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true)
+			+ collectionGatheringRepository.countByJoinerIdAndInitialGathering(
+			writer.getId(), true) + requestTaskPurchasingRepository.countByBuyerIdAndAccepted(writer.getId(), true);
 
 		return GetIdeaDetailDtoConverter.toResponse(ideaMarket, writer, saveCount, totalIdeas, totalCollaborations);
 	}
