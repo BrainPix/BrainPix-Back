@@ -24,20 +24,27 @@ import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
 import com.brainpix.post.service.CollaborationHubInitialMemberService;
 import com.brainpix.post.service.CollaborationHubService;
+import com.brainpix.security.authorization.AllUser;
+import com.brainpix.security.authorization.UserId;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/collaborations")
 @RequiredArgsConstructor
+@Tag(name = "CollaborationHub API", description = "협업 광장 관련 API")
 public class CollaborationHubController {
 
 	private final CollaborationHubService collaborationHubService;
 	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
 
+	@AllUser
+	@Operation(summary = "협업 광장 글 생성", description = "협업 광장 글 내용, 모집 분야와 개최 인원 정보를 포함하여 협업 광장 게시글을 생성합니다.")
 	@PostMapping
-	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@RequestParam Long userId,
+	public ResponseEntity<ApiResponse<CollaborationHubApiResponseDto>> createCollaborationHub(@UserId Long userId,
 		@Valid @RequestBody CollaborationHubCreateDto createDto) {
 		Long collaborationId = collaborationHubService.createCollaborationHub(userId, createDto);
 		return ResponseEntity.ok(
@@ -54,9 +61,11 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
+	@AllUser
+	@Operation(summary = "협업 광장 글 수정", description = "협업 광장 게시글 내용을 수정합니다. 모집 분야 및 개최 인원 정보는 수정할 수 없습니다.")
 	@PutMapping("/{collaborationId}")
 	public ResponseEntity<ApiResponse<Void>> updateCollaborationHub(@PathVariable("collaborationId") Long workspaceId,
-		@RequestParam Long userId, @Valid @RequestBody CollaborationHubUpdateDto updateDto) {
+		@UserId Long userId, @Valid @RequestBody CollaborationHubUpdateDto updateDto) {
 		collaborationHubService.updateCollaborationHub(workspaceId, userId, updateDto);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
@@ -70,13 +79,16 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
+	@AllUser
+	@Operation(summary = "협업 광장 글 삭제", description = "협업 광장 게시글을 삭제합니다.")
 	@DeleteMapping("/{collaborationId}")
 	public ResponseEntity<ApiResponse<Void>> deleteCollaborationHub(@PathVariable("collaborationId") Long workspaceId,
-		@RequestParam Long userId) {
+		@UserId Long userId) {
 		collaborationHubService.deleteCollaborationHub(workspaceId, userId);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@Operation(summary = "협업 광장 內 개최 인원 아이디 검증", description = "개최 인원 정보 파트에 아이디 입력 후 포트폴리오 불러오기를 통해 아이디의 존재 여부를 검증합니다.")
 	@GetMapping("/validate/{identifier}")
 	public ResponseEntity<ApiResponse<Void>> validateUserIdentifier(@PathVariable String identifier) {
 		collaborationHubInitialMemberService.validateUserIdentifier(identifier);
