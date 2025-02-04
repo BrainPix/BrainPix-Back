@@ -17,14 +17,13 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/alarm")
-@SecurityRequirement(name = "JWT Token")
+// @SecurityRequirement(name = "JWT Token")
 @Tag(name = "Alarm", description = "알림 관련 API")
 public class AlarmController {
 
