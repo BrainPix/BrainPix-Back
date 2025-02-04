@@ -81,6 +81,8 @@ public class MyRequestTaskService {
 		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
+		purchasing.getRequestTaskRecruitment().getRequestTask().validateWriter(userId);
+
 		// 이미 승인된 경우 예외 처리
 		if (Boolean.TRUE.equals(purchasing.getAccepted())) {
 			throw new BrainPixException(CommonErrorCode.METHOD_NOT_ALLOWED);
@@ -94,6 +96,8 @@ public class MyRequestTaskService {
 	public void rejectApplication(Long userId, Long purchasingId) {
 		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		purchasing.getRequestTaskRecruitment().getRequestTask().validateWriter(userId);
 
 		purchasing.reject();
 	}
