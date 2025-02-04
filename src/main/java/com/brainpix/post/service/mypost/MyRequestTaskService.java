@@ -64,7 +64,8 @@ public class MyRequestTaskService {
 			.stream()
 			.collect(Collectors.groupingBy(
 				purchasing -> purchasing.getRequestTaskRecruitment().getDomain(), //역할별 그룹화
-				Collectors.mapping(purchasing -> purchasing.getBuyer().getId(), Collectors.toList()) // 승인된 멤버 ID 리스트
+				Collectors.mapping(purchasing -> purchasing.getBuyer().getIdentifier(), Collectors.toList())
+				// 승인된 멤버 ID 리스트
 			))
 			.entrySet()
 			.stream()
