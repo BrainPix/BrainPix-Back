@@ -11,6 +11,11 @@ jobs:
   pr_build:
     runs-on: ubuntu-latest
     steps:
+      - name: Set Git identity
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI Runner"
+
       # PR 브랜치 체크아웃
       - name: Checkout PR branch
         uses: actions/checkout@v4
