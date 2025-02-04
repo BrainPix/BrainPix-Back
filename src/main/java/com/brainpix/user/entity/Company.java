@@ -16,6 +16,11 @@ import lombok.NoArgsConstructor;
 public class Company extends User {
 	private String position;
 
+	@Override
+	public String getUserType() {
+		return "기업";
+	}
+
 	@Builder
 	public Company(String identifier, String password, String name, String nickName, LocalDate birthday,
 		String email, String profileImage, Profile profile, String position) {

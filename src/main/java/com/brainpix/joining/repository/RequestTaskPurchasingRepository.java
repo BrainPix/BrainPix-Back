@@ -1,5 +1,6 @@
 package com.brainpix.joining.repository;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,7 @@ public interface RequestTaskPurchasingRepository
 
 	// 이미 지원했는지 여부 확인
 	boolean existsByBuyerIdAndRequestTaskRecruitmentId(Long buyerId, Long requestTaskRecruitmentId);
+  
+  Long countByBuyerIdAndAccepted(Long joinerId, Boolean accepted);
+
 }

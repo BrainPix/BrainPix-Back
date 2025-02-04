@@ -57,9 +57,13 @@ public abstract class User extends BaseTimeEntity {
 		return profile.getId();
 	}
 
+
+	public abstract String getUserType();
+
 	public abstract BrainpixAuthority getAuthority();
  
 	public void updateProfileImage(String profileImage) {
 		this.profileImage = profileImage;
 	}
+
 }

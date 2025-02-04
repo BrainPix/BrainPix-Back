@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Individual extends User {
 
+	@Override
+	public String getUserType() {
+		return "개인";
+	}
+
 	@Builder
 	public Individual(String identifier, String password, String name, String nickName, LocalDate birthday,
 		String email,
