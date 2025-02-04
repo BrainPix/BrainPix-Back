@@ -16,17 +16,22 @@ import com.brainpix.alarm.dto.GetUnreadAlarmDto;
 import com.brainpix.alarm.service.AlarmService;
 import com.brainpix.api.ApiResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/alarm")
+@SecurityRequirement(name = "JWT Token")
+@Tag(name = "Alarm", description = "알림 관련 API")
 public class AlarmController {
 
 	private final AlarmService alarmService;
 
-	// 알림 읽음 처리 API
 	@PatchMapping("/read/{alarmId}")
+	@Operation(summary = "알림 읽음 처리 API", description = "알림을 읽음 처리합니다.")
 	public ResponseEntity<ApiResponse<Void>> readAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.readAlarm(alarmId, userId);
@@ -34,9 +39,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	// 일반 알림 조회 API
-	// 시큐리티 적용 전까지 임시로 userId를 RequestParam 으로 받아서 사용
 	@GetMapping
+	@Operation(summary = "알림 다건 조회 API", description = "여러건의 알림을 조회합니다.")
 	public ResponseEntity<ApiResponse<GetAlarmDto.Response>> getAlarmList(Pageable pageable, @RequestParam Long userId) {
 
 		GetAlarmDto.Response data = alarmService.getAlarm(pageable, userId);
@@ -44,9 +48,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.success(data));
 	}
 
-	// 휴지통 알림 조회 API
-	// 시큐리티 적용 전까지 임시로 userId를 RequestParam 으로 받아서 사용
 	@GetMapping("/trash")
+	@Operation(summary = "휴지통 알림 조회 API", description = "휴지통에 있는 알림들을 조회합니다.")
 	public ResponseEntity<ApiResponse<GetAlarmDto.Response>> getTrashAlarmList(Pageable pageable, @RequestPart Long userId) {
 
 		GetAlarmDto.Response data = alarmService.getTrashAlarm(pageable, userId);
@@ -54,8 +57,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.success(data));
 	}
 
-	// 알림 수 조회 API
 	@GetMapping("/count")
+	@Operation(summary = "알림 개수 조회 API", description = "알림 개수를 조회합니다.")
 	public ResponseEntity<ApiResponse<GetUnreadAlarmDto.Response>> getUnreadAlarmCount(@RequestParam Long userId) {
 
 		GetUnreadAlarmDto.Response data = alarmService.getUnreadAlarmCount(userId);
@@ -63,8 +66,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.success(data));
 	}
 
-	// 알림 휴지통으로 보내기 API
 	@PatchMapping("/trash/{alarmId}")
+	@Operation(summary = "알림 휴지통으로 보내기 API", description = "알림 하나를 휴지통으로 보냅니다.")
 	public ResponseEntity<ApiResponse<Void>> addTrashAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.addTrashAlarm(alarmId, userId);
@@ -72,8 +75,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	// 알림 휴지통에서 복구 API
 	@PatchMapping("/restore/{alarmId}")
+	@Operation(summary = "휴지통에서 알림 복구 API", description = "휴지통에서 알림을 복구합니다.")
 	public ResponseEntity<ApiResponse<Void>> restoreAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.restoreAlarm(alarmId, userId);
@@ -81,8 +84,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	// 알림 삭제 API
 	@DeleteMapping("/delete/{alarmId}")
+	@Operation(summary = "휴지통에서 알림 하나 삭제 API", description = "휴지통에 있는 알림 하나를 삭제합니다.")
 	public ResponseEntity<ApiResponse<Void>> deleteAlarm(@PathVariable String alarmId, @RequestParam Long userId) {
 
 		alarmService.deleteOneAlarm(alarmId, userId);
@@ -90,8 +93,8 @@ public class AlarmController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	// 알림 전체 삭제 API
 	@DeleteMapping("/delete")
+	@Operation(summary = "휴지통에서 알림 전체 삭제 API", description = "휴지통에 있는 알림 전체를 삭제합니다.")
 	public ResponseEntity<ApiResponse<Void>> deleteAllAlarm(@RequestParam Long userId) {
 
 		alarmService.deleteAllAlarm(userId);
