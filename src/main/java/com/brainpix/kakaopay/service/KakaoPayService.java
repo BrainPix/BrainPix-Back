@@ -87,9 +87,9 @@ public class KakaoPayService {
 		parameters.put("total_amount", String.valueOf(parameter.getTotalPrice()));    // 상품 총액
 		parameters.put("tax_free_amount", "0");    // 비과세 금액
 		parameters.put("vat_amount", String.valueOf(parameter.getVat()));    // vat 금액
-		parameters.put("approval_url", "http://localhost:3000/approve?orderId=" + orderId);    // 결제 요청 성공 시 URL
-		parameters.put("cancel_url", "http://localhost:3000/cancel");    // 결제 취소 시 URL
-		parameters.put("fail_url", "http://localhost:3000/fail");    // 결제 실패 시 URL
+		parameters.put("approval_url", "https://www.brainpix.net/approve?orderId=" + orderId);    // 결제 요청 성공 시 URL
+		parameters.put("cancel_url", "https://www.brainpix.net/cancel");    // 결제 취소 시 URL
+		parameters.put("fail_url", "https://www.brainpix.net/fail");    // 결제 실패 시 URL
 
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(parameters, getRequestHeaders());
 
