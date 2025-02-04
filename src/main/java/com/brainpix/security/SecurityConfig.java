@@ -42,8 +42,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.addAllowedOrigin("http://localhost:5173");
-		configuration.addAllowedOrigin("https://www.brainpix.net");
+		configuration.addAllowedOriginPattern("*");
 
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
@@ -51,9 +50,7 @@ public class SecurityConfig {
 		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/swagger-ui.html", configuration);
-		source.registerCorsConfiguration("/swagger-ui/**", configuration);
-		source.registerCorsConfiguration("/v3/api-docs/**", configuration);
+		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
 }
