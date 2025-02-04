@@ -31,7 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		String jwt = request.getHeader("Authorization");
 		if (jwt == null) {
-			BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null, List.of(BrainpixAuthority.ANONYMOUS))
+			BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null,
+				List.of(BrainpixAuthority.ANONYMOUS));
 			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			filterChain.doFilter(request, response);
 		} else {
@@ -46,7 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			 * Jwt 토큰의 서명이 없는 경우
 			 *  JWT 토큰이 만료된 경우
 			 */ catch (SignatureException | UnsupportedJwtException | MalformedJwtException | ExpiredJwtException e) {
-				BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null, List.of(BrainpixAuthority.ANONYMOUS))
+				BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null,
+					List.of(BrainpixAuthority.ANONYMOUS));
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 				filterChain.doFilter(request, response);
 			}
