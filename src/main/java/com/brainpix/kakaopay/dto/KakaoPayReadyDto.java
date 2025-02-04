@@ -43,7 +43,6 @@ public class KakaoPayReadyDto {
 	@Getter
 	@Builder
 	public static class Response {
-		private String tid;
 		private String nextRedirectPcUrl;
 		private String orderId;    // 최종 승인(approve)때, 세션에서 결제 정보를 가져오는데 Key로 사용하기 위함
 	}

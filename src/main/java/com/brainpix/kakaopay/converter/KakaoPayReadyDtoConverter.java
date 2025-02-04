@@ -23,7 +23,6 @@ public class KakaoPayReadyDtoConverter {
 		String orderId) {
 
 		return KakaoPayReadyDto.Response.builder()
-			.tid(kakaoApiResponse.getTid())
 			.nextRedirectPcUrl(kakaoApiResponse.getNext_redirect_pc_url())
 			.orderId(orderId)
 			.build();
