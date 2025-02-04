@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.post.dto.PostApiResponseDto;
 import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
 import com.brainpix.post.dto.ApplyRequestTaskDto;
-import com.brainpix.post.dto.RequestTaskApiResponseDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.service.RequestTaskCommandService;
@@ -29,10 +29,10 @@ public class RequestTaskCommandController {
 	private final RequestTaskCommandService requestTaskCommandService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<RequestTaskApiResponseDto>> createRequestTask(@RequestParam Long userId,
+	public ResponseEntity<ApiResponse<PostApiResponseDto>> createRequestTask(@RequestParam Long userId,
 		@Valid @RequestBody RequestTaskCreateDto createDto) {
 		Long taskId = requestTaskCommandService.createRequestTask(userId, createDto); // 컨버터행
-		return ResponseEntity.ok(ApiResponse.success(new RequestTaskApiResponseDto("taskId", taskId)));
+		return ResponseEntity.ok(ApiResponse.success(new PostApiResponseDto("taskId", taskId)));
 	}
 
 	@PutMapping("/{taskId}")

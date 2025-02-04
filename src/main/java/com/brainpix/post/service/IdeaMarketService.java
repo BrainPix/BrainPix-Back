@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
-import com.brainpix.api.code.error.IdeaMarketErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
@@ -42,7 +42,7 @@ public class IdeaMarketService {
 	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
 
 		User writer = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
 
 		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
 
@@ -56,7 +56,7 @@ public class IdeaMarketService {
 	@Transactional
 	public void updateIdeaMarket(Long ideaId, Long userId, IdeaMarketUpdateDto updateDto) {
 		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
-			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		ideaMarket.validateWriter(userId);
 
@@ -69,7 +69,7 @@ public class IdeaMarketService {
 	@Transactional
 	public void deleteIdeaMarket(Long ideaId, Long userId) {
 		IdeaMarket ideaMarket = ideaMarketRepository.findById(ideaId)
-			.orElseThrow(() -> new BrainPixException(IdeaMarketErrorCode.IDEA_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		ideaMarket.validateWriter(userId);
 
