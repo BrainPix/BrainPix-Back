@@ -12,9 +12,10 @@ import com.brainpix.user.entity.User;
 
 public class GetRequestTaskDetailDtoConverter {
 
-	public static GetRequestTaskDetailDto.Parameter toParameter(Long taskId) {
+	public static GetRequestTaskDetailDto.Parameter toParameter(Long taskId, Long userId) {
 		return GetRequestTaskDetailDto.Parameter.builder()
 			.taskId(taskId)
+			.userId(userId)
 			.build();
 	}
 
@@ -49,6 +50,7 @@ public class GetRequestTaskDetailDtoConverter {
 			.writer(writerDto)
 			.attachments(requestTask.getImageList())
 			.recruitments(recruitments)
+			.openMyProfile(requestTask.getOpenMyProfile())
 			.build();
 	}
 
