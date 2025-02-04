@@ -41,6 +41,7 @@ public class GetIdeaDetailDtoConverter {
 			.createdDate(ideaMarket.getCreatedAt().toLocalDate())
 			.writer(writerDto)
 			.attachments(attachments)
+			.openMyProfile(ideaMarket.getOpenMyProfile())
 			.build();
 	}
 

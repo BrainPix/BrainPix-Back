@@ -33,6 +33,7 @@ public class GetIdeaDetailDto {
 		private LocalDate createdDate;         // 아이디어 작성일 (YYYY/MM/DD)
 		private Writer writer;                // 작성자
 		private List<String> attachments; // 첨부 파일 목록
+		private Boolean openMyProfile;    // 프로필 공개 여부
 	}
 
 	@Builder
