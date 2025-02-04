@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/alarm")
-// @SecurityRequirement(name = "JWT Token")
 @Tag(name = "Alarm", description = "알림 관련 API")
 public class AlarmController {
 
