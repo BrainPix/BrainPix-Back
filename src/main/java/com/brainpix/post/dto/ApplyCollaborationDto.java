@@ -4,13 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class ApplyCollaborationDto {
 
 	@NoArgsConstructor
 	@Getter
-	@Setter
 	public static class Request {
 		@NotNull(message = "지원 분야는 필수입니다.")
 		Long collaborationRecruitmentId;    // 지원 분야 식별자
