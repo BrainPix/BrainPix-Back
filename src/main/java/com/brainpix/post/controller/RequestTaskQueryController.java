@@ -18,8 +18,6 @@ import com.brainpix.post.dto.GetRequestTaskDetailDto;
 import com.brainpix.post.dto.GetRequestTaskListDto;
 import com.brainpix.post.service.RequestTaskQueryService;
 import com.brainpix.security.authorization.AllUser;
-import com.brainpix.security.authorization.Company;
-import com.brainpix.security.authorization.Individual;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +41,6 @@ public class RequestTaskQueryController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
-	@AllUser
 	@Operation(summary = "인기 요청 과제 조회", description = "쿼리 파라미터로 요청 과제 타입(OPEN_IDEA, TECH_ZONE)과 page, size를 입력받아 저장순으로 조회합니다.")
 	@GetMapping("/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail>>> getPopularRequestTaskList(
@@ -55,8 +52,7 @@ public class RequestTaskQueryController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
-	@Individual
-	@Company
+	@AllUser
 	@Operation(summary = "요청 과제 상세 조회", description = "경로 변수로 요청과제 식별자 값을 입력받아 상세 조회합니다.")
 	@GetMapping("/{taskId}")
 	public ResponseEntity<ApiResponse<GetRequestTaskDetailDto.Response>> getRequestTaskDetail(
