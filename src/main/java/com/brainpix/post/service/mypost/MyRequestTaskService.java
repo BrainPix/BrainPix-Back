@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.post.dto.PostRequestTaskResponse;
 import com.brainpix.post.dto.mypostdto.ApplicationStatusResponse;
@@ -52,7 +53,7 @@ public class MyRequestTaskService {
 
 		//  지원 현황 조회
 		List<ApplicationStatusResponse> applicationStatus = requestTaskPurchasingRepository
-			.findByRequestTaskRecruitmentIn(requestTask.getRecruitments())
+			.findByRequestTaskRecruitmentInAndAcceptedIsNull(requestTask.getRecruitments()) // null 값만 가져오기
 			.stream()
 			.map(ApplicationStatusResponse::from)
 			.collect(Collectors.toList());
@@ -71,6 +72,29 @@ public class MyRequestTaskService {
 			.collect(Collectors.toList());
 
 		return MyRequestTaskDetailResponse.from(requestTask, applicationStatus, currentMembers);
+	}
+
+	//  지원 수락
+	@Transactional
+	public void acceptApplication(Long userId, Long purchasingId) {
+		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		// 이미 승인된 경우 예외 처리
+		if (Boolean.TRUE.equals(purchasing.getAccepted())) {
+			throw new BrainPixException(CommonErrorCode.METHOD_NOT_ALLOWED);
+		}
+
+		purchasing.approve();
+	}
+
+	//  지원 거절
+	@Transactional
+	public void rejectApplication(Long userId, Long purchasingId) {
+		RequestTaskPurchasing purchasing = requestTaskPurchasingRepository.findById(purchasingId)
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+		purchasing.reject();
 	}
 
 }

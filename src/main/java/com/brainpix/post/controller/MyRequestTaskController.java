@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,4 +45,27 @@ public class MyRequestTaskController {
 		MyRequestTaskDetailResponse response = myRequestTaskService.getRequestTaskDetail(userId, postId);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
+
+	@Operation(summary = "지원 수락", description = "해당 지원을 승인합니다")
+	@AllUser
+	@PostMapping("/application/{purchasingId}/accept")
+	public ResponseEntity<ApiResponse<Void>> acceptApplication(
+		@UserId Long userId,
+		@PathVariable Long purchasingId
+	) {
+		myRequestTaskService.acceptApplication(userId, purchasingId);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
+	@Operation(summary = "지원 거절", description = "해당 지원을 거절합니다")
+	@AllUser
+	@PostMapping("/application/{purchasingId}/reject")
+	public ResponseEntity<ApiResponse<Void>> rejectApplication(
+		@UserId Long userId,
+		@PathVariable Long purchasingId
+	) {
+		myRequestTaskService.rejectApplication(userId, purchasingId);
+		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.brainpix.joining.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,10 @@ public interface RequestTaskPurchasingRepository
 	List<RequestTaskPurchasing> findByRequestTaskRecruitmentInAndAcceptedTrue(
 		List<RequestTaskRecruitment> recruitments);
 
-	List<RequestTaskPurchasing> findByRequestTaskRecruitmentIn(List<RequestTaskRecruitment> recruitments);
+	List<RequestTaskPurchasing> findByRequestTaskRecruitmentInAndAcceptedIsNull(
+		List<RequestTaskRecruitment> recruitments);
 
+	Optional<RequestTaskPurchasing> findById(Long purchasingId);
+
+	void deleteById(Long purchasingId);
 }

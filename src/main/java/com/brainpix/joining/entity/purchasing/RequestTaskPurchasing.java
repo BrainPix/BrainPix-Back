@@ -30,7 +30,7 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 	private PaymentDuration paymentDuration;
 
 	private Boolean accepted;
-	
+
 	private Boolean openProfile;
 	private String message;
 
@@ -60,5 +60,13 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 		if (Boolean.TRUE.equals(this.accepted)) {
 			throw new BrainPixException(PurchasingErrorCode.INVALID_STATUS);
 		}
+	}
+
+	public void approve() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
 	}
 }
