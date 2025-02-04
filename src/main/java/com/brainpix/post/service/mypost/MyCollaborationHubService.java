@@ -1,4 +1,4 @@
-package com.brainpix.post.service;
+package com.brainpix.post.service.mypost;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.post.dto.PostRequestTaskResponse;
-import com.brainpix.post.repository.RequestTaskRepository;
+import com.brainpix.post.dto.PostCollaborationResponse;
+import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
@@ -18,20 +18,21 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MyRequestTaskService {
+public class MyCollaborationHubService {
 
 	private final UserRepository userRepository;
-	private final RequestTaskRepository requestTaskRepository;
+	private final CollaborationHubRepository collaborationHubRepository;
 	private final SavedPostRepository savedPostRepository;
 
-	public Page<PostRequestTaskResponse> findReqeustTaskPosts(long userId, Pageable pageable) {
+	public Page<PostCollaborationResponse> findCollaborationPosts(long userId, Pageable pageable) {
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
-
-		return requestTaskRepository.findByWriter(writer, pageable)
-			.map(requestTask -> {
-				Long saveCount = savedPostRepository.countByPostId(requestTask.getId());
-				return PostRequestTaskResponse.from(requestTask, saveCount);
+		return collaborationHubRepository.findByWriter(writer, pageable)
+			.map(collaborationHub -> {
+				Long saveCount = savedPostRepository.countByPostId(collaborationHub.getId());
+				long totalQuantity = collaborationHub.getTotalQuantity();
+				long occupiedQuantity = collaborationHub.getOccupiedQuantity();
+				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity, occupiedQuantity);
 			});
 	}
 }

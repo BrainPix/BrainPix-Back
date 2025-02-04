@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.PostCollaborationResponse;
-import com.brainpix.post.service.MyCollaborationHubService;
+import com.brainpix.post.service.mypost.MyCollaborationHubService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
