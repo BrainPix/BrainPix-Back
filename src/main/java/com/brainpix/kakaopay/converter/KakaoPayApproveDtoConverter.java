@@ -1,6 +1,7 @@
 package com.brainpix.kakaopay.converter;
 
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
+import com.brainpix.joining.entity.purchasing.Payment;
 import com.brainpix.joining.entity.quantity.PaymentDuration;
 import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
@@ -28,7 +29,7 @@ public class KakaoPayApproveDtoConverter {
 			.price(kakaoApiResponse.getAmount().getTotal())
 			.vat(kakaoApiResponse.getAmount().getVat())
 			.quantity(kakaoApiResponse.getQuantity())
-			.paymentDuration(paymentDuration)
+			.payment(Payment.KAKAO_PAY)
 			.build();
 	}
 
