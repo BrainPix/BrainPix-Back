@@ -1,11 +1,14 @@
 package com.brainpix.security.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.brainpix.security.authenticationToken.AnonymousAuthenticationToken;
 import com.brainpix.security.authenticationToken.BrainpixAuthenticationToken;
+import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.security.tokenManger.TokenManager;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,6 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		String jwt = request.getHeader("Authorization");
 		if (jwt == null) {
+			BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null,
+				List.of(BrainpixAuthority.ANONYMOUS));
+			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			filterChain.doFilter(request, response);
 		} else {
 			jwt = parseJwt(jwt);
@@ -41,6 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			 * Jwt 토큰의 서명이 없는 경우
 			 *  JWT 토큰이 만료된 경우
 			 */ catch (SignatureException | UnsupportedJwtException | MalformedJwtException | ExpiredJwtException e) {
+				BrainpixAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(null, null,
+					List.of(BrainpixAuthority.ANONYMOUS));
+				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 				filterChain.doFilter(request, response);
 			}
 		}
