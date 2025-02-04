@@ -66,10 +66,11 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@Operation(summary = "협업 광장 전체 조회", description = "쿼리 파라미터로 검색 조건, page, size를 입력받아 전체 조회합니다.")
-	@GetMapping
+	@Operation(summary = "협업 광장 전체 조회 [POST]", description = "json body로 검색 조건을 입력받고, 쿼리 파라미터로 페이징을 위한 page, size를 입력받아 전체 조회합니다.")
+	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail>>> getCollaborationHubList(
-		GetCollaborationHubListDto.Request request, @PageableDefault(page = 0, size = 6) Pageable pageable) {
+		@RequestBody GetCollaborationHubListDto.Request request,
+		@PageableDefault(page = 0, size = 6) Pageable pageable) {
 		GetCollaborationHubListDto.Parameter parameter = GetCollaborationHubListDtoConverter.toParameter(request,
 			pageable);
 		CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> response = collaborationHubService.getCollaborationHubList(
@@ -91,7 +92,7 @@ public class CollaborationHubController {
 	}
 
 	@AllUser
-	@Operation(summary = "협업 광장 상세 조회", description = "경로 변수로 협업 게시글 식별자 값을 입력받아 상세 조회합니다.")
+	@Operation(summary = "협업 광장 상세 조회 [GET]", description = "경로 변수로 협업 게시글 식별자 값을 입력받아 상세 조회합니다.")
 	@GetMapping("/{collaborationId}")
 	public ResponseEntity<ApiResponse<GetCollaborationHubDetailDto.Response>> getCollaborationHubDetail(
 		@UserId Long userId,

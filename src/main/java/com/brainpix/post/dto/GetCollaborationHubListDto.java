@@ -8,13 +8,11 @@ import com.brainpix.profile.entity.Specialization;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class GetCollaborationHubListDto {
 
 	@NoArgsConstructor
 	@Getter
-	@Setter
 	public static class Request {
 		private String keyword;        // 검색 키워드
 		private String category;  // 카테고리
