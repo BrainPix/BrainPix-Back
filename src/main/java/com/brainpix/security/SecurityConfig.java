@@ -51,7 +51,9 @@ public class SecurityConfig {
 		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
+		source.registerCorsConfiguration("/swagger-ui.html", configuration);
+		source.registerCorsConfiguration("/swagger-ui/**", configuration);
+		source.registerCorsConfiguration("/v3/api-docs/**", configuration);
 		return source;
 	}
 }
