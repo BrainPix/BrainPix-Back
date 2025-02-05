@@ -49,7 +49,7 @@ public class GetCollaborationHubDetailDtoConverter {
 
 		return GetCollaborationHubDetailDto.Response.builder()
 			.collaborationId(collaborationHub.getId())
-			.thumbnailImageUrl(collaborationHub.getImageList().get(0))
+			.thumbnailImageUrl(collaborationHub.getImageList() != null ? collaborationHub.getImageList().get(0) : null)
 			.category(collaborationHub.getSpecialization().toString())
 			.auth(collaborationHub.getPostAuth().toString())
 			.title(collaborationHub.getTitle())
@@ -68,12 +68,14 @@ public class GetCollaborationHubDetailDtoConverter {
 	}
 
 	public static GetCollaborationHubDetailDto.Writer toWriter(User writer, Long totalIdeas, Long totalCollaborations) {
+
 		return GetCollaborationHubDetailDto.Writer.builder()
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList().get(0).toString())
+			.specialization(writer.getProfile().getSpecializationList() != null ?
+				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)
 			.build();
