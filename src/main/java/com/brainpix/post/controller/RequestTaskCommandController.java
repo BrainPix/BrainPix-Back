@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
-import com.brainpix.post.dto.PostApiResponseDto;
 import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
 import com.brainpix.post.dto.ApplyRequestTaskDto;
+import com.brainpix.post.dto.PostApiResponseDto;
 import com.brainpix.post.dto.RequestTaskCreateDto;
 import com.brainpix.post.dto.RequestTaskUpdateDto;
 import com.brainpix.post.service.RequestTaskCommandService;
@@ -60,11 +59,13 @@ public class RequestTaskCommandController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@AllUser
+	@Operation(summary = "요청 과제 신청 API", description = "요청 과제에서 특정 모집 분야에 지원하는 API입니다.<br>경로 변수로 요청 과제 식별자를 입력받고, json body로 모집 분야 식별자 값, 프로필 공개 여부, 추가 메시지를 입력받습니다.")
 	@PostMapping("/{taskId}/apply")
 	public ResponseEntity<ApiResponse<ApplyRequestTaskDto.Response>> applyRequestTask(
 		@PathVariable("taskId") Long taskId,
-		@RequestParam("userId") Long userId,
-		@Valid ApplyRequestTaskDto.Request request
+		@UserId Long userId,
+		@Valid @RequestBody ApplyRequestTaskDto.Request request
 	) {
 		ApplyRequestTaskDto.Parameter parameter = ApplyRequestTaskDtoConverter.toParameter(taskId, userId, request);
 		ApplyRequestTaskDto.Response response = requestTaskCommandService.applyRequestTask(parameter);

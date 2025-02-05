@@ -12,6 +12,7 @@ public class GetRequestTaskDetailDto {
 	@Getter
 	public static class Parameter {
 		private Long taskId;    // 요청 과제 ID
+		private Long userId;    // 유저 ID
 	}
 
 	@Builder
@@ -31,6 +32,7 @@ public class GetRequestTaskDetailDto {
 		private Writer writer;          // 작성자
 		private List<String> attachments; // 첨부 파일 목록
 		private List<Recruitment> recruitments;    // 모집 단위
+		private Boolean openMyProfile;    // 내 프로필 공개 여부
 	}
 
 	@Builder

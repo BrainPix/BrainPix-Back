@@ -1,6 +1,7 @@
 package com.brainpix.post.controller;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
@@ -21,8 +23,8 @@ import com.brainpix.post.dto.CollaborationHubCreateDto;
 import com.brainpix.post.dto.CollaborationHubUpdateDto;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
-import com.brainpix.post.service.CollaborationHubInitialMemberService;
 import com.brainpix.post.dto.PostApiResponseDto;
+import com.brainpix.post.service.CollaborationHubInitialMemberService;
 import com.brainpix.post.service.CollaborationHubService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
@@ -51,10 +53,13 @@ public class CollaborationHubController {
 			ApiResponse.success(new PostApiResponseDto("collaborationId", collaborationId)));
 	}
 
+	@AllUser
+	@Operation(summary = "협업 광장 신청 API", description = "경로 변수로 협업 게시글 식별자 값을 입력받고, json body로 지원 분야 식별자, 프로필 공개 여부, 추가 메시지를 입력받습니다.")
 	@PostMapping("/{collaborationId}/apply")
 	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
 		@PathVariable("collaborationId") Long collaborationId,
-		@RequestParam("userId") Long userId, ApplyCollaborationDto.Request request) {
+		@RequestParam("userId") Long userId,
+		@RequestBody ApplyCollaborationDto.Request request) {
 		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
 			request);
 		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);
@@ -70,12 +75,15 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@GetMapping
-	public ResponseEntity<ApiResponse<GetCollaborationHubListDto.Response>> getCollaborationHubList(
-		GetCollaborationHubListDto.Request request, Pageable pageable) {
+	@Operation(summary = "협업 광장 전체 조회 [POST]", description = "json body로 검색 조건을 입력받고, 쿼리 파라미터로 페이징을 위한 page, size를 입력받아 전체 조회합니다.")
+	@PostMapping("/search")
+	public ResponseEntity<ApiResponse<CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail>>> getCollaborationHubList(
+		@RequestBody GetCollaborationHubListDto.Request request,
+		@PageableDefault(page = 0, size = 6) Pageable pageable) {
 		GetCollaborationHubListDto.Parameter parameter = GetCollaborationHubListDtoConverter.toParameter(request,
 			pageable);
-		GetCollaborationHubListDto.Response response = collaborationHubService.getCollaborationHubList(parameter);
+		CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> response = collaborationHubService.getCollaborationHubList(
+			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
@@ -95,11 +103,14 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@AllUser
+	@Operation(summary = "협업 광장 상세 조회 [GET]", description = "경로 변수로 협업 게시글 식별자 값을 입력받아 상세 조회합니다.")
 	@GetMapping("/{collaborationId}")
 	public ResponseEntity<ApiResponse<GetCollaborationHubDetailDto.Response>> getCollaborationHubDetail(
+		@UserId Long userId,
 		@PathVariable("collaborationId") Long collaborationId) {
 		GetCollaborationHubDetailDto.Parameter parameter = GetCollaborationHubDetailDtoConverter.toParameter(
-			collaborationId);
+			collaborationId, userId);
 		GetCollaborationHubDetailDto.Response response = collaborationHubService.getCollaborationHubDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
