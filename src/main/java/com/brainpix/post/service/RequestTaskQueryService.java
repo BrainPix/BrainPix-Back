@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RequestTaskQueryService {
 
 	private final RequestTaskRepository requestTaskRepository;
@@ -42,6 +41,7 @@ public class RequestTaskQueryService {
 	private final PostRepository postRepository;
 
 	// 요청 과제 메인페이지에서 검색 조건을 적용하여 요청 과제 목록을 반환합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail> getRequestTaskList(
 		GetRequestTaskListDto.Parameter parameter) {
 
@@ -55,6 +55,7 @@ public class RequestTaskQueryService {
 	}
 
 	// 저장순으로 요청 과제를 조회합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail> getPopularRequestTaskList(
 		GetPopularRequestTaskListDto.Parameter parameter) {
 
@@ -67,6 +68,7 @@ public class RequestTaskQueryService {
 	}
 
 	// 요청 과제 상세 페이지 내용을 조회합니다.
+	@Transactional
 	public GetRequestTaskDetailDto.Response getRequestTaskDetail(
 		GetRequestTaskDetailDto.Parameter parameter) {
 

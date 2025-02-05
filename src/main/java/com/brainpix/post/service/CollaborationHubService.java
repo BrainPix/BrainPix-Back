@@ -108,7 +108,7 @@ public class CollaborationHubService {
 		return GetCollaborationHubListDtoConverter.toResponse(result);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public GetCollaborationHubDetailDto.Response getCollaborationHubDetail(
 		GetCollaborationHubDetailDto.Parameter parameter) {
 
