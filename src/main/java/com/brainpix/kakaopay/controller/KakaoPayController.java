@@ -11,7 +11,7 @@ import com.brainpix.kakaopay.converter.KakaoPayApproveDtoConverter;
 import com.brainpix.kakaopay.converter.KakaoPayReadyDtoConverter;
 import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
-import com.brainpix.kakaopay.service.KakaoPayService;
+import com.brainpix.kakaopay.service.KakaoPayFacadeService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "카카오페이 아이디어 결제 API", description = "아이디어를 카카오페이로 결제하는 API 입니다.<br>결제 과정 : 결제 준비 API 호출 -> 리다이렉트된 사용자의 결제 진행 -> 결제 승인 API 호출")
 public class KakaoPayController {
 
-	private final KakaoPayService kakaoPayService;
+	private final KakaoPayFacadeService kakaoPayService;
 
 	@AllUser
 	@Operation(summary = "결제 준비 API", description = "아이디어 식별자, 판매자 식별자, 상품 수량, 총 결제금액(vat 포함), vat를 json 본문으로 입력받아 카카오페이 쪽에 결제 정보를 생성합니다.<br>사용자를 결제 화면으로 이동시킬 수 있도록 리다이렉트 url과 주문 번호가 응답값으로 제공됩니다.<br>주문 번호는 이후 승인 단계에서 pgToken과 함께 전달해주시면 됩니다.")
