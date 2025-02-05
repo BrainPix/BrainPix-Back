@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
 import com.brainpix.post.converter.GetCollaborationHubListDtoConverter;
@@ -75,7 +76,12 @@ public class CollaborationHubController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@Operation(summary = "협업 광장 전체 조회 [POST]", description = "json body로 검색 조건을 입력받고, 쿼리 파라미터로 페이징을 위한 page, size를 입력받아 전체 조회합니다.")
+	@SwaggerPageable
+	@Operation(summary = "협업 광장 전체 조회 [POST]", description =
+		"json body로 검색 조건을 입력받고, 쿼리 파라미터로 페이징을 위한 page, size를 입력받아 전체 조회합니다."
+			+ "<br>category : ADVERTISING_PROMOTION, DESIGN, LESSON, MARKETING, DOCUMENT_WRITING, MEDIA_CONTENT,"
+			+ " TRANSLATION_INTERPRETATION, TAX_LAW_LABOR, CUSTOM_PRODUCTION, STARTUP_BUSINESS, FOOD_BEVERAGE, IT_TECH, OTHERS"
+			+ "<br>sortType : NEWEST, OLDEST, POPULAR")
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail>>> getCollaborationHubList(
 		@RequestBody GetCollaborationHubListDto.Request request,
