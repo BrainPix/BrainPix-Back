@@ -1,11 +1,15 @@
 package com.brainpix.post.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brainpix.api.code.error.SavedPostErrorCode;
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.dto.PostCollaborationResponse;
 import com.brainpix.post.dto.PostIdeaMarketResponse;
 import com.brainpix.post.dto.PostRequestTaskResponse;
@@ -33,19 +37,23 @@ public class SavedPostService {
 	@Transactional
 	public void savePost(long userId, long postId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.POST_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
-		validateNotDuplicate(user, post);
+		Optional<SavedPost> savedPost = savedPostRepository.findByUserAndPost(user, post);
 
-		savedPostRepository.save(new SavedPost(user, post));
+		if (savedPost.isPresent()) {
+			savedPostRepository.delete(savedPost.get());    // 이미 존재하면 즐겨찾기 해제
+		} else {
+			savedPostRepository.save(new SavedPost(user, post));    // 없으면 즐겨찾기 등록
+		}
 	}
 
 	public Page<PostRequestTaskResponse> findSavedRequestTasks(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		return savedPostRepository.findSavedRequestTasksByUser(user, pageable)
 			.map(savedPost -> {
@@ -57,7 +65,7 @@ public class SavedPostService {
 
 	public Page<PostIdeaMarketResponse> findSavedIdeaMarkets(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		return savedPostRepository.findSavedIdeaMarketsByUser(user, pageable)
 			.map(savedPost -> {
@@ -69,7 +77,7 @@ public class SavedPostService {
 
 	public Page<PostCollaborationResponse> findSavedCollaborationHubs(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		return savedPostRepository.findSavedCollaborationHubsByUser(user, pageable)
 			.map(savedPost -> {
@@ -83,11 +91,5 @@ public class SavedPostService {
 				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
 					occupiedQuantity);
 			});
-	}
-
-	private void validateNotDuplicate(User user, Post post) {
-		if (savedPostRepository.existsByUserAndPost(user, post)) {
-			throw new IllegalStateException(SavedPostErrorCode.DUPLICATE_SAVED_POST.getMessage());
-		}
 	}
 }
