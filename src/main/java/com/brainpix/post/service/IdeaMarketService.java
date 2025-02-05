@@ -162,6 +162,10 @@ public class IdeaMarketService {
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
 			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
 		}
+		// 글 작성자가 구매하려는 경우 처리
+		if (seller == user) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
 
 		return GetIdeaPurchasePageDtoConverter.toResponse(ideaMarket, seller);
 	}
