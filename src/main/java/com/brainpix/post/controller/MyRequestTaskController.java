@@ -18,10 +18,12 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "나의 요청 과제 조회", description = "내가 작성한 요청과제 조회 API")
 @RequestMapping("/post-management/request-task")
 public class MyRequestTaskController {
 	private final MyRequestTaskService myRequestTaskService;
