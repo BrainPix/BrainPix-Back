@@ -1,10 +1,12 @@
 package com.brainpix.post.controller;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
@@ -69,10 +72,17 @@ public class IdeaMarketController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@Operation(summary = "아이디어 전체 조회 [POST]", description = "json body로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 검색 조건을 입력 받습니다.<br>페이징을 위한 page, size는 쿼리 파라미터로 입력받아 전체 조회합니다.")
+	@SwaggerPageable
+	@Operation(summary = "아이디어 전체 조회 [POST]", description =
+		"json body로 아이디어 마켓 타입과 검색 조건을 입력 받습니다."
+			+ "<br>페이징을 위한 page, size는 쿼리 파라미터로 입력받아 전체 조회합니다."
+			+ "<br>type : IDEA_SOLUTION, MARKET_PLACE"
+			+ "<br>category : ADVERTISING_PROMOTION, DESIGN, LESSON, MARKETING, DOCUMENT_WRITING, MEDIA_CONTENT,"
+			+ " TRANSLATION_INTERPRETATION, TAX_LAW_LABOR, CUSTOM_PRODUCTION, STARTUP_BUSINESS, FOOD_BEVERAGE, IT_TECH, OTHERS"
+			+ "<br>sortType : NEWEST, OLDEST, POPULAR, HIGHEST_PRICE, LOWEST_PRICE")
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetIdeaListDto.IdeaDetail>>> getIdeaList(
-		@RequestBody GetIdeaListDto.Request request,
+		@RequestBody @Valid GetIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
 		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(request, pageable);
 		CommonPageResponse<GetIdeaListDto.IdeaDetail> response = ideaMarketService.getIdeaList(parameter);
@@ -91,10 +101,11 @@ public class IdeaMarketController {
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 
-	@Operation(summary = "인기 아이디어 조회 [GET]", description = "쿼리 파라미터로 아이디어 마켓 타입(IDEA_SOLUTION, MARKET_PLACE)과 페이징을 위한 page, size를 입력받아 인기 아이디어를 조회합니다.")
+	@SwaggerPageable
+	@Operation(summary = "인기 아이디어 조회 [GET]", description = "쿼리 파라미터로 아이디어 마켓 타입과 페이징을 위한 page, size를 입력받아 인기 아이디어를 조회합니다.<br>type : IDEA_SOLUTION, MARKET_PLACE")
 	@GetMapping("/search/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularIdeaListDto.IdeaDetail>>> getPopularIdeaList(
-		GetPopularIdeaListDto.Request request,
+		@ModelAttribute @ParameterObject @Valid GetPopularIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 3) Pageable pageable
 	) {
 		GetPopularIdeaListDto.Parameter parameter = GetPopularIdeaListDtoConverter.toParameter(request, pageable);
