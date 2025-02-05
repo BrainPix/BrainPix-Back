@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.quantity.Price;
