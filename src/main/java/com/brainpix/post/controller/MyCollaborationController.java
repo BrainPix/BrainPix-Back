@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.post.dto.PostCollaborationResponse;
 import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailResponse;
 import com.brainpix.post.service.mypost.MyCollaborationHubService;
@@ -18,11 +19,13 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/post-management/collaboration")
 @RequiredArgsConstructor
+@Tag(name = "나의 협업 광장 조회", description = "내가 작성한 협업 광장 조회 API")
 public class MyCollaborationController {
 
 	private final MyCollaborationHubService myCollaborationHubService;
@@ -30,6 +33,7 @@ public class MyCollaborationController {
 	@Operation(summary = "나의 협업 광장 조회", description = "현재 로그인한 사용자가 본인이 작성한 협업광장 리스트를 조회합니다.")
 	@AllUser
 	@GetMapping
+	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PostCollaborationResponse>>> getSavedIdeaMarkets(
 		@UserId Long userId, Pageable pageable) {
 		Page<PostCollaborationResponse> result = myCollaborationHubService.findCollaborationPosts(userId, pageable);
