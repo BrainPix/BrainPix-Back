@@ -2,6 +2,7 @@ package com.brainpix.profile.dto.request;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 import com.brainpix.profile.entity.Portfolio;
 import com.brainpix.profile.entity.Profile;
@@ -29,7 +30,9 @@ public record PortfolioRequest(
 	 * DTO -> Entity 변환 (생성 시 사용)
 	 */
 	public Portfolio toEntity(Profile profile) {
-		List<Specialization> specs = specializations.stream()
+		List<Specialization> specs = Optional.ofNullable(specializations)
+			.orElse(List.of())
+			.stream()
 			.map(SpecializationRequest::toDomain)
 			.toList();
 
@@ -48,17 +51,19 @@ public record PortfolioRequest(
 	 * 엔티티 수정에 반영할 메서드 (update)
 	 */
 	public void applyTo(Portfolio portfolio) {
-		List<Specialization> specs = specializations.stream()
+		List<Specialization> specs = Optional.ofNullable(specializations)
+			.orElse(List.of())
+			.stream()
 			.map(SpecializationRequest::toDomain)
 			.toList();
 
 		portfolio.update(
-			title,
+			Optional.ofNullable(title).orElse(portfolio.getTitle()),  // null이면 기존 값 유지
 			specs,
-			startDate,
-			endDate,
-			content,
-			profileImage
+			Optional.ofNullable(startDate).orElse(portfolio.getStartDate()),
+			Optional.ofNullable(endDate).orElse(portfolio.getEndDate()),
+			Optional.ofNullable(content).orElse(portfolio.getContent()),
+			Optional.ofNullable(profileImage).orElse(portfolio.getProfileImage())
 		);
 	}
 }
