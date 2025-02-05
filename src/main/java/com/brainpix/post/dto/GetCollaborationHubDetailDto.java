@@ -12,6 +12,7 @@ public class GetCollaborationHubDetailDto {
 	@Getter
 	public static class Parameter {
 		private Long collaborationId;    // 협업 게시글 ID
+		private Long userId;    // 유저 ID
 	}
 
 	@Builder
@@ -32,6 +33,7 @@ public class GetCollaborationHubDetailDto {
 		private List<String> attachments;    // 첨부 파일 목록
 		private List<Recruitment> recruitments;    // 모집 단위
 		private List<OpenMember> openMembers;    // 개최 인원
+		private Boolean openMyProfile;    // 프로필 공개 여부
 	}
 
 	@Builder
@@ -61,6 +63,6 @@ public class GetCollaborationHubDetailDto {
 		private Long userId;    // 유저 식별자 값
 		private String name;    // 유저 이름
 		private String domain;    // 유저 역할
-		private Boolean isOpenPortfolio;    // 포트폴리오 불러오기 여부
+		private Boolean openMyProfile;    // 포트폴리오 불러오기 여부
 	}
 }

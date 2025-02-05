@@ -13,9 +13,10 @@ import com.brainpix.user.entity.User;
 
 public class GetCollaborationHubDetailDtoConverter {
 
-	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId) {
+	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId, Long userId) {
 		return GetCollaborationHubDetailDto.Parameter.builder()
 			.collaborationId(collaborationId)
+			.userId(userId)
 			.build();
 	}
 
@@ -62,6 +63,7 @@ public class GetCollaborationHubDetailDtoConverter {
 			.attachments(collaborationHub.getImageList())
 			.recruitments(recruitments)
 			.openMembers(openMembers)
+			.openMyProfile(collaborationHub.getOpenMyProfile())
 			.build();
 	}
 
@@ -91,7 +93,7 @@ public class GetCollaborationHubDetailDtoConverter {
 			.userId(collectionGathering.getJoiner().getId())
 			.name(collectionGathering.getJoiner().getName())
 			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
-			// .isOpenPortfolio(?)
+			.openMyProfile(collectionGathering.getOpenProfile())
 			.build();
 	}
 }
