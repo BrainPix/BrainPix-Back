@@ -105,4 +105,15 @@ public class JwtTokenManager implements TokenManager {
 			.compact();
 	}
 
+	@Override
+	public String readEmail(String token) {
+
+		JwtParser jwtParser = Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build();
+		Claims claims = jwtParser.parseClaimsJws(token)
+			.getBody();
+
+		return claims.get("email", String.class);
+	}
 }

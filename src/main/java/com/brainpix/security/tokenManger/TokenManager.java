@@ -11,4 +11,5 @@ public interface TokenManager {
 
 	String writeEmailAuthCodeToken(String email, String authCode);
 
+	String readEmail(String token);
 }

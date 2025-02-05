@@ -42,6 +42,9 @@ public class EmailAuthService {
 		mailEventService.sendMailEvent(sendMailDto);
 	}
 
+	/*
+	 * 이메일 인증 코드를 확인하고 토큰을 발급합니다.
+	 */
 	@Transactional
 	public EmailAuthCode.Response checkEmailAuthCode(EmailAuthCode.Request emailAuthCode) {
 		EmailAuth emailAuth = emailAuthRepository.findFirstByEmailOrderByCreatedAtDesc(emailAuthCode.getEmail())
@@ -54,6 +57,15 @@ public class EmailAuthService {
 			return EmailAuthCodeConverter.toResponse(token);
 		} else {
 			throw new BrainPixException(AuthorityErrorCode.EMAIL_AUTH_CODE_NOT_MATCH);
+		}
+	}
+
+	/*
+	 * 이메일과 토큰을 확인합니다.
+	 */
+	public void checkEmailToken(String email, String jwt) {
+		if (!email.equals(tokenManager.readEmail(jwt))) {
+			throw new BrainPixException(AuthorityErrorCode.EMAIL_NOT_MATCHED);
 		}
 	}
 

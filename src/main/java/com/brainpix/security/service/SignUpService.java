@@ -17,10 +17,12 @@ public abstract class SignUpService {
 
 	private final UserRepository userRepository;
 	public final PasswordEncoder passwordEncoder;
+	private final EmailAuthService emailAuthService;
 
 	public void signUpUser(SignUpRequest.CommonSignUpRequest commonSignUpRequest) {
 		checkDuplicated(commonSignUpRequest.getId());
 		checkDuplicatedNickName(commonSignUpRequest.myNickname());
+		emailAuthService.checkEmailToken(commonSignUpRequest.getEmail(), commonSignUpRequest.getEmailToken());
 
 		User user = commonSignUpRequest.toEntity(passwordEncoder.encode(commonSignUpRequest.getPassword()));
 		userRepository.save(user);
@@ -29,7 +31,7 @@ public abstract class SignUpService {
 
 	public void checkDuplicated(String identifier) {
 		if (userRepository.findByIdentifier(identifier).isPresent()) {
-			throw new BrainPixException(SecurityErrorCode.NICKNAME_DUPLICATED);
+			throw new BrainPixException(SecurityErrorCode.IDENTIFIER_DUPLICATED);
 		}
 	}
 
