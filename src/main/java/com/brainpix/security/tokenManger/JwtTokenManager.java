@@ -38,7 +38,7 @@ public class JwtTokenManager implements TokenManager {
 	}
 
 	@Override
-	public BrainpixAuthenticationToken readToken(String token) throws
+	public BrainpixAuthenticationToken readAuthenticationToken(String token) throws
 		SignatureException, UnsupportedJwtException, MalformedJwtException, ExpiredJwtException {
 
 		JwtParser jwtParser = Jwts.parserBuilder()
@@ -71,7 +71,7 @@ public class JwtTokenManager implements TokenManager {
 	}
 
 	@Override
-	public String writeToken(Authentication authentication) {
+	public String writeAuthenticationToken(Authentication authentication) {
 		return Jwts.builder()
 			.setHeader(Map.of(
 				"provider", "brainpix",
@@ -87,4 +87,22 @@ public class JwtTokenManager implements TokenManager {
 			.signWith(secretKey)
 			.compact();
 	}
+
+	@Override
+	public String writeEmailAuthCodeToken(String email, String authCode) {
+		return Jwts.builder()
+			.setHeader(Map.of(
+				"provider", "brainpix",
+				"type", "emailAuthCode"
+			))
+			.setClaims(Map.of(
+				"email", email,
+				"authCode", authCode
+			))
+			.setIssuedAt(new Date())
+			.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+			.signWith(secretKey)
+			.compact();
+	}
+
 }

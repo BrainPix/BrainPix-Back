@@ -31,7 +31,7 @@ public class SignInController {
 	public ResponseEntity<ApiResponse<SignInResponse>> singIn(@RequestBody SignInRequest signInRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 			SignInConverter.toAuthenticationToken(signInRequest));
-		String jwt = tokenManager.writeToken(authentication);
+		String jwt = tokenManager.writeAuthenticationToken(authentication);
 		return ResponseEntity.ok(ApiResponse.success(new SignInResponse("Bearer " + jwt)));
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.security.dto.EmailAuthCode;
 import com.brainpix.security.dto.request.SendEmailNumberRequest;
 import com.brainpix.security.service.EmailAuthService;
 
@@ -28,4 +29,11 @@ public class EmailController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
+	@Operation(summary = "인증번호 확인", description = "입력한 인증번호가 맞는지 확인합니다.")
+	@PostMapping("/auth")
+	public ResponseEntity<ApiResponse<EmailAuthCode.Response>> checkAuthCode(
+		@RequestBody EmailAuthCode.Request request) {
+		EmailAuthCode.Response response = emailAuthService.checkEmailAuthCode(request);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
 }

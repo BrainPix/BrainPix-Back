@@ -5,7 +5,10 @@ import org.springframework.security.core.Authentication;
 import com.brainpix.security.authenticationToken.BrainpixAuthenticationToken;
 
 public interface TokenManager {
-	BrainpixAuthenticationToken readToken(String token);
+	BrainpixAuthenticationToken readAuthenticationToken(String token);
 
-	String writeToken(Authentication authentication);
+	String writeAuthenticationToken(Authentication authentication);
+
+	String writeEmailAuthCodeToken(String email, String authCode);
+
 }
