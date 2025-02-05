@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.profile.dto.CreatePortfolioDto;
 import com.brainpix.profile.dto.request.PortfolioRequest;
 import com.brainpix.profile.dto.response.PortfolioDetailResponse;
@@ -80,6 +81,7 @@ public class PortfolioController {
 	@AllUser
 	@Operation(summary = "내 포트폴리오 목록 조회", description = "사용자 ID를 기준으로 포트폴리오 목록을 페이징 처리하여 조회합니다.")
 	@GetMapping
+	@SwaggerPageable
 	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findMyPortfolios(
 		@UserId Long userId,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
