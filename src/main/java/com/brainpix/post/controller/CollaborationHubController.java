@@ -53,10 +53,13 @@ public class CollaborationHubController {
 			ApiResponse.success(new PostApiResponseDto("collaborationId", collaborationId)));
 	}
 
+	@AllUser
+	@Operation(summary = "협업 광장 신청 API", description = "경로 변수로 협업 게시글 식별자 값을 입력받고, json body로 지원 분야 식별자, 프로필 공개 여부, 추가 메시지를 입력받습니다.")
 	@PostMapping("/{collaborationId}/apply")
 	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
 		@PathVariable("collaborationId") Long collaborationId,
-		@RequestParam("userId") Long userId, ApplyCollaborationDto.Request request) {
+		@RequestParam("userId") Long userId,
+		@RequestBody ApplyCollaborationDto.Request request) {
 		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
 			request);
 		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);

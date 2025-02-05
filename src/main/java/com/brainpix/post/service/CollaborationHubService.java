@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.code.error.CollectionErrorCode;
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CollaborationHubErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
@@ -151,36 +152,36 @@ public class CollaborationHubService {
 		// 협업 게시글 조회
 		CollaborationHub collaboration = collaborationHubRepository.findById(parameter.getCollaborationId())
 			.orElseThrow(() -> new BrainPixException(
-				CollaborationHubErrorCode.COLLABORATION_NOT_FOUND));
+				PostErrorCode.POST_NOT_FOUND));
 
 		// 유저 조회
 		User user = userRepository.findById(parameter.getUserId())
-			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 지원 분야 조회
 		CollaborationRecruitment recruitment = collaborationRecruitmentRepository.findById(
 				parameter.getCollaborationRecruitmentId())
-			.orElseThrow(() -> new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CollectionErrorCode.RECRUITMENT_NOT_FOUND));
 
 		// 지원자가 모두 채워진 경우 예외
 		if (recruitment.getGathering().getOccupiedQuantity() >= recruitment.getGathering().getTotalQuantity()) {
-			throw new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_ALREADY_FULL);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_ALREADY_FULL);
 		}
 
 		// 글 작성자가 신청하는 예외는 필터링
 		if (collaboration.getWriter() == user) {
-			throw new BrainPixException(CollaborationHubErrorCode.INVALID_RECRUITMENT_OWNER);
+			throw new BrainPixException(PostErrorCode.FORBIDDEN_ACCESS);
 		}
 
 		// 이미 지원한 분야인 경우 예외
 		if (collectionGatheringRepository.existsByJoinerIdAndCollaborationRecruitmentId(user.getId(),
 			recruitment.getId())) {
-			throw new BrainPixException(CollaborationHubErrorCode.RECRUITMENT_ALREADY_APPLY);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_ALREADY_APPLY);
 		}
 
 		// 협업 게시글에 속하는 지원 분야인지 확인
 		if (recruitment.getParentCollaborationHub() != collaboration) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
+			throw new BrainPixException(CollectionErrorCode.RECRUITMENT_NOT_FOUND);
 		}
 
 		// 엔티티 생성
