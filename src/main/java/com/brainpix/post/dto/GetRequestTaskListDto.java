@@ -9,13 +9,11 @@ import com.brainpix.profile.entity.Specialization;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class GetRequestTaskListDto {
 
 	@NoArgsConstructor
 	@Getter
-	@Setter
 	public static class Request {
 		private String type;    // 요청 과제 타입
 		private String keyword;        // 검색 키워드
