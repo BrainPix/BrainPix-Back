@@ -1,12 +1,9 @@
 package com.brainpix.post.converter;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.dto.GetIdeaListDto;
@@ -25,8 +22,10 @@ public class GetIdeaListDtoConverter {
 
 		try {
 			type = request.getType() != null ? IdeaMarketType.valueOf(request.getType().toUpperCase()) : null;
-			category = request.getCategory() != null ? Specialization.valueOf(request.getCategory().toUpperCase()) : null;
-			sortType = request.getSortType() != null ? SortType.valueOf("IDEA_" + request.getSortType().toUpperCase()) : null;
+			category =
+				request.getCategory() != null ? Specialization.valueOf(request.getCategory().toUpperCase()) : null;
+			sortType =
+				request.getSortType() != null ? SortType.valueOf("IDEA_" + request.getSortType().toUpperCase()) : null;
 		} catch (Exception e) {
 			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
 		}
@@ -41,21 +40,13 @@ public class GetIdeaListDtoConverter {
 			.build();
 	}
 
-	public static GetIdeaListDto.Response toResponse(Page<Object[]> ideaMarkets) {
+	public static CommonPageResponse<GetIdeaListDto.IdeaDetail> toResponse(Page<Object[]> ideaMarkets) {
 
-		List<GetIdeaListDto.IdeaDetail> IdeaDetailList = ideaMarkets.stream()
-			.map(ideaMarket ->
-				toIdeaDetail((IdeaMarket) ideaMarket[0], (Long) ideaMarket[1])
-			).toList();
+		Page<GetIdeaListDto.IdeaDetail> response = ideaMarkets.map(
+			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1])
+		);
 
-		return GetIdeaListDto.Response.builder()
-			.ideaDetailList(IdeaDetailList)
-			.totalPages(ideaMarkets.getTotalPages())
-			.totalElements((int)ideaMarkets.getTotalElements())
-			.currentPage(ideaMarkets.getNumber())
-			.currentSize(ideaMarkets.getNumberOfElements())
-			.hasNext(ideaMarkets.hasNext())
-			.build();
+		return CommonPageResponse.of(response);
 	}
 
 	public static GetIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount) {

@@ -1,21 +1,19 @@
 package com.brainpix.post.converter;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
-import com.brainpix.post.enums.SortType;
-import com.brainpix.profile.entity.Specialization;
 
 public class GetPopularIdeaListDtoConverter {
 
-	public static GetPopularIdeaListDto.Parameter toParameter(GetPopularIdeaListDto.Request request, Pageable pageable) {
+	public static GetPopularIdeaListDto.Parameter toParameter(GetPopularIdeaListDto.Request request,
+		Pageable pageable) {
 		IdeaMarketType type = null;
 
 		try {
@@ -30,21 +28,13 @@ public class GetPopularIdeaListDtoConverter {
 			.build();
 	}
 
-	public static GetPopularIdeaListDto.Response toResponse(Page<Object[]> ideaMarkets) {
+	public static CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> toResponse(Page<Object[]> ideaMarkets) {
 
-		List<GetPopularIdeaListDto.IdeaDetail> ideaDetailList = ideaMarkets.stream()
-			.map(ideaMarket ->
-				toIdeaDetail((IdeaMarket) ideaMarket[0], (Long) ideaMarket[1])
-			).toList();
+		Page<GetPopularIdeaListDto.IdeaDetail> response = ideaMarkets.map(
+			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1])
+		);
 
-		return GetPopularIdeaListDto.Response.builder()
-			.ideaDetailList(ideaDetailList)
-			.totalPages(ideaMarkets.getTotalPages())
-			.totalElements((int)ideaMarkets.getTotalElements())
-			.currentPage(ideaMarkets.getNumber())
-			.currentSize(ideaMarkets.getNumberOfElements())
-			.hasNext(ideaMarkets.hasNext())
-			.build();
+		return CommonPageResponse.of(response);
 	}
 
 	public static GetPopularIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount) {
