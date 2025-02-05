@@ -62,4 +62,12 @@ public class CollectionGathering extends BaseTimeEntity {
 			throw new BrainPixException(CollectionErrorCode.INVALID_STATUS);
 		}
 	}
+
+	public void approve() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
+	}
 }

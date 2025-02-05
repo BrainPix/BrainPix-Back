@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.SavedPostErrorCode;
-import com.brainpix.post.dto.SavedPostCollaborationResponse;
-import com.brainpix.post.dto.SavedPostIdeaMarketResponse;
-import com.brainpix.post.dto.SavedPostRequestTaskResponse;
+import com.brainpix.post.dto.PostCollaborationResponse;
+import com.brainpix.post.dto.PostIdeaMarketResponse;
+import com.brainpix.post.dto.PostRequestTaskResponse;
 import com.brainpix.post.entity.Post;
 import com.brainpix.post.entity.SavedPost;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
@@ -43,7 +43,7 @@ public class SavedPostService {
 		savedPostRepository.save(new SavedPost(user, post));
 	}
 
-	public Page<SavedPostRequestTaskResponse> findSavedRequestTasks(long userId, Pageable pageable) {
+	public Page<PostRequestTaskResponse> findSavedRequestTasks(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
@@ -51,11 +51,11 @@ public class SavedPostService {
 			.map(savedPost -> {
 				RequestTask requestTask = (RequestTask)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(requestTask.getId());
-				return SavedPostRequestTaskResponse.from(requestTask, saveCount);
+				return PostRequestTaskResponse.from(requestTask, saveCount);
 			});
 	}
 
-	public Page<SavedPostIdeaMarketResponse> findSavedIdeaMarkets(long userId, Pageable pageable) {
+	public Page<PostIdeaMarketResponse> findSavedIdeaMarkets(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
@@ -63,11 +63,11 @@ public class SavedPostService {
 			.map(savedPost -> {
 				IdeaMarket ideaMarket = (IdeaMarket)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(ideaMarket.getId());
-				return SavedPostIdeaMarketResponse.from(ideaMarket, saveCount);
+				return PostIdeaMarketResponse.from(ideaMarket, saveCount);
 			});
 	}
 
-	public Page<SavedPostCollaborationResponse> findSavedCollaborationHubs(long userId, Pageable pageable) {
+	public Page<PostCollaborationResponse> findSavedCollaborationHubs(long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException(SavedPostErrorCode.USER_NOT_FOUND.getMessage()));
 
@@ -80,7 +80,7 @@ public class SavedPostService {
 				long totalQuantity = collaborationHub.getTotalQuantity();
 				long occupiedQuantity = collaborationHub.getOccupiedQuantity();
 
-				return SavedPostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
+				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
 					occupiedQuantity);
 			});
 	}

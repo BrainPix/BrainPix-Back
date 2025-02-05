@@ -4,7 +4,7 @@ import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.profile.entity.Specialization;
 
-public record SavedPostIdeaMarketResponse(
+public record PostIdeaMarketResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
@@ -16,8 +16,8 @@ public record SavedPostIdeaMarketResponse(
 	Long saveCount,
 	Long viewCount
 ) {
-	public static SavedPostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount) {
-		return new SavedPostIdeaMarketResponse(
+	public static PostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount) {
+		return new PostIdeaMarketResponse(
 			ideaMarket.getId(),
 			ideaMarket.getPostAuth(),
 			ideaMarket.getWriter().getProfileImage(),
