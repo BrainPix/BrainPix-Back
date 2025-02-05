@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.post.converter.CreateCommentDtoConverter;
 import com.brainpix.post.converter.CreateReplyDtoConverter;
 import com.brainpix.post.converter.DeleteCommentDtoConverter;
@@ -39,6 +40,7 @@ public class CommentController {
 
 	private final CommentService commentService;
 
+	@SwaggerPageable
 	@AllUser
 	@Operation(summary = "댓글 목록 조회 API", description = "경로변수로 postId를 입력받아 해당 게시글의 댓글 목록을 조회합니다.<br>페이징을 위한 page와 size는 쿼리 파라미터로 입력받습니다.")
 	@GetMapping
