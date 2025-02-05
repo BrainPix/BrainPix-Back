@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.kafka.service.AlarmEventService;
 import com.brainpix.post.converter.CreateCommentDtoConverter;
@@ -56,11 +57,11 @@ public class CommentService {
 
 		// 작성자 조회
 		User sender = userRepository.findById(parameter.getSenderId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 게시글 조회
 		Post post = postRepository.findById(parameter.getPostId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 댓글 생성
 		Comment comment = CreateCommentDtoConverter.toComment(sender, post, parameter.getContent());
@@ -83,11 +84,11 @@ public class CommentService {
 
 		// 작성자 조회
 		User sender = userRepository.findById(parameter.getSenderId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 게시글 조회
 		Post post = postRepository.findById(parameter.getPostId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 부모 댓글 조회
 		Comment parentComment = commentRepository.findById(parameter.getCommentId())
@@ -114,7 +115,7 @@ public class CommentService {
 
 		// 작성자 조회
 		User writer = userRepository.findById(parameter.getWriterId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 댓글 조회
 		Comment comment = commentRepository.findById(parameter.getCommentId())
@@ -122,7 +123,7 @@ public class CommentService {
 
 		// 댓글 작성자인지 검증
 		if (comment.getWriter() != writer) {
-			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);
+			throw new BrainPixException(CommonErrorCode.METHOD_NOT_ALLOWED);
 		}
 
 		// 댓글 삭제 (자식은 Cascade.REMOVE)
