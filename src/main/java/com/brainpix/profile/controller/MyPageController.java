@@ -16,10 +16,12 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/my-page")
+@Tag(name = "마이페이지 기본 화면 조회", description = "마이페이지 기본 화면 조회 관련 API")
 @RequiredArgsConstructor
 public class MyPageController {
 
