@@ -15,6 +15,7 @@ import com.brainpix.security.dto.request.SendEmailNumberRequest;
 import com.brainpix.security.tokenManger.TokenManager;
 import com.brainpix.user.entity.EmailAuth;
 import com.brainpix.user.repository.EmailAuthRepository;
+import com.brainpix.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,7 @@ public class EmailAuthService {
 	private final EmailAuthRepository emailAuthRepository;
 	private final MailEventService mailEventService;
 	private final TokenManager tokenManager;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public void sendEmailAuthCode(SendEmailNumberRequest sendEmailNumberRequest) {
@@ -37,7 +39,10 @@ public class EmailAuthService {
 			.email(sendEmailNumberRequest.getEmail())
 			.authCode(sendMailDto.getSignupCode())
 			.build();
-
+		userRepository.findByEmail(sendEmailNumberRequest.getEmail())
+			.ifPresent(user -> {
+				throw new BrainPixException(AuthorityErrorCode.EMAIL_ALREADY_EXIST);
+			});
 		emailAuthRepository.save(emailAuth);
 		mailEventService.sendMailEvent(sendMailDto);
 	}
