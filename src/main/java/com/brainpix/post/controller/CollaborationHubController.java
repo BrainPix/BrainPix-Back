@@ -59,7 +59,7 @@ public class CollaborationHubController {
 	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
 		@PathVariable("collaborationId") Long collaborationId,
 		@RequestParam("userId") Long userId,
-		@RequestBody ApplyCollaborationDto.Request request) {
+		@RequestBody @Valid ApplyCollaborationDto.Request request) {
 		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
 			request);
 		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);
