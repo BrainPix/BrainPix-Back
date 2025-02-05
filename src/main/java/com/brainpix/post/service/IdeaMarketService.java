@@ -25,6 +25,7 @@ import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
@@ -43,6 +44,7 @@ public class IdeaMarketService {
 	private final PriceService priceService;
 	private final CreateIdeaMarketConverter createIdeaMarketConverter;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final PostRepository postRepository;
 
 	@Transactional
 	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
@@ -95,7 +97,7 @@ public class IdeaMarketService {
 	}
 
 	// 아이디어 식별자 값을 입력받아 상세보기에 관한 내용을 반환합니다.
-	@Transactional(readOnly = true)
+	@Transactional
 	public GetIdeaDetailDto.Response getIdeaDetail(GetIdeaDetailDto.Parameter parameter) {
 
 		// 유저 조회
@@ -111,6 +113,9 @@ public class IdeaMarketService {
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
 			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
 		}
+
+		// 조회수 증가
+		postRepository.increaseViewCount(ideaMarket.getId());
 
 		// 작성자 조회
 		User writer = ideaMarket.getWriter();
