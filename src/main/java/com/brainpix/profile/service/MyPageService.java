@@ -11,7 +11,7 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
-import com.brainpix.post.entity.idea_market.IdeaMarket;
+import com.brainpix.post.dto.MyDefaultPageIdeaListDto;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.profile.dto.MyPageResponseDto;
 import com.brainpix.profile.entity.CompanyProfile;
@@ -60,11 +60,11 @@ public class MyPageService {
 			.build();
 	}
 
-	public Page<String> getMyIdeas(Long userId, Pageable pageable) {
+	public Page<MyDefaultPageIdeaListDto> getMyIdeas(Long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 		return ideaMarketRepository.findByWriter(user, pageable)
-			.map(IdeaMarket::getTitle);
+			.map(ideaMarket -> new MyDefaultPageIdeaListDto(ideaMarket.getId(), ideaMarket.getTitle()));
 	}
 
 	private long calculateCollaborationCount(User user) {
