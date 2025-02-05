@@ -16,13 +16,10 @@ import com.brainpix.kakaopay.entity.KakaoPaymentData;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.user.entity.User;
 
-import lombok.RequiredArgsConstructor;
-
 @Component
-@RequiredArgsConstructor
 public class KakaoPayApiClient {
 
-	private final RestTemplate restTemplate;
+	private final RestTemplate restTemplate = new RestTemplate();
 
 	private final String READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
 	private final String APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
