@@ -16,6 +16,7 @@ import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.profile.dto.MyPageResponseDto;
 import com.brainpix.profile.entity.CompanyProfile;
 import com.brainpix.profile.entity.IndividualProfile;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
@@ -31,16 +32,14 @@ public class MyPageService {
 	private final UserRepository userRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
-	private final RequestTaskPurchasingRepository requestTaskPurchasingRepositoryl;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
 
 	public MyPageResponseDto getMyPage(Long userId) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 
 		// 분야 (최대 2개)
-		List<String> specializations = user.getProfile().getSpecializationList().stream()
-			.map(Enum::name)
-			.toList();
+		List<Specialization> specializations = user.getProfile().getSpecializationList().stream().toList();
 
 		// 아이디어 작성 횟수 (아이디어 마켓 게시물 수)
 		long ideaCount = ideaMarketRepository.countByWriterId(user.getId());
@@ -62,7 +61,7 @@ public class MyPageService {
 
 	public Page<MyDefaultPageIdeaListDto> getMyIdeas(Long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 		return ideaMarketRepository.findByWriter(user, pageable)
 			.map(ideaMarket -> new MyDefaultPageIdeaListDto(ideaMarket.getId(), ideaMarket.getTitle()));
 	}
@@ -73,7 +72,7 @@ public class MyPageService {
 		long initialGatherings = collectionGatheringRepository.countByJoinerIdAndInitialGathering(user.getId(), true);
 
 		// RequestTaskRecruitment: 요청 과제에서 승인된 횟수
-		long approvedRequestTasks = requestTaskPurchasingRepositoryl.countByBuyerIdAndAccepted(user.getId(), true);
+		long approvedRequestTasks = requestTaskPurchasingRepository.countByBuyerIdAndAccepted(user.getId(), true);
 
 		return approvedCollaborations + initialGatherings + approvedRequestTasks;
 	}
