@@ -26,6 +26,7 @@ import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,7 +42,7 @@ public class PortfolioController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<CreatePortfolioDto.Response>> createPortfolio(
 		@UserId Long userId,
-		@RequestBody PortfolioRequest request
+		@Valid @RequestBody PortfolioRequest request
 	) {
 		Long portfolioId = portfolioService.createPortfolio(userId, request);
 
@@ -55,7 +56,7 @@ public class PortfolioController {
 	public ResponseEntity<ApiResponse<Void>> updatePortfolio(
 		@UserId Long userId,
 		@PathVariable long portfolioId,
-		@RequestBody PortfolioRequest request
+		@Valid @RequestBody PortfolioRequest request
 	) {
 		try {
 			portfolioService.updatePortfolio(userId, portfolioId, request);
