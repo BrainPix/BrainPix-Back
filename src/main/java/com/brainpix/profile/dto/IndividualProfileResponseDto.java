@@ -3,10 +3,14 @@ package com.brainpix.profile.dto;
 import java.time.YearMonth;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.brainpix.profile.entity.ContactType;
 import com.brainpix.profile.entity.Specialization;
 import com.brainpix.profile.entity.StackProficiency;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -45,7 +49,13 @@ public class IndividualProfileResponseDto {
 	@Builder
 	public static class CareerDto {
 		private String content; // 경력 내용
+		@Schema(type = "string", example = "yyyy-MM")
+		@DateTimeFormat(pattern = "yyyy-MM")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 		private YearMonth startDate; // 시작 날짜
+		@Schema(type = "string", example = "yyyy-MM")
+		@DateTimeFormat(pattern = "yyyy-MM")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 		private YearMonth endDate; // 종료 날짜
 	}
 
