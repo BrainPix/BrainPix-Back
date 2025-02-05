@@ -9,13 +9,15 @@ import com.brainpix.user.entity.User;
 
 public class GetIdeaDetailDtoConverter {
 
-	public static GetIdeaDetailDto.Parameter toParameter(Long ideaId) {
+	public static GetIdeaDetailDto.Parameter toParameter(Long ideaId, Long userId) {
 		return GetIdeaDetailDto.Parameter.builder()
 			.ideaId(ideaId)
+			.userId(userId)
 			.build();
 	}
 
-	public static GetIdeaDetailDto.Response toResponse(IdeaMarket ideaMarket, User writer, Long saveCount, Long totalIdeas, Long totalCollaborations) {
+	public static GetIdeaDetailDto.Response toResponse(IdeaMarket ideaMarket, User writer, Long saveCount,
+		Long totalIdeas, Long totalCollaborations) {
 
 		// 작성자
 		GetIdeaDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
@@ -39,6 +41,7 @@ public class GetIdeaDetailDtoConverter {
 			.createdDate(ideaMarket.getCreatedAt().toLocalDate())
 			.writer(writerDto)
 			.attachments(attachments)
+			.openMyProfile(ideaMarket.getOpenMyProfile())
 			.build();
 	}
 
