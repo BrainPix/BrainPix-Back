@@ -48,7 +48,7 @@ public class GetRequestTaskDetailDtoConverter {
 			.saveCount(saveCount)
 			.createdDate(requestTask.getCreatedAt().toLocalDate())
 			.writer(writerDto)
-			.attachments(requestTask.getImageList())
+			.attachments(requestTask.getAttachmentFileList())
 			.recruitments(recruitments)
 			.openMyProfile(requestTask.getOpenMyProfile())
 			.build();
@@ -60,7 +60,7 @@ public class GetRequestTaskDetailDtoConverter {
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList() != null ?
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
 				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)

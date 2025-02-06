@@ -23,11 +23,11 @@ public class GetIdeaDetailDtoConverter {
 		GetIdeaDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
 
 		// 첨부 파일 URL
-		List<String> attachments = ideaMarket.getImageList();
+		List<String> attachments = ideaMarket.getAttachmentFileList();
 
 		return GetIdeaDetailDto.Response.builder()
 			.ideaId(ideaMarket.getId())
-			.thumbnailImageUrl(ideaMarket.getImageList() != null ? ideaMarket.getImageList().get(0) : null)
+			.thumbnailImageUrl(!ideaMarket.getImageList().isEmpty() ? ideaMarket.getImageList().get(0) : null)
 			.category(ideaMarket.getSpecialization().toString())
 			.ideaMarketType(ideaMarket.getIdeaMarketType().toString())
 			.auth(ideaMarket.getPostAuth().toString())
@@ -51,7 +51,7 @@ public class GetIdeaDetailDtoConverter {
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList() != null ?
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
 				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)
