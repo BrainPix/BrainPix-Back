@@ -9,6 +9,8 @@ import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.profile.entity.Specialization;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public record PostRequestTaskResponse(
 	Long ideaId,
 	PostAuth auth,
@@ -16,6 +18,7 @@ public record PostRequestTaskResponse(
 	String writerName,
 	String thumbnailImageUrl,
 	String title,
+	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	LocalDateTime deadline,

@@ -1,6 +1,5 @@
 package com.brainpix.joining.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.joining.dto.AcceptedCollaborationDto;
 import com.brainpix.joining.dto.RejectedCollaborationDto;
@@ -33,11 +33,12 @@ public class SupportCollaborationController {
 	@AllUser
 	@GetMapping("/rejected")
 	@SwaggerPageable
-	public ResponseEntity<ApiResponse<Page<RejectedCollaborationDto>>> getRejectedList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<RejectedCollaborationDto>>> getRejectedList(
 		@UserId Long userId,
 		Pageable pageable) {
 
-		Page<RejectedCollaborationDto> dtos = supportCollaborationService.getRejectedList(userId, pageable);
+		CommonPageResponse<RejectedCollaborationDto> dtos = supportCollaborationService.getRejectedList(userId,
+			pageable);
 		return ResponseEntity.ok(ApiResponse.success(dtos));
 	}
 
@@ -45,11 +46,11 @@ public class SupportCollaborationController {
 	@AllUser
 	@GetMapping("/accepted")
 	@SwaggerPageable
-	public ResponseEntity<ApiResponse<Page<AcceptedCollaborationDto>>> getAcceptedList(
+	public ResponseEntity<ApiResponse<CommonPageResponse<AcceptedCollaborationDto>>> getAcceptedList(
 		@UserId Long userId,
 		Pageable pageable) {
-
-		Page<AcceptedCollaborationDto> dtos = supportCollaborationService.getAcceptedList(userId, pageable);
+		CommonPageResponse<AcceptedCollaborationDto> dtos = supportCollaborationService.getAcceptedList(userId,
+			pageable);
 		return ResponseEntity.ok(ApiResponse.success(dtos));
 	}
 

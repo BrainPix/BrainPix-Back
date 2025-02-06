@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.brainpix.profile.entity.Specialization;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,6 +31,7 @@ public class PublicProfileResponseDto {
 		private String writerName;     // 작성자 이름
 		private Long savedCount;       // 스크랩/즐겨찾기 횟수
 		private Long viewCount;        // 조회수
+		@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
 		@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 		private LocalDateTime deadline;// 마감일

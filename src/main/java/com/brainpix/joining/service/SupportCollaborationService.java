@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CollectionErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
@@ -39,7 +40,7 @@ public class SupportCollaborationService {
 	 */
 
 	@Transactional(readOnly = true)
-	public Page<RejectedCollaborationDto> getRejectedList(Long userId, Pageable pageable) {
+	public CommonPageResponse<RejectedCollaborationDto> getRejectedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
@@ -47,8 +48,9 @@ public class SupportCollaborationService {
 
 		Page<CollectionGathering> rejectedPage =
 			gatheringRepository.findByJoinerAndAcceptedIsFalse(currentUser, sortedPageable);
+		Page<RejectedCollaborationDto> dtoPage = rejectedPage.map(converter::toRejectedDto);
 
-		return rejectedPage.map(converter::toRejectedDto);
+		return CommonPageResponse.of(dtoPage);
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class SupportCollaborationService {
 	 * - 팀원 정보까지 추가
 	 */
 	@Transactional(readOnly = true)
-	public Page<AcceptedCollaborationDto> getAcceptedList(Long userId, Pageable pageable) {
+	public CommonPageResponse<AcceptedCollaborationDto> getAcceptedList(Long userId, Pageable pageable) {
 		User currentUser = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
@@ -67,11 +69,13 @@ public class SupportCollaborationService {
 		Page<CollectionGathering> acceptedPage =
 			gatheringRepository.findByJoinerAndAcceptedIsTrue(currentUser, sortedPageable);
 
-		return acceptedPage.map(cg -> {
+		Page<AcceptedCollaborationDto> dtoPage = acceptedPage.map(cg -> {
 			CollaborationHub hub = cg.getCollaborationRecruitment().getParentCollaborationHub();
 			List<TeamMemberInfoDto> teamInfo = converter.createTeamInfoList(hub);
 			return converter.toAcceptedDto(cg, teamInfo);
 		});
+
+		return CommonPageResponse.of(dtoPage);
 	}
 
 	/**

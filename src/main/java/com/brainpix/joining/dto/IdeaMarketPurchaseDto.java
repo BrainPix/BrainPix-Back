@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.brainpix.profile.entity.Specialization;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IdeaMarketPurchaseDto {
 	private Long purchasingId;
+	@Schema(type = "string", example = "yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDateTime purchasedAt;

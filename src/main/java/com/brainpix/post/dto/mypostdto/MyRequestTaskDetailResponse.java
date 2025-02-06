@@ -9,10 +9,13 @@ import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.profile.entity.Specialization;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public record MyRequestTaskDetailResponse(
 	Long postId,
 	Specialization specialization,
 	String title,
+	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	LocalDateTime deadLine,
