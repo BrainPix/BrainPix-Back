@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/collaborations")
 @RequiredArgsConstructor
-@Tag(name = "CollaborationHub API", description = "협업 광장 관련 API")
+@Tag(name = "협업 광장 관련 API", description = "협업 광장 관련 API")
 public class CollaborationHubController {
 
 	private final CollaborationHubService collaborationHubService;

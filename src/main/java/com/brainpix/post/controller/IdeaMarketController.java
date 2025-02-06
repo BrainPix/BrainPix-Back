@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/idea-markets")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "IdeaMarket API", description = "아이디어 마켓 관련 API")
+@Tag(name = "아이디어 마켓 API", description = "아이디어 마켓 관련 API")
 public class IdeaMarketController {
 
 	private final IdeaMarketService ideaMarketService;
