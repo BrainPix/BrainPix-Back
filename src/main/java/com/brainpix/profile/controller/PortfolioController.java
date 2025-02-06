@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/portfolios")
-@Tag(name = "Portfolio API", description = "포트폴리오 생성, 수정, 삭제 및 조회 관련 API")
+@Tag(name = "자신의 포트폴리오 생성, 수정, 삭제, 조회 API", description = "포트폴리오 생성, 수정, 삭제 및 조회 관련 API")
 @RequiredArgsConstructor
 public class PortfolioController {
 

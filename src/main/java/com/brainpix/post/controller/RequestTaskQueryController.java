@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/request-tasks")
 @RequiredArgsConstructor
-@Tag(name = "요청 과제 조회 API", description = "메인 페이지에서 요청과제를 조회하는 API입니다.")
+@Tag(name = "요청 과제 검색 API", description = "메인 페이지에서 요청과제를 조회하는 API입니다.")
 public class RequestTaskQueryController {
 
 	private final RequestTaskQueryService requestTaskQueryService;
