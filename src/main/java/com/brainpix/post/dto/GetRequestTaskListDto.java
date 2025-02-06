@@ -6,6 +6,7 @@ import com.brainpix.post.entity.request_task.RequestTaskType;
 import com.brainpix.post.enums.SortType;
 import com.brainpix.profile.entity.Specialization;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class GetRequestTaskListDto {
 	@NoArgsConstructor
 	@Getter
 	public static class Request {
+		@NotBlank(message = "요청 과제 타입은 필수입니다. (OPEN_IDEA, TECH_ZONE)")
 		private String type;    // 요청 과제 타입
 		private String keyword;        // 검색 키워드
 		private String category;  // 카테고리

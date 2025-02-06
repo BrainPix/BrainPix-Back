@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class GetPopularIdeaListDto {
 	@Getter
 	@Setter
 	public static class Request {
+		@NotBlank(message = "아이디어 타입은 필수입니다. (IDEA_SOLUTION, MARKET_PLACE)")
 		private String type;    // 아이디어 타입 (IDEA_SOLUTION, MARKET_PLACE)
 	}
 

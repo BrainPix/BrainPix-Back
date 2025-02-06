@@ -16,6 +16,7 @@ import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
+import com.brainpix.kafka.service.AlarmEventService;
 import com.brainpix.post.converter.ApplyCollaborationDtoConverter;
 import com.brainpix.post.converter.CreateCollaborationHubConverter;
 import com.brainpix.post.converter.GetCollaborationHubDetailDtoConverter;
@@ -53,6 +54,7 @@ public class CollaborationHubService {
 	private final SavedPostRepository savedPostRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final AlarmEventService alarmEventService;
 	private final PostRepository postRepository;
 
 	@Transactional
@@ -196,6 +198,10 @@ public class CollaborationHubService {
 
 		// 지원 신청
 		collectionGatheringRepository.save(collectionGathering);
+
+		// 알람 생성
+		alarmEventService.publishCollaborationTaskApply(collaboration.getWriter().getId(), user.getName(),
+			collaboration.getWriter().getName());
 
 		return ApplyCollaborationDtoConverter.toResponse(collectionGathering);
 	}

@@ -14,26 +14,29 @@ import com.brainpix.api.CommonPageResponse;
 import com.brainpix.post.dto.PostCollaborationResponse;
 import com.brainpix.post.dto.PostIdeaMarketResponse;
 import com.brainpix.post.dto.PostRequestTaskResponse;
+import com.brainpix.post.dto.SavePostResponseDto;
 import com.brainpix.post.service.SavedPostService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/saved-posts")
 @RequiredArgsConstructor
+@Tag(name = "게시글 저장 관련 API", description = "게시글을 저장 및 해제 하고, 저장된 게시글을 조회하는 API입니다.")
 public class SavedPostController {
 
 	private final SavedPostService savedPostService;
 
-	@Operation(summary = "게시글 저장", description = "현재 로그인한 사용자가 특정 게시글을 저장합니다.")
+	@Operation(summary = "게시글 저장 및 해제", description = "토글 형식으로 현재 로그인한 사용자가 특정 게시글을 저장 또는 해제 합니다.<br>이미 저장된 게시글은 해제되고, 그렇지 않다면 저장합니다.")
 	@AllUser
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> savePost(@UserId Long userId, @RequestParam long postId) {
-		savedPostService.savePost(userId, postId);
-		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	public ResponseEntity<ApiResponse<SavePostResponseDto>> savePost(@UserId Long userId, @RequestParam long postId) {
+		SavePostResponseDto result = savedPostService.savePost(userId, postId);
+		return ResponseEntity.ok(ApiResponse.success(result));
 	}
 
 	@Operation(summary = "저장된 요청 과제 조회", description = "현재 로그인한 사용자가 저장한 요청 과제를 조회합니다.")

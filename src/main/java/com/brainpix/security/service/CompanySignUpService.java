@@ -14,9 +14,8 @@ public class CompanySignUpService extends SignUpService {
 	private final ProfileRepository profileRepository;
 
 	public CompanySignUpService(UserRepository userRepository,
-		PasswordEncoder passwordEncoder,
-		ProfileRepository profileRepository) {
-		super(userRepository, passwordEncoder);
+		PasswordEncoder passwordEncoder, ProfileRepository profileRepository, EmailAuthService emailAuthService) {
+		super(userRepository, passwordEncoder, emailAuthService);
 		this.profileRepository = profileRepository;
 	}
 

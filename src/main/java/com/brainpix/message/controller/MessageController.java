@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/messages")
-@Tag(name = "Message", description = "메시지 송수신 관련 API")
+@Tag(name = "메시지 API", description = "메시지 송수신 관련 API")
 public class MessageController {
 
 	private final MessageService messageService;
@@ -37,7 +37,8 @@ public class MessageController {
 	@AllUser
 	@GetMapping
 	@Operation(summary = "메시지 다건 조회 API", description = "여러개의 메시지를 조회합니다.")
-	public ResponseEntity<ApiResponse<GetMessageListDto.Response>> getMessageList(@RequestParam String status, Pageable pageable, @UserId Long userId) {
+	public ResponseEntity<ApiResponse<GetMessageListDto.Response>> getMessageList(@RequestParam String status,
+		Pageable pageable, @UserId Long userId) {
 
 		GetMessageListDto.Parameter parameter = GetMessageListConverter.toParameter(userId, status, pageable);
 
@@ -49,7 +50,8 @@ public class MessageController {
 	@AllUser
 	@PostMapping
 	@Operation(summary = "메시지 단건 전송 API", description = "메시지 하나를 전송합니다.")
-	public ResponseEntity<ApiResponse<SendMessageDto.Response>> sendMessage(@UserId Long userId, @RequestBody SendMessageDto.Request request) {
+	public ResponseEntity<ApiResponse<SendMessageDto.Response>> sendMessage(@UserId Long userId,
+		@RequestBody SendMessageDto.Request request) {
 
 		SendMessageDto.Parameter parameter = SendMessageConverter.toParameter(request, userId);
 
@@ -71,7 +73,8 @@ public class MessageController {
 	@AllUser
 	@GetMapping("/{messageId}")
 	@Operation(summary = "메시지 단건 조회 API", description = "메시지 하나를 조회합니다.")
-	public ResponseEntity<ApiResponse<GetMessageDto.Response>> getMessage(@PathVariable String messageId, @UserId Long userId) {
+	public ResponseEntity<ApiResponse<GetMessageDto.Response>> getMessage(@PathVariable String messageId,
+		@UserId Long userId) {
 
 		GetMessageDto.Response data = messageService.getMessage(messageId, userId);
 

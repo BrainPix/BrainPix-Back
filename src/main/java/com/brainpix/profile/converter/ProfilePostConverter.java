@@ -17,18 +17,17 @@ public class ProfilePostConverter {
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toRequestTaskPreviewDto(RequestTask task, long savedCount) {
 		String openScope = parseOpenScope(task.getPostAuth());
-		String dDayString = task.getDeadline().toString();
 		String writerName = getDisplayName(task.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(task.getId())
 			.openScope(openScope)
-			.categoryName("요청 과제 > " + task.getSpecialization())
+			.specialization(task.getSpecialization())
 			.title(task.getTitle())
 			.writerName(writerName)
 			.savedCount(savedCount)
 			.viewCount(task.getViewCount())
-			.deadline(dDayString)
+			.deadline(task.getDeadline())
 			.thumbnailImage(task.getFirstImage())
 			.writerImageUrl(task.getWriter().getProfileImage())
 			.build();
@@ -44,7 +43,7 @@ public class ProfilePostConverter {
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(market.getId())
 			.openScope(openScope)
-			.categoryName("아이디어 마켓 > " + market.getSpecialization())
+			.specialization(market.getSpecialization())
 			.title(market.getTitle())
 			.writerName(writerName)
 			.savedCount(savedCount)
@@ -65,19 +64,18 @@ public class ProfilePostConverter {
 		long totalMembers = hub.getCollaborations().stream()
 			.mapToLong(rec -> rec.getGathering().getTotalQuantity())
 			.sum();
-		String dDayString = hub.getDeadline().toString();
 		String openScope = parseOpenScope(hub.getPostAuth());
 		String writerName = getDisplayName(hub.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(hub.getId())
 			.openScope(openScope)
-			.categoryName("협업 광장 > " + hub.getSpecialization())
+			.specialization(hub.getSpecialization())
 			.title(hub.getTitle())
 			.writerName(writerName)
 			.savedCount(savedCount)
 			.viewCount(hub.getViewCount())
-			.deadline(dDayString)
+			.deadline(hub.getDeadline())
 			.thumbnailImage(hub.getFirstImage())
 			.currentMembers(currentMembers)
 			.totalMembers(totalMembers)

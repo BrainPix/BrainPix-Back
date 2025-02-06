@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/request-tasks")
 @RequiredArgsConstructor
-@Tag(name = "RequestTask API", description = "요청 과제 관련 API")
+@Tag(name = "요청 과제 생성, 수정, 삭제 API", description = "요청 과제 관련 API")
 public class RequestTaskCommandController {
 
 	private final RequestTaskCommandService requestTaskCommandService;

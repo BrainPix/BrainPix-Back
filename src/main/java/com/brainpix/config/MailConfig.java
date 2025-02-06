@@ -15,9 +15,10 @@ public class MailConfig {
 	private final String USERNAME;
 	private final String PASSWORD;
 
-	public MailConfig(@Value("${spring.mail.password}") String HOST,
+	public MailConfig(
+		@Value("${spring.mail.host}") String HOST,
 		@Value("${spring.mail.username}") String USERNAME,
-		@Value("${spring.mail.host}") String PASSWORD) {
+		@Value("${spring.mail.password}") String PASSWORD) {
 		this.HOST = HOST;
 		this.USERNAME = USERNAME;
 		this.PASSWORD = PASSWORD;

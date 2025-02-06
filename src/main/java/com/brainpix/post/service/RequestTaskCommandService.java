@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brainpix.api.code.error.CollectionErrorCode;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.PostErrorCode;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
+import com.brainpix.kafka.service.AlarmEventService;
 import com.brainpix.post.converter.ApplyRequestTaskDtoConverter;
 import com.brainpix.post.converter.CreateRequestTaskConverter;
 import com.brainpix.post.dto.ApplyRequestTaskDto;
@@ -34,6 +34,7 @@ public class RequestTaskCommandService {
 	private final CreateRequestTaskConverter createRequestTaskConverter;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
 	private final RequestTaskRecruitmentRepository requestTaskRecruitmentRepository;
+	private final AlarmEventService alarmEventService;
 
 	@Transactional
 	public Long createRequestTask(Long userId, RequestTaskCreateDto createDto) {
@@ -118,6 +119,10 @@ public class RequestTaskCommandService {
 
 		// 지원 신청
 		requestTaskPurchasingRepository.save(requestTaskPurchasing);
+
+		// 알람 생성
+		alarmEventService.publishRequestTaskApply(requestTask.getWriter().getId(), requestTask.getWriter().getName(),
+			user.getName());
 
 		return ApplyRequestTaskDtoConverter.toResponse(requestTaskPurchasing);
 	}

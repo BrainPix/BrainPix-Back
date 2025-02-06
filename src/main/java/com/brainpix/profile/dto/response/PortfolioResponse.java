@@ -1,12 +1,12 @@
 package com.brainpix.profile.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.brainpix.profile.entity.Portfolio;
 
 public record PortfolioResponse(long id,
 								String title,
-								LocalDateTime createdDate,
+								LocalDate createdDate,
 								String profileImage
 ) {
 
@@ -14,7 +14,7 @@ public record PortfolioResponse(long id,
 		return new PortfolioResponse(
 			portfolio.getId(),
 			portfolio.getTitle(),
-			portfolio.getCreatedAt(),
+			portfolio.getCreatedAt().toLocalDate(),
 			portfolio.getProfileImage()
 		);
 	}
