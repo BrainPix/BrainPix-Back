@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/collaborations")
 @RequiredArgsConstructor
 @Tag(name = "협업 광장 생성, 수정, 삭제 API", description = "협업 광장 관련 API")
-public class CollaborationHubController {
+public class CollaborationHubCommandController {
 
 	private final CollaborationHubService collaborationHubService;
 	private final CollaborationHubInitialMemberService collaborationHubInitialMemberService;
