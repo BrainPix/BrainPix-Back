@@ -51,7 +51,8 @@ public class GetIdeaDetailDtoConverter {
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList().get(0).toString())
+			.specialization(writer.getProfile().getSpecializationList() != null ?
+				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)
 			.build();

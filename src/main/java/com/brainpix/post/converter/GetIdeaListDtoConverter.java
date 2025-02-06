@@ -55,7 +55,7 @@ public class GetIdeaListDtoConverter {
 			.auth(ideaMarket.getPostAuth().toString())
 			.writerImageUrl(ideaMarket.getWriter().getProfileImage())
 			.writerName(ideaMarket.getWriter().getName())
-			.thumbnailImageUrl(ideaMarket.getImageList().get(0))
+			.thumbnailImageUrl(ideaMarket.getImageList() != null ? ideaMarket.getImageList().get(0) : null)
 			.title(ideaMarket.getTitle())
 			.price(ideaMarket.getPrice().getPrice())
 			.category(ideaMarket.getSpecialization().toString())
