@@ -6,6 +6,7 @@ import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.enums.SortType;
 import com.brainpix.profile.entity.Specialization;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class GetIdeaListDto {
 	@NoArgsConstructor
 	@Getter
 	public static class Request {
+		@NotBlank(message = "아이디어 타입은 필수입니다. (IDEA_SOLUTION, MARKET_PLACE)")
 		private String type;    // 아이디어 타입
 		private String keyword;        // 검색 키워드
 		private String category;  // 카테고리
