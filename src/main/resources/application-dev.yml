@@ -20,9 +20,9 @@ spring:
     mongodb:
       uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
   mail:
-    host: smtp.gmail.com
-    username: example12345@gmail.com
-    password: example12345
+    host: ENC(5WpWHIIQtBVAYDvxlhS3jjaEZXLMSQjIqO5kXPrLze/PM29RbHV3U8Z6ihG501qp)
+    username: ENC(prCp5Ol/nxisuAB+sy7D1brjRQDnk1sArHFMZ1J310Q7O/DOed09i9OXAiZBSrh2Lae9pI7soUI6dxdpgcx3KA==)
+    password: ENC(15oeubKhgXAzVQFYZJlBH+zhMn9nO9baDacvG0xfZVKCALibswPooowYZbQHja6X/kgi0gSJ5/kVx6yuQhgz+Q==)
 jasypt:
   encryptor:
     password: jasyptKey

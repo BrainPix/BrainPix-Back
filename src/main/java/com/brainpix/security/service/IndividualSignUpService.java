@@ -14,9 +14,8 @@ public class IndividualSignUpService extends SignUpService {
 	public final ProfileRepository profileRepository;
 
 	public IndividualSignUpService(UserRepository userRepository,
-		PasswordEncoder passwordEncoder,
-		ProfileRepository profileRepository) {
-		super(userRepository, passwordEncoder);
+		PasswordEncoder passwordEncoder, ProfileRepository profileRepository, EmailAuthService emailAuthService) {
+		super(userRepository, passwordEncoder, emailAuthService);
 		this.profileRepository = profileRepository;
 	}
 
