@@ -18,10 +18,12 @@ import com.brainpix.security.authorization.Individual;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/profile")
+@Tag(name = "본인 프로필 조회/수정 API", description = "개인/기업 본인시 소유한 계정의 프로필을 조회 및 수정 API 입니다.")
 @RequiredArgsConstructor
 public class ProfileController {
 
