@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.joining.dto.AcceptedRequestTaskPurchasingDto;
 import com.brainpix.joining.dto.RejectedRequestTaskPurchasingDto;
 import com.brainpix.joining.service.SupportRequestTaskService;
@@ -17,11 +18,13 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/supports/request-tasks")
 @RequiredArgsConstructor
+@Tag(name = "지원 현황 -요청과제 조회 API", description = "요청 과제 지원 내역을 조회합니다.")
 public class SupportRequestTaskController {
 
 	private final SupportRequestTaskService supportRequestTaskService;
@@ -29,6 +32,7 @@ public class SupportRequestTaskController {
 	@Operation(summary = "지원 거절된 요청 과제 게시글", description = "본인이 지원한 요청과제 게시글 중 거절된 목록들을 조회합니다.")
 	@AllUser
 	@GetMapping("/rejected")
+	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<RejectedRequestTaskPurchasingDto>>> getRejectedList(
 		@UserId Long userId,
 		Pageable pageable
@@ -41,6 +45,7 @@ public class SupportRequestTaskController {
 	@Operation(summary = "지원 승낙된 요청 과제 게시글", description = "본인이 지원한 요청과제 게시글 중 승낙된 목록들을 조회합니다.")
 	@AllUser
 	@GetMapping("/accepted")
+	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<AcceptedRequestTaskPurchasingDto>>> getAcceptedList(
 		@UserId Long userId,
 		Pageable pageable

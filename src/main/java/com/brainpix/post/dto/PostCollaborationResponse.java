@@ -2,9 +2,12 @@ package com.brainpix.post.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.profile.entity.Specialization;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record PostCollaborationResponse(
 	Long ideaId,
@@ -13,6 +16,8 @@ public record PostCollaborationResponse(
 	String writerName,
 	String thumbnailImageUrl,
 	String title,
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	LocalDateTime deadline,
 	Specialization specialization,
 	Long saveCount,

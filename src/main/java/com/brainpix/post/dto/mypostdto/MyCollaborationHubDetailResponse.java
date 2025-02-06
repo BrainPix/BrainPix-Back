@@ -3,13 +3,18 @@ package com.brainpix.post.dto.mypostdto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.profile.entity.Specialization;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record MyCollaborationHubDetailResponse(
 	Long postId,
 	Specialization specialization,
 	String title,
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	LocalDateTime deadLine,
 	String thumbnailImage,
 	List<CollaborationApplicationStatusResponse> applicationStatus,
