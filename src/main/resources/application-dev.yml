@@ -33,3 +33,8 @@ jwt:
 
 springdoc:
   use-fqn: true
+
+kakao:
+  pay:
+    secret-key: ENC(97EXNTaZOAO5M/YmiG831cRnVLAaz2aVg3+bWr6obBiBk5k0sg91JTZv1sGHFhCNTatNJV4XX43l5Qxz1eBk0m1QMJ/VDLJ9T6AC/6yuISQ=)
+    cid: ENC(+Kb6JKxydvdU8AtNjy6i8E/0cr3mcK3/yIXO4oULT/Z41Ri57uepQtt7vEAl1uyk)
