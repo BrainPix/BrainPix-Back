@@ -27,7 +27,7 @@ public class GetIdeaDetailDtoConverter {
 
 		return GetIdeaDetailDto.Response.builder()
 			.ideaId(ideaMarket.getId())
-			.thumbnailImageUrl(ideaMarket.getImageList().get(0))
+			.thumbnailImageUrl(ideaMarket.getImageList() != null ? ideaMarket.getImageList().get(0) : null)
 			.category(ideaMarket.getSpecialization().toString())
 			.ideaMarketType(ideaMarket.getIdeaMarketType().toString())
 			.auth(ideaMarket.getPostAuth().toString())
