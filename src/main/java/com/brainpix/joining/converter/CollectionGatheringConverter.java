@@ -30,7 +30,7 @@ public class CollectionGatheringConverter {
 			.firstImage(hub.getFirstImage())                // Post#getFirstImage()
 			.postCreatedAt(hub.getCreatedAt())            // BaseTimeEntity
 			.postTitle(hub.getTitle())
-			.postCategory("협업 광장 > " + hub.getSpecialization())
+			.specialization(hub.getSpecialization())
 			.domain(recruitment.getDomain())
 			.build();
 	}
@@ -54,7 +54,7 @@ public class CollectionGatheringConverter {
 			.firstImage(hub.getFirstImage())
 			.postCreatedAt(hub.getCreatedAt())
 			.postTitle(hub.getTitle())
-			.postCategory("협업 광장 > " + hub.getSpecialization())
+			.specialization(hub.getSpecialization())
 			.domain(recruitment.getDomain())
 			.writerName(writerName)
 			.writerType(writerType)

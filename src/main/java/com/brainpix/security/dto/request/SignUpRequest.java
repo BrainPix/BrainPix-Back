@@ -19,6 +19,7 @@ public class SignUpRequest {
 		protected String name;
 		protected LocalDate birthday;
 		protected String email;
+		protected String emailToken;
 
 		public abstract User toEntity(String encodedPassword);
 

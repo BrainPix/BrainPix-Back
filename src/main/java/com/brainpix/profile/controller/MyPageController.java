@@ -8,16 +8,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
+import com.brainpix.post.dto.MyDefaultPageIdeaListDto;
 import com.brainpix.profile.dto.MyPageResponseDto;
 import com.brainpix.profile.service.MyPageService;
 import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/my-page")
+@Tag(name = "마이페이지 기본 화면 조회", description = "마이페이지 기본 화면 조회 관련 API")
 @RequiredArgsConstructor
 public class MyPageController {
 
@@ -33,8 +37,9 @@ public class MyPageController {
 
 	@AllUser
 	@Operation(summary = "'내 아이디어' 조회", description = "특정 사용자가 작성한 아이디어 목록을 페이징 처리하여 조회합니다")
+	@SwaggerPageable
 	@GetMapping("/ideas")
-	public ResponseEntity<ApiResponse<CommonPageResponse<String>>> getMyIdeas(
+	public ResponseEntity<ApiResponse<CommonPageResponse<MyDefaultPageIdeaListDto>>> getMyIdeas(
 		@UserId Long userId,
 		Pageable pageable) {
 		return ResponseEntity.ok(

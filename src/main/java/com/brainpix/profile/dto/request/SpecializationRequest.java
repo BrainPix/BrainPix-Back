@@ -1,20 +1,12 @@
 package com.brainpix.profile.dto.request;
 
-import com.brainpix.api.code.error.CommonErrorCode;
-import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.profile.entity.Specialization;
 
-public record SpecializationRequest(String specialization) {
+import jakarta.validation.constraints.NotNull;
+
+public record SpecializationRequest(@NotNull(message = "전문 분야는 필수 입력값입니다.") Specialization specialization) {
 
 	public Specialization toDomain() {
-		if (specialization == null || specialization.trim().isEmpty()) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
-		}
-
-		try {
-			return Specialization.of(specialization);
-		} catch (BrainPixException e) {
-			throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
-		}
+		return specialization;
 	}
 }

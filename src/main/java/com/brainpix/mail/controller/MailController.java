@@ -11,8 +11,10 @@ import com.brainpix.kafka.service.MailEventService;
 import com.brainpix.mail.dto.SendMailDto;
 import com.brainpix.mail.service.MailService;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 
+@Hidden
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mail")

@@ -4,6 +4,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 import com.brainpix.api.code.error.PortfolioErrorCode;
+import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.user.entity.User;
 
@@ -83,9 +84,7 @@ public class Portfolio extends BaseTimeEntity {
 
 	public void validateOwnership(User user) {
 		if (!this.profile.getUser().equals(user)) {
-			throw new IllegalArgumentException(
-				PortfolioErrorCode.NOT_OWNED_PORTFOLIO.getMessage()
-			);
+			throw new BrainPixException(PortfolioErrorCode.NOT_OWNED_PORTFOLIO);
 		}
 	}
 }

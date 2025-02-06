@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brainpix.kafka.service.KafkaProducerService;
 import com.brainpix.api.ApiResponse;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Hidden
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +26,5 @@ public class KafkaProducerController {
 		kafkaProducerService.sendTestMessage(message);
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
-	
+
 }

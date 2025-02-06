@@ -19,7 +19,7 @@ public class RequestTaskPurchasingConverter {
 	public RejectedRequestTaskPurchasingDto toRejectedDto(RequestTaskPurchasing p) {
 
 		RequestTaskRecruitment recruitment = p.getRequestTaskRecruitment();
-	
+
 		RequestTask requestTask = recruitment.getRequestTask();
 
 		return RejectedRequestTaskPurchasingDto.builder()
@@ -27,7 +27,7 @@ public class RequestTaskPurchasingConverter {
 			.firstImage(requestTask.getFirstImage())
 			.postCreatedAt(requestTask.getCreatedAt())
 			.postTitle(requestTask.getTitle())
-			.postCategory("요청 과제 > " + requestTask.getSpecialization())
+			.specialization(requestTask.getSpecialization())
 			.domain(recruitment.getDomain())
 			.build();
 	}
@@ -48,7 +48,7 @@ public class RequestTaskPurchasingConverter {
 			.firstImage(requestTask.getFirstImage())
 			.postCreatedAt(requestTask.getCreatedAt())
 			.postTitle(requestTask.getTitle())
-			.postCategory("요청 과제 > " + requestTask.getSpecialization())
+			.specialization(requestTask.getSpecialization())
 			.domain(recruitment.getDomain())
 			.writerName(writerName)
 			.writerType(writerType)

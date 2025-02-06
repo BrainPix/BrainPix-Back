@@ -1,6 +1,5 @@
 package com.brainpix.profile.converter;
 
-import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,7 @@ public class ProfileConverter {
 	}
 
 	public Career toCareer(IndividualProfileUpdateDto.CareerDto dto, IndividualProfile profile) {
-		return new Career(dto.getContent(), YearMonth.parse(dto.getStartDate()), YearMonth.parse(dto.getEndDate()),
+		return new Career(dto.getContent(), dto.getStartDate(), dto.getEndDate(),
 			profile);
 	}
 

@@ -61,21 +61,21 @@ public class GetCollaborationHubListDtoConverter {
 	}
 
 	public static GetCollaborationHubListDto.CollaborationDetail toCollaborationDetail(
-		CollaborationHub CollaborationHub, Long saveCount,
+		CollaborationHub collaborationHub, Long saveCount,
 		Long deadline, Long occupiedQuantity, Long totalQuantity) {
 		return GetCollaborationHubListDto.CollaborationDetail.builder()
-			.collaborationId(CollaborationHub.getId())
-			.auth(CollaborationHub.getPostAuth().toString())
-			.writerImageUrl(CollaborationHub.getWriter().getProfileImage())
-			.writerName(CollaborationHub.getWriter().getName())
-			.thumbnailImageUrl(CollaborationHub.getImageList().get(0))
-			.title(CollaborationHub.getTitle())
+			.collaborationId(collaborationHub.getId())
+			.auth(collaborationHub.getPostAuth().toString())
+			.writerImageUrl(collaborationHub.getWriter().getProfileImage())
+			.writerName(collaborationHub.getWriter().getName())
+			.thumbnailImageUrl(collaborationHub.getImageList() != null ? collaborationHub.getImageList().get(0) : null)
+			.title(collaborationHub.getTitle())
 			.deadline(deadline)
-			.category(CollaborationHub.getSpecialization().toString())
+			.category(collaborationHub.getSpecialization().toString())
 			.occupiedQuantity(occupiedQuantity)
 			.totalQuantity(totalQuantity)
 			.saveCount(saveCount)
-			.viewCount(CollaborationHub.getViewCount())
+			.viewCount(collaborationHub.getViewCount())
 			.build();
 	}
 }

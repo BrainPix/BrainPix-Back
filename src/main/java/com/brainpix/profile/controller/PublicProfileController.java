@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
 import com.brainpix.api.CommonPageResponse;
+import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.profile.dto.CompanyProfileResponseDto;
 import com.brainpix.profile.dto.IndividualProfileResponseDto;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
@@ -18,10 +19,12 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/public-profile") // 기존 마이페이지 조회 API와 구별
+@Tag(name = "상대방 프로필 조회 API", description = "상대방 계정의 프로필을 조회 API 입니다.")
 @RequiredArgsConstructor
 public class PublicProfileController {
 
@@ -53,6 +56,7 @@ public class PublicProfileController {
 	@AllUser
 	@Operation(summary = "사용자 게시글 조회", description = "특정 사용자가 작성한 공개 게시글을 조회합니다.")
 	@GetMapping
+	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
 		@UserId Long userId,
 		@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {

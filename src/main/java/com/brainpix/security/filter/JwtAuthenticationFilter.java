@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		} else {
 			jwt = parseJwt(jwt);
 			try {
-				BrainpixAuthenticationToken authenticationToken = tokenManager.readToken(jwt);
+				BrainpixAuthenticationToken authenticationToken = tokenManager.readAuthenticationToken(jwt);
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 				filterChain.doFilter(request, response);
 			}

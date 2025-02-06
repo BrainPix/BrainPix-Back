@@ -40,7 +40,7 @@ public class GetPopularRequestTaskListDtoConverter {
 			.auth(requestTask.getPostAuth().toString())
 			.writerImageUrl(requestTask.getWriter().getProfileImage())
 			.writerName(requestTask.getWriter().getName())
-			.thumbnailImageUrl(requestTask.getImageList().get(0))
+			.thumbnailImageUrl(requestTask.getImageList() != null ? requestTask.getImageList().get(0) : null)
 			.title(requestTask.getTitle())
 			.deadline(deadline)
 			.category(requestTask.getSpecialization().toString())
