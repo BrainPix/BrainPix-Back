@@ -18,7 +18,7 @@ spring:
         format_sql: true
   data:
     mongodb:
-      uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
+      uri: ENC(ntZhfbWKkCOZNqOpRHvqXNo6dobNfFZ/Di5ttdUS2DYYcrgyKJ65WS2QwDANfHxaLz5oYrPgYOiEfRgtWSCq+Iz9sMKPumkayGCZRCGK+zrV4SjF0DHUHMgCWOjgiZJKJBbHxKbwdgwHHnNAJkYGixZMTy2fTp+5OJKFOMSn5Lb5Mz+UXFnMKfrIhnIV6HAjd8Lew8yry6npsHneBiXzlA==)
   mail:
     host: ENC(5WpWHIIQtBVAYDvxlhS3jjaEZXLMSQjIqO5kXPrLze/PM29RbHV3U8Z6ihG501qp)
     username: ENC(prCp5Ol/nxisuAB+sy7D1brjRQDnk1sArHFMZ1J310Q7O/DOed09i9OXAiZBSrh2Lae9pI7soUI6dxdpgcx3KA==)
