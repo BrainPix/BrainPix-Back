@@ -7,7 +7,6 @@ import com.brainpix.joining.dto.RejectedRequestTaskPurchasingDto;
 import com.brainpix.joining.entity.purchasing.RequestTaskPurchasing;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
-import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 
 @Component
@@ -42,7 +41,6 @@ public class RequestTaskPurchasingConverter {
 
 		User writer = requestTask.getWriter();
 		String writerName = writer.getName();
-		String writerType = (writer instanceof Individual) ? "개인" : "회사";
 
 		return AcceptedRequestTaskPurchasingDto.builder()
 			.purchasingId(p.getId())
@@ -52,7 +50,7 @@ public class RequestTaskPurchasingConverter {
 			.specialization(requestTask.getSpecialization())
 			.domain(recruitment.getDomain())
 			.writerName(writerName)
-			.writerType(writerType)
+			.writerType(writer.getUserType())
 			.requestTaskId(requestTask.getId())
 			.build();
 	}

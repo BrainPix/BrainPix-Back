@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
-import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
 
 public class GetIdeaDetailDtoConverter {
@@ -50,7 +49,7 @@ public class GetIdeaDetailDtoConverter {
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
-			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
+			.role(writer.getUserType())
 			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
 				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)

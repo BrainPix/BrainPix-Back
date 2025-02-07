@@ -19,7 +19,8 @@ public class MyProfileConverter {
 
 		return IndividualProfileResponseDto.builder()
 			.userId(user.getId())
-			.userType("개인")
+			.userType(user.getUserType())
+			.profileImage(user.getProfileImage())
 			.specializations(profile.getSpecializationList().stream()
 				.toList())
 			.name(user.getName())
@@ -51,10 +52,11 @@ public class MyProfileConverter {
 
 		return CompanyProfileResponseDto.builder()
 			.userId(user.getId())
-			.userType("기업")
+			.userType(user.getUserType())
 			.specializations(profile.getSpecializationList().stream()
 				.toList())
 			.name(user.getName())
+			.imageUrl(user.getProfileImage())
 			.selfIntroduction(profile.getSelfIntroduction())
 			.businessInformation(profile.getBusinessInformation())
 			.companyInformations(profile.getCompanyInformations().stream()
