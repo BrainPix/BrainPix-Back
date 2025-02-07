@@ -16,15 +16,18 @@ import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateIdeaMarketConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetIdeaPurchasePageDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
+import com.brainpix.post.dto.GetIdeaPurchasePageDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
@@ -43,6 +46,7 @@ public class IdeaMarketService {
 	private final PriceService priceService;
 	private final CreateIdeaMarketConverter createIdeaMarketConverter;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final PostRepository postRepository;
 
 	@Transactional
 	public Long createIdeaMarket(Long userId, IdeaMarketCreateDto createDto) {
@@ -96,7 +100,7 @@ public class IdeaMarketService {
 	}
 
 	// 아이디어 식별자 값을 입력받아 상세보기에 관한 내용을 반환합니다.
-	@Transactional(readOnly = true)
+	@Transactional
 	public GetIdeaDetailDto.Response getIdeaDetail(GetIdeaDetailDto.Parameter parameter) {
 
 		// 유저 조회
@@ -112,6 +116,9 @@ public class IdeaMarketService {
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
 			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
 		}
+
+		// 조회수 증가
+		postRepository.increaseViewCount(ideaMarket.getId());
 
 		// 작성자 조회
 		User writer = ideaMarket.getWriter();
@@ -148,5 +155,32 @@ public class IdeaMarketService {
 			parameter.getPageable());
 
 		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
+	}
+
+	@Transactional(readOnly = true)
+	public GetIdeaPurchasePageDto.Response getIdeaPurchasePage(GetIdeaPurchasePageDto.Parameter parameter) {
+
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
+
+		// 아이디어 조회
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
+
+		// 판매자 정보 조회
+		User seller = ideaMarket.getWriter();
+
+		// 개인이 기업 게시물을 구매하려는 경우 처리
+		if (ideaMarket.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
+			.equals(BrainpixAuthority.INDIVIDUAL)) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
+		// 글 작성자가 구매하려는 경우 처리
+		if (seller == user) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
+
+		return GetIdeaPurchasePageDtoConverter.toResponse(ideaMarket, seller);
 	}
 }

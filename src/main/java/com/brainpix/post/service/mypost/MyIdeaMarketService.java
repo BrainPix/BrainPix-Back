@@ -53,6 +53,7 @@ public class MyIdeaMarketService {
 			.stream()
 			.map(purchase -> new PurchaseInfoResponse(
 				purchase.getBuyer().getIdentifier(),
+				purchase.getBuyer().getId(),
 				purchase.getPayment(),
 				purchase.getPrice()
 			))

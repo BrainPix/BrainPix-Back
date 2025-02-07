@@ -17,9 +17,11 @@ import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.swagger.SwaggerPageable;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetIdeaPurchasePageDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
+import com.brainpix.post.dto.GetIdeaPurchasePageDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.service.IdeaMarketService;
 import com.brainpix.security.authorization.AllUser;
@@ -82,6 +84,16 @@ public class IdeaMarketQueryController {
 			pageable);
 		CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> response = ideaMarketService.getPopularIdeaList(
 			parameter);
+		return ResponseEntity.ok(ApiResponse.success(response));
+	}
+
+	@AllUser
+	@Operation(summary = "아이디어 구매 페이지 [GET]", description = "경로 변수로 아이디어 식별자를 받아, 아이디어 구매 페이지에 필요한 DTO를 반환하는 API입니다.")
+	@GetMapping("/{ideaId}/purchase")
+	public ResponseEntity<ApiResponse<GetIdeaPurchasePageDto.Response>> getIdeaPurchasePage(
+		@PathVariable("ideaId") Long ideaId, @UserId Long userId) {
+		GetIdeaPurchasePageDto.Parameter parameter = GetIdeaPurchasePageDtoConverter.toParameter(ideaId, userId);
+		GetIdeaPurchasePageDto.Response response = ideaMarketService.getIdeaPurchasePage(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
 }

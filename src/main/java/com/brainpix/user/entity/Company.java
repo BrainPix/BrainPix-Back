@@ -18,7 +18,7 @@ public class Company extends User {
 
 	@Override
 	public String getUserType() {
-		return "기업";
+		return "COMPANY";
 	}
 
 	@Builder

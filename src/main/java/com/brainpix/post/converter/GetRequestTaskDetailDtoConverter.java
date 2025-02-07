@@ -7,7 +7,6 @@ import java.util.List;
 import com.brainpix.post.dto.GetRequestTaskDetailDto;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
-import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
 
 public class GetRequestTaskDetailDtoConverter {
@@ -48,7 +47,7 @@ public class GetRequestTaskDetailDtoConverter {
 			.saveCount(saveCount)
 			.createdDate(requestTask.getCreatedAt().toLocalDate())
 			.writer(writerDto)
-			.attachments(requestTask.getImageList())
+			.attachments(requestTask.getAttachmentFileList())
 			.recruitments(recruitments)
 			.openMyProfile(requestTask.getOpenMyProfile())
 			.isSavedPost(isSavedPost)
@@ -61,8 +60,8 @@ public class GetRequestTaskDetailDtoConverter {
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
-			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList() != null ?
+			.role(writer.getUserType())
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
 				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)

@@ -36,4 +36,5 @@ public class AcceptedCollaborationDto {
 
 	// 팀원 정보 (모든 도메인에 대한 현재인원/총인원 + 멤버)
 	private List<TeamMemberInfoDto> teamInfoList;
+	private Long collaborationId;
 }

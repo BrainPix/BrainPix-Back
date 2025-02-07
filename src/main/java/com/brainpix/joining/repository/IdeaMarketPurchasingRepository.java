@@ -12,8 +12,7 @@ import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.user.entity.User;
 
 @Repository
-public interface IdeaMarketPurchasingRepository
-	extends JpaRepository<IdeaMarketPurchasing, Long> {
+public interface IdeaMarketPurchasingRepository extends JpaRepository<IdeaMarketPurchasing, Long> {
 	Page<IdeaMarketPurchasing> findByBuyer(User buyer, Pageable pageable);
 
 	List<IdeaMarketPurchasing> findByIdeaMarket(IdeaMarket ideaMarket);

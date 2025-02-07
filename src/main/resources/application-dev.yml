@@ -18,7 +18,7 @@ spring:
         format_sql: true
   data:
     mongodb:
-      uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
+      uri: ENC(ntZhfbWKkCOZNqOpRHvqXNo6dobNfFZ/Di5ttdUS2DYYcrgyKJ65WS2QwDANfHxaLz5oYrPgYOiEfRgtWSCq+Iz9sMKPumkayGCZRCGK+zrV4SjF0DHUHMgCWOjgiZJKJBbHxKbwdgwHHnNAJkYGixZMTy2fTp+5OJKFOMSn5Lb5Mz+UXFnMKfrIhnIV6HAjd8Lew8yry6npsHneBiXzlA==)
   mail:
     host: ENC(5WpWHIIQtBVAYDvxlhS3jjaEZXLMSQjIqO5kXPrLze/PM29RbHV3U8Z6ihG501qp)
     username: ENC(prCp5Ol/nxisuAB+sy7D1brjRQDnk1sArHFMZ1J310Q7O/DOed09i9OXAiZBSrh2Lae9pI7soUI6dxdpgcx3KA==)
@@ -33,3 +33,21 @@ jwt:
 
 springdoc:
   use-fqn: true
+
+kakao:
+  pay:
+    secret-key: ENC(97EXNTaZOAO5M/YmiG831cRnVLAaz2aVg3+bWr6obBiBk5k0sg91JTZv1sGHFhCNTatNJV4XX43l5Qxz1eBk0m1QMJ/VDLJ9T6AC/6yuISQ=)
+    cid: ENC(+Kb6JKxydvdU8AtNjy6i8E/0cr3mcK3/yIXO4oULT/Z41Ri57uepQtt7vEAl1uyk)
+    ready-url: https://open-api.kakaopay.com/online/v1/payment/ready
+    approve-url: https://open-api.kakaopay.com/online/v1/payment/approve
+
+cloud:
+  aws:
+    region: ap-northeast-2
+    credentials:
+      access-key: ENC(BmfwEKh+yJlv4gszhV+HyfOeEWIu8ZVQp86f2Oug/8y1yCo9p9elIJvoB6t9cmQF4R6DhMOcZAY5o0L5fj5Zig==)
+      secret-key: ENC(KfOW6KGilnbGL7EE4H8gC6KtfPINKq5pV73jDiVW/YKZN5cZd/hQvy62FUS/VIbEvQ/fkcGeUzrwhkY9zrMKnq+j/l6Anw1b5TsHYLj8+EA=)
+    s3:
+      bucket: ENC(rrnE1x4Zt298sljRL6ZRmr/hLjBr00/DV0MVRinK6bnb3PGWraGDEFVkwQ6C/2qI)
+    stack:
+      auto: false

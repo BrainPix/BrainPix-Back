@@ -32,6 +32,7 @@ import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.post.repository.CollaborationRecruitmentRepository;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
@@ -54,6 +55,7 @@ public class CollaborationHubService {
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
 	private final AlarmEventService alarmEventService;
+	private final PostRepository postRepository;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -113,7 +115,7 @@ public class CollaborationHubService {
 		return GetCollaborationHubListDtoConverter.toResponse(result);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public GetCollaborationHubDetailDto.Response getCollaborationHubDetail(
 		GetCollaborationHubDetailDto.Parameter parameter) {
 
@@ -130,6 +132,9 @@ public class CollaborationHubService {
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
 			throw new BrainPixException(RequestTaskErrorCode.FORBIDDEN_ACCESS);
 		}
+
+		// 조회수 증가
+		postRepository.increaseViewCount(collaborationHub.getId());
 
 		// 작성자 조회
 		User writer = collaborationHub.getWriter();

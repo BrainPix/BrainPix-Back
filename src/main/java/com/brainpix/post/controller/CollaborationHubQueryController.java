@@ -26,6 +26,7 @@ import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -42,7 +43,7 @@ public class CollaborationHubQueryController {
 	public ResponseEntity<ApiResponse<ApplyCollaborationDto.Response>> applyCollaboration(
 		@PathVariable("collaborationId") Long collaborationId,
 		@RequestParam("userId") Long userId,
-		@RequestBody ApplyCollaborationDto.Request request) {
+		@RequestBody @Valid ApplyCollaborationDto.Request request) {
 		ApplyCollaborationDto.Parameter parameter = ApplyCollaborationDtoConverter.toParameter(collaborationId, userId,
 			request);
 		ApplyCollaborationDto.Response response = collaborationHubService.applyCollaboration(parameter);

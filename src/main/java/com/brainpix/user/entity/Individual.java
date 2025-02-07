@@ -17,7 +17,7 @@ public class Individual extends User {
 
 	@Override
 	public String getUserType() {
-		return "개인";
+		return "INDIVIDUAL";
 	}
 
 	@Builder

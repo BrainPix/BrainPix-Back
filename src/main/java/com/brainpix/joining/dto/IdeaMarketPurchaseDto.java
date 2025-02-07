@@ -36,6 +36,7 @@ public class IdeaMarketPurchaseDto {
 	// 결제금액 계산
 	private Long fee;            // 수수료
 	private Long finalPrice;     // (price × quantity) + fee
+	private Long ideaMarketId;
 
 }
 
