@@ -20,6 +20,7 @@ import com.brainpix.post.dto.mypostdto.MyCollaborationHubDetailResponse;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -68,7 +69,12 @@ public class MyCollaborationHubService {
 				collection.getInitialGathering()))
 			.collect(Collectors.groupingBy(
 				collection -> collection.getCollaborationRecruitment().getDomain(),
-				Collectors.mapping(collection -> collection.getJoiner().getIdentifier(), Collectors.toList())
+				Collectors.mapping(collection -> {
+					User joiner = collection.getJoiner();
+					String userType = (joiner instanceof Individual) ? "개인" : "회사";
+					return CollaborationCurrentMemberResponse.AcceptedInfo.from(joiner.getIdentifier(), userType,
+						joiner.getId());
+				}, Collectors.toList())
 			))
 			.entrySet()
 			.stream()

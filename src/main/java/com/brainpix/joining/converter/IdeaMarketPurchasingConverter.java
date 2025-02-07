@@ -41,6 +41,7 @@ public class IdeaMarketPurchasingConverter {
 			.quantity(purchasing.getQuantity())
 			.fee(purchasing.getVat())
 			.finalPrice(purchasing.getPrice())
+			.ideaMarketId(ideaMarket.getId())
 			.build();
 	}
 }

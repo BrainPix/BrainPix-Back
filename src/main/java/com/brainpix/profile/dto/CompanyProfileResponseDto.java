@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CompanyProfileResponseDto {
+	private Long userId;
 	private String userType; // 개인/기업
 	private List<Specialization> specializations;
 	private String name; // 기업 이름
