@@ -12,7 +12,7 @@ import com.brainpix.post.entity.idea_market.IdeaMarketType;
 
 public class GetPopularIdeaListDtoConverter {
 
-	public static GetPopularIdeaListDto.Parameter toParameter(GetPopularIdeaListDto.Request request,
+	public static GetPopularIdeaListDto.Parameter toParameter(Long userId, GetPopularIdeaListDto.Request request,
 		Pageable pageable) {
 		IdeaMarketType type = null;
 
@@ -23,6 +23,7 @@ public class GetPopularIdeaListDtoConverter {
 		}
 
 		return GetPopularIdeaListDto.Parameter.builder()
+			.userId(userId)
 			.type(type)
 			.pageable(pageable)
 			.build();
@@ -31,13 +32,14 @@ public class GetPopularIdeaListDtoConverter {
 	public static CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> toResponse(Page<Object[]> ideaMarkets) {
 
 		Page<GetPopularIdeaListDto.IdeaDetail> response = ideaMarkets.map(
-			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1])
+			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1], (Boolean)ideaMarket[2])
 		);
 
 		return CommonPageResponse.of(response);
 	}
 
-	public static GetPopularIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount) {
+	public static GetPopularIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount,
+		Boolean isSavedPost) {
 
 		return GetPopularIdeaListDto.IdeaDetail.builder()
 			.ideaId(ideaMarket.getId())
@@ -50,6 +52,7 @@ public class GetPopularIdeaListDtoConverter {
 			.category(ideaMarket.getSpecialization().toString())
 			.saveCount(saveCount)
 			.viewCount(ideaMarket.getViewCount())
+			.isSavedPost(isSavedPost)
 			.build();
 	}
 }

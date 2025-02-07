@@ -17,7 +17,7 @@ public class GetIdeaDetailDtoConverter {
 	}
 
 	public static GetIdeaDetailDto.Response toResponse(IdeaMarket ideaMarket, User writer, Long saveCount,
-		Long totalIdeas, Long totalCollaborations) {
+		Long totalIdeas, Long totalCollaborations, Boolean isSavedPost, Boolean isMyPost) {
 
 		// 작성자
 		GetIdeaDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
@@ -42,6 +42,8 @@ public class GetIdeaDetailDtoConverter {
 			.writer(writerDto)
 			.attachments(attachments)
 			.openMyProfile(ideaMarket.getOpenMyProfile())
+			.isSavedPost(isSavedPost)
+			.isMyPost(isMyPost)
 			.build();
 	}
 

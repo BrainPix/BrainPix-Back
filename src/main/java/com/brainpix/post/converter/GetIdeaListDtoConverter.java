@@ -14,7 +14,7 @@ import com.brainpix.profile.entity.Specialization;
 
 public class GetIdeaListDtoConverter {
 
-	public static GetIdeaListDto.Parameter toParameter(GetIdeaListDto.Request request, Pageable pageable) {
+	public static GetIdeaListDto.Parameter toParameter(Long userId, GetIdeaListDto.Request request, Pageable pageable) {
 
 		IdeaMarketType type = null;
 		Specialization category = null;
@@ -31,6 +31,7 @@ public class GetIdeaListDtoConverter {
 		}
 
 		return GetIdeaListDto.Parameter.builder()
+			.userId(userId)
 			.type(type)
 			.keyword(request.getKeyword())
 			.category(category)
@@ -43,13 +44,13 @@ public class GetIdeaListDtoConverter {
 	public static CommonPageResponse<GetIdeaListDto.IdeaDetail> toResponse(Page<Object[]> ideaMarkets) {
 
 		Page<GetIdeaListDto.IdeaDetail> response = ideaMarkets.map(
-			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1])
+			ideaMarket -> toIdeaDetail((IdeaMarket)ideaMarket[0], (Long)ideaMarket[1], (Boolean)ideaMarket[2])
 		);
 
 		return CommonPageResponse.of(response);
 	}
 
-	public static GetIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount) {
+	public static GetIdeaListDto.IdeaDetail toIdeaDetail(IdeaMarket ideaMarket, Long saveCount, Boolean isSavedPost) {
 		return GetIdeaListDto.IdeaDetail.builder()
 			.ideaId(ideaMarket.getId())
 			.auth(ideaMarket.getPostAuth().toString())
@@ -61,6 +62,7 @@ public class GetIdeaListDtoConverter {
 			.category(ideaMarket.getSpecialization().toString())
 			.saveCount(saveCount)
 			.viewCount(ideaMarket.getViewCount())
+			.isSavedPost(isSavedPost)
 			.build();
 	}
 }

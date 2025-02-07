@@ -87,7 +87,8 @@ public class IdeaMarketService {
 	public CommonPageResponse<GetIdeaListDto.IdeaDetail> getIdeaList(GetIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
-		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(parameter.getType(),
+		Page<Object[]> result = ideaMarketRepository.findIdeaListWithSaveCount(parameter.getUserId(),
+			parameter.getType(),
 			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(),
 			parameter.getPageable());
 
@@ -126,7 +127,14 @@ public class IdeaMarketService {
 			+ collectionGatheringRepository.countByJoinerIdAndInitialGathering(
 			writer.getId(), true) + requestTaskPurchasingRepository.countByBuyerIdAndAccepted(writer.getId(), true);
 
-		return GetIdeaDetailDtoConverter.toResponse(ideaMarket, writer, saveCount, totalIdeas, totalCollaborations);
+		// 저장한 게시글인지 확인
+		Boolean isSavedPost = savedPostRepository.existsByUserAndPost(user, ideaMarket);
+
+		// 내 게시글인지 확인
+		Boolean isMyPost = writer.equals(user);
+
+		return GetIdeaDetailDtoConverter.toResponse(ideaMarket, writer, saveCount, totalIdeas, totalCollaborations,
+			isSavedPost, isMyPost);
 	}
 
 	// 저장순으로 아이디어를 조회합니다.
@@ -135,7 +143,8 @@ public class IdeaMarketService {
 		GetPopularIdeaListDto.Parameter parameter) {
 
 		// 아이디어-저장수 쌍으로 반환된 결과
-		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getType(),
+		Page<Object[]> ideaMarkets = ideaMarketRepository.findPopularIdeaListWithSaveCount(parameter.getUserId(),
+			parameter.getType(),
 			parameter.getPageable());
 
 		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
