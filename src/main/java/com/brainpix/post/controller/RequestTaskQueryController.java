@@ -47,9 +47,11 @@ public class RequestTaskQueryController {
 			+ "<br>sortType : NEWEST, OLDEST, POPULAR")
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail>>> getRequestTaskList(
+		@UserId Long userId,
 		@RequestBody @Valid GetRequestTaskListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
-		GetRequestTaskListDto.Parameter parameter = GetRequestTaskListDtoConverter.toParameter(request, pageable);
+		GetRequestTaskListDto.Parameter parameter = GetRequestTaskListDtoConverter.toParameter(userId, request,
+			pageable);
 		CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail> response = requestTaskQueryService.getRequestTaskList(
 			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
@@ -60,9 +62,11 @@ public class RequestTaskQueryController {
 		+ "<br>type : OPEN_IDEA, TECH_ZONE")
 	@GetMapping("/search/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail>>> getPopularRequestTaskList(
+		@UserId Long userId,
 		@ModelAttribute @ParameterObject @Valid GetPopularRequestTaskListDto.Request request,
 		@PageableDefault(page = 0, size = 3) Pageable pageable) {
-		GetPopularRequestTaskListDto.Parameter parameter = GetPopularRequestTaskListDtoConverter.toParameter(request,
+		GetPopularRequestTaskListDto.Parameter parameter = GetPopularRequestTaskListDtoConverter.toParameter(userId,
+			request,
 			pageable);
 		CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail> response = requestTaskQueryService.getPopularRequestTaskList(
 			parameter);

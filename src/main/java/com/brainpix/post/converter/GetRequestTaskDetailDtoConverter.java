@@ -20,7 +20,7 @@ public class GetRequestTaskDetailDtoConverter {
 	}
 
 	public static GetRequestTaskDetailDto.Response toResponse(RequestTask requestTask, User writer, Long saveCount,
-		Long totalIdeas, Long totalCollaborations) {
+		Long totalIdeas, Long totalCollaborations, Boolean isSavedPost, Boolean isMyPost) {
 
 		// 작성자
 		GetRequestTaskDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
@@ -51,6 +51,8 @@ public class GetRequestTaskDetailDtoConverter {
 			.attachments(requestTask.getImageList())
 			.recruitments(recruitments)
 			.openMyProfile(requestTask.getOpenMyProfile())
+			.isSavedPost(isSavedPost)
+			.isMyPost(isMyPost)
 			.build();
 	}
 

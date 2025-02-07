@@ -44,9 +44,15 @@ public class RequestTaskQueryService {
 		GetRequestTaskListDto.Parameter parameter) {
 
 		// 요청 과제-저장수 쌍으로 반환된 결과
-		Page<Object[]> result = requestTaskRepository.findRequestTaskListWithSaveCount(parameter.getType(),
-			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(),
-			parameter.getPageable());
+		Page<Object[]> result = requestTaskRepository.findRequestTaskListWithSaveCount(
+			parameter.getUserId(),
+			parameter.getType(),
+			parameter.getKeyword(),
+			parameter.getCategory(),
+			parameter.getOnlyCompany(),
+			parameter.getSortType(),
+			parameter.getPageable()
+		);
 
 		// dto로 변환
 		return GetRequestTaskListDtoConverter.toResponse(result);
@@ -57,8 +63,11 @@ public class RequestTaskQueryService {
 		GetPopularRequestTaskListDto.Parameter parameter) {
 
 		// 요청 과제-저장수 쌍으로 반환된 결과
-		Page<Object[]> result = requestTaskRepository.findPopularRequestTaskListWithSaveCount(parameter.getType(),
-			parameter.getPageable());
+		Page<Object[]> result = requestTaskRepository.findPopularRequestTaskListWithSaveCount(
+			parameter.getUserId(),
+			parameter.getType(),
+			parameter.getPageable()
+		);
 
 		// dto로 변환
 		return GetPopularRequestTaskListDtoConverter.toResponse(result);
@@ -96,7 +105,13 @@ public class RequestTaskQueryService {
 			+ collectionGatheringRepository.countByJoinerIdAndInitialGathering(
 			writer.getId(), true) + requestTaskPurchasingRepository.countByBuyerIdAndAccepted(writer.getId(), true);
 
+		// 저장한 게시글인지 확인
+		Boolean isSavedPost = savedPostRepository.existsByUserAndPost(user, requestTask);
+
+		// 내 게시글인지 확인
+		Boolean isMyPost = writer.equals(user);
+
 		return GetRequestTaskDetailDtoConverter.toResponse(requestTask, writer, saveCount, totalIdeas,
-			totalCollaborations);
+			totalCollaborations, isSavedPost, isMyPost);
 	}
 }
