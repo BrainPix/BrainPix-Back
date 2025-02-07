@@ -21,8 +21,10 @@ public class KakaoPayApiClient {
 
 	private final RestTemplate restTemplate = new RestTemplate();
 
-	private final String READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
-	private final String APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
+	@Value("${kakao.pay.ready-url}")
+	private String READY_URL;
+	@Value("${kakao.pay.approve-url}")
+	private String APPROVE_URL;
 
 	@Value("${kakao.pay.cid}")
 	private String cid;        // TC0ONETIME (테스트용 가맹점 cid)
@@ -75,7 +77,8 @@ public class KakaoPayApiClient {
 		params.put("total_amount", String.valueOf(parameter.getTotalPrice()));
 		params.put("tax_free_amount", "0");
 		params.put("vat_amount", String.valueOf(parameter.getVat()));
-		params.put("approval_url", "https://www.brainpix.net/purchase/approve?orderId=" + orderId);
+		params.put("approval_url",
+			"https://www.brainpix.net/purchase/approve?ideaId=" + ideaMarket.getId() + "&orderId=" + orderId);
 		params.put("cancel_url", "https://www.brainpix.net/purchase/cancel?ideaId=" + ideaMarket.getId());
 		params.put("fail_url", "https://www.brainpix.net/purchase/fail?ideaId=" + ideaMarket.getId());
 

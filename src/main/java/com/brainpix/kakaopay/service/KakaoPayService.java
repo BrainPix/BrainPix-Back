@@ -3,7 +3,6 @@ package com.brainpix.kakaopay.service;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,11 +42,6 @@ public class KakaoPayService {
 	private final KakaoPaymentDataRepository kakaoPaymentDataRepository;
 	private final AlarmEventService alarmEventService;
 	private final KakaoPayApiClient kakaoPayApiClient;
-
-	@Value("${kakao.pay.secret-key}")
-	private String secretKey;    // secret-key(dev) 값 (테스트용 시크릿 값)
-	@Value("${kakao.pay.cid}")
-	private String cid;        // TC0ONETIME (테스트용 가맹점 cid)
 
 	@Transactional
 	public KakaoPayReadyDto.Response kakaoPayReady(KakaoPayReadyDto.Parameter parameter) {

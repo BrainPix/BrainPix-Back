@@ -27,7 +27,7 @@ public class KakaoPayFacadeService {
 
 	@Transactional
 	public KakaoPayApproveDto.Response kakaoPayApprove(KakaoPayApproveDto.Parameter parameter) {
-		String lockName = "LOCK_KAKAO_PAY_APPROVE";
+		String lockName = "LOCK_KAKAO_PAY_APPROVE_" + parameter.getIdeaId();
 		try {
 			acquireLock(lockName);
 			return kakaoPayService.kakaoPayApprove(parameter);

@@ -1,6 +1,7 @@
 package com.brainpix.kakaopay.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ public class KakaoPayApproveDto {
 		private String pgToken;    // 결제 최종 완료를 위한 토큰
 		@NotBlank(message = "주문 번호를 입력해주세요.")
 		private String orderId;    // 주문 번호 (세션에서 결제 정보 탐색 Key)
+		@NotNull(message = "아이디어 게시글 ID를 입력해주세요.")
+		private Long ideaId;        // 아이디어 ID
 	}
 
 	@Getter
@@ -22,6 +25,7 @@ public class KakaoPayApproveDto {
 		private Long userId;    // 유저 ID
 		private String orderId;    // 주문 번호 (결제 정보 탐색 Key)
 		private String pgToken;    // 결제 최종 완료를 위한 토큰
+		private Long ideaId;    // 아이디어 ID
 	}
 
 	@Getter
