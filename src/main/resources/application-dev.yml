@@ -40,3 +40,14 @@ kakao:
     cid: ENC(+Kb6JKxydvdU8AtNjy6i8E/0cr3mcK3/yIXO4oULT/Z41Ri57uepQtt7vEAl1uyk)
     ready-url: https://open-api.kakaopay.com/online/v1/payment/ready
     approve-url: https://open-api.kakaopay.com/online/v1/payment/approve
+
+cloud:
+  aws:
+    region: ap-northeast-2
+    credentials:
+      access-key: ENC(BmfwEKh+yJlv4gszhV+HyfOeEWIu8ZVQp86f2Oug/8y1yCo9p9elIJvoB6t9cmQF4R6DhMOcZAY5o0L5fj5Zig==)
+      secret-key: ENC(KfOW6KGilnbGL7EE4H8gC6KtfPINKq5pV73jDiVW/YKZN5cZd/hQvy62FUS/VIbEvQ/fkcGeUzrwhkY9zrMKnq+j/l6Anw1b5TsHYLj8+EA=)
+    s3:
+      bucket: ENC(rrnE1x4Zt298sljRL6ZRmr/hLjBr00/DV0MVRinK6bnb3PGWraGDEFVkwQ6C/2qI)
+    stack:
+      auto: false
