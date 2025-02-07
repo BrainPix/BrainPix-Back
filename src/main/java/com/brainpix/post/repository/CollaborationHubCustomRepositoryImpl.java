@@ -9,6 +9,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.brainpix.post.entity.QSavedPost;
+import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.collaboration_hub.QCollaborationHub;
 import com.brainpix.post.enums.PostBooleanExpression;
 import com.brainpix.post.enums.SortType;
@@ -16,6 +17,8 @@ import com.brainpix.profile.entity.Specialization;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanTemplate;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -30,7 +33,7 @@ public class CollaborationHubCustomRepositoryImpl implements CollaborationHubCus
 	QSavedPost savedPost = QSavedPost.savedPost;
 
 	@Override
-	public Page<Object[]> findCollaborationListWithSaveCount(String keyword, Specialization category,
+	public Page<Object[]> findCollaborationListWithSaveCount(Long userId, String keyword, Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable) {
 
 		// 검색 조건
@@ -43,13 +46,24 @@ public class CollaborationHubCustomRepositoryImpl implements CollaborationHubCus
 			)
 			.reduce(BooleanExpression::and)
 			.orElse(null);
-		
+
 		// 정렬 조건 (기본 값은 최신순)
 		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.COLLABORATION_NEWEST.getOrder();
 
+		// 저장 여부 판별을 위한 쿼리
+		BooleanTemplate isSavedPost = Expressions.booleanTemplate(
+			"CASE WHEN EXISTS (SELECT 1 FROM SavedPost sp WHERE sp.post.id = {0} AND sp.user.id = {1}) "
+				+ "THEN TRUE ELSE FALSE END",
+			collaborationHub.id, userId
+		);
+
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
-			.select(collaborationHub, savedPost.count())
+			.select(
+				collaborationHub,
+				savedPost.count(),
+				isSavedPost
+			)
 			.from(collaborationHub)
 			.leftJoin(savedPost).on(collaborationHub.eq(savedPost.post))
 			.where(where)
@@ -74,9 +88,10 @@ public class CollaborationHubCustomRepositoryImpl implements CollaborationHubCus
 	private List<Object[]> parsingResult(List<Tuple> queryResult) {
 		return queryResult.stream()
 			.map(tuple -> {
-				Object[] objects = new Object[2];
-				objects[0] = tuple.get(collaborationHub);
-				objects[1] = tuple.get(savedPost.count());
+				Object[] objects = new Object[3];
+				objects[0] = tuple.get(0, CollaborationHub.class);
+				objects[1] = tuple.get(1, Long.class);
+				objects[2] = tuple.get(2, Boolean.class);
 				return objects;
 			})
 			.toList();

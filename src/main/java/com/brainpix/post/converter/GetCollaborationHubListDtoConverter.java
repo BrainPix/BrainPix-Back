@@ -15,7 +15,8 @@ import com.brainpix.post.enums.SortType;
 import com.brainpix.profile.entity.Specialization;
 
 public class GetCollaborationHubListDtoConverter {
-	public static GetCollaborationHubListDto.Parameter toParameter(GetCollaborationHubListDto.Request request,
+	public static GetCollaborationHubListDto.Parameter toParameter(Long userId,
+		GetCollaborationHubListDto.Request request,
 		Pageable pageable) {
 
 		Specialization category = null;
@@ -31,6 +32,7 @@ public class GetCollaborationHubListDtoConverter {
 		}
 
 		return GetCollaborationHubListDto.Parameter.builder()
+			.userId(userId)
 			.keyword(request.getKeyword())
 			.category(category)
 			.onlyCompany(request.getOnlyCompany())
@@ -40,12 +42,12 @@ public class GetCollaborationHubListDtoConverter {
 	}
 
 	public static CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> toResponse(
-		Page<Object[]> CollaborationHubs) {
+		Page<Object[]> collaborationHubs) {
 
-		Page<GetCollaborationHubListDto.CollaborationDetail> response = CollaborationHubs
-			.map(CollaborationHub -> {
-					CollaborationHub collaboration = (CollaborationHub)CollaborationHub[0];    // 실제 엔티티 객체
-					Long saveCount = (Long)CollaborationHub[1];        // 저장 횟수
+		Page<GetCollaborationHubListDto.CollaborationDetail> response = collaborationHubs
+			.map(collaborationHub -> {
+					CollaborationHub collaboration = (CollaborationHub)collaborationHub[0];    // 실제 엔티티 객체
+					Long saveCount = (Long)collaborationHub[1];        // 저장 횟수
 					LocalDateTime deadline = collaboration.getDeadline();    // 마감 기한
 					LocalDateTime now = LocalDateTime.now();    // 현재 시간
 					Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline); // D-DAY 계산
@@ -53,7 +55,10 @@ public class GetCollaborationHubListDtoConverter {
 					// 현재 인원 및 모집 인원
 					Long occupiedQuantity = collaboration.getOccupiedQuantity();
 					Long totalQuantity = collaboration.getTotalQuantity();
-					return toCollaborationDetail(collaboration, saveCount, days, occupiedQuantity, totalQuantity);
+
+					Boolean isSavedPost = (Boolean)collaborationHub[2];
+					return toCollaborationDetail(collaboration, saveCount, days, occupiedQuantity, totalQuantity,
+						isSavedPost);
 				}
 			);
 
@@ -62,7 +67,7 @@ public class GetCollaborationHubListDtoConverter {
 
 	public static GetCollaborationHubListDto.CollaborationDetail toCollaborationDetail(
 		CollaborationHub collaborationHub, Long saveCount,
-		Long deadline, Long occupiedQuantity, Long totalQuantity) {
+		Long deadline, Long occupiedQuantity, Long totalQuantity, Boolean isSavedPost) {
 		return GetCollaborationHubListDto.CollaborationDetail.builder()
 			.collaborationId(collaborationHub.getId())
 			.auth(collaborationHub.getPostAuth().toString())
@@ -76,6 +81,7 @@ public class GetCollaborationHubListDtoConverter {
 			.totalQuantity(totalQuantity)
 			.saveCount(saveCount)
 			.viewCount(collaborationHub.getViewCount())
+			.isSavedPost(isSavedPost)
 			.build();
 	}
 }

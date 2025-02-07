@@ -100,10 +100,15 @@ public class CollaborationHubService {
 	public CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> getCollaborationHubList(
 		GetCollaborationHubListDto.Parameter parameter) {
 
-		// 협업 게시글-저장수 쌍으로 반환된 결과
+		// 협업 게시글-저장수-저장여부 쌍으로 반환된 결과
 		Page<Object[]> result = collaborationHubRepository.findCollaborationListWithSaveCount(
-			parameter.getKeyword(), parameter.getCategory(), parameter.getOnlyCompany(), parameter.getSortType(),
-			parameter.getPageable());
+			parameter.getUserId(),
+			parameter.getKeyword(),
+			parameter.getCategory(),
+			parameter.getOnlyCompany(),
+			parameter.getSortType(),
+			parameter.getPageable()
+		);
 
 		return GetCollaborationHubListDtoConverter.toResponse(result);
 	}
@@ -144,8 +149,14 @@ public class CollaborationHubService {
 		List<CollectionGathering> collectionGatherings = collectionGatheringRepository.findByCollaborationHubId(
 			collaborationHub.getId());
 
+		// 저장한 게시글인지 확인
+		Boolean isSavedPost = savedPostRepository.existsByUserAndPost(user, collaborationHub);
+
+		// 내 게시글인지 확인
+		Boolean isMyPost = writer == user;
+
 		return GetCollaborationHubDetailDtoConverter.toResponse(collaborationHub, collectionGatherings, writer,
-			saveCount, totalIdeas, totalCollaborations);
+			saveCount, totalIdeas, totalCollaborations, isSavedPost, isMyPost);
 	}
 
 	@Transactional

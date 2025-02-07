@@ -57,9 +57,11 @@ public class CollaborationHubQueryController {
 			+ "<br>sortType : NEWEST, OLDEST, POPULAR")
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail>>> getCollaborationHubList(
+		@UserId Long userId,
 		@RequestBody GetCollaborationHubListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
-		GetCollaborationHubListDto.Parameter parameter = GetCollaborationHubListDtoConverter.toParameter(request,
+		GetCollaborationHubListDto.Parameter parameter = GetCollaborationHubListDtoConverter.toParameter(userId,
+			request,
 			pageable);
 		CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> response = collaborationHubService.getCollaborationHubList(
 			parameter);
@@ -72,8 +74,8 @@ public class CollaborationHubQueryController {
 	public ResponseEntity<ApiResponse<GetCollaborationHubDetailDto.Response>> getCollaborationHubDetail(
 		@UserId Long userId,
 		@PathVariable("collaborationId") Long collaborationId) {
-		GetCollaborationHubDetailDto.Parameter parameter = GetCollaborationHubDetailDtoConverter.toParameter(
-			collaborationId, userId);
+		GetCollaborationHubDetailDto.Parameter parameter = GetCollaborationHubDetailDtoConverter.toParameter(userId,
+			collaborationId);
 		GetCollaborationHubDetailDto.Response response = collaborationHubService.getCollaborationHubDetail(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}

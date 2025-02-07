@@ -34,6 +34,8 @@ public class GetCollaborationHubDetailDto {
 		private List<Recruitment> recruitments;    // 모집 단위
 		private List<OpenMember> openMembers;    // 개최 인원
 		private Boolean openMyProfile;    // 프로필 공개 여부
+		private Boolean isSavedPost;    // 게시글 저장 여부
+		private Boolean isMyPost;    // 내 게시글인지 여부
 	}
 
 	@Builder
