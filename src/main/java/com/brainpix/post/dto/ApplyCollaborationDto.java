@@ -14,7 +14,6 @@ public class ApplyCollaborationDto {
 		Long collaborationRecruitmentId;    // 지원 분야 식별자
 		@NotNull(message = "자기소개 및 포트폴리오 공개 여부를 결정해주세요.")
 		Boolean isOpenProfile;    // 자기소개 및 포트폴리오 공개 여부
-		@NotNull(message = "메시지에 null 값은 허용되지 않습니다.")
 		String message;    // 추가 메시지
 	}
 

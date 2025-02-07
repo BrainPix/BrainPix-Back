@@ -19,6 +19,7 @@ import com.brainpix.post.dto.GetRequestTaskListDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.security.authority.BrainpixAuthority;
@@ -29,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RequestTaskQueryService {
 
 	private final RequestTaskRepository requestTaskRepository;
@@ -38,8 +38,10 @@ public class RequestTaskQueryService {
 	private final CollectionGatheringRepository collectionGatheringRepository;
 	private final UserRepository userRepository;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final PostRepository postRepository;
 
 	// 요청 과제 메인페이지에서 검색 조건을 적용하여 요청 과제 목록을 반환합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail> getRequestTaskList(
 		GetRequestTaskListDto.Parameter parameter) {
 
@@ -53,6 +55,7 @@ public class RequestTaskQueryService {
 	}
 
 	// 저장순으로 요청 과제를 조회합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail> getPopularRequestTaskList(
 		GetPopularRequestTaskListDto.Parameter parameter) {
 
@@ -65,6 +68,7 @@ public class RequestTaskQueryService {
 	}
 
 	// 요청 과제 상세 페이지 내용을 조회합니다.
+	@Transactional
 	public GetRequestTaskDetailDto.Response getRequestTaskDetail(
 		GetRequestTaskDetailDto.Parameter parameter) {
 
@@ -81,6 +85,9 @@ public class RequestTaskQueryService {
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
 			throw new BrainPixException(PostErrorCode.FORBIDDEN_ACCESS);
 		}
+
+		// 조회수 증가
+		postRepository.increaseViewCount(requestTask.getId());
 
 		// 작성자 조회
 		User writer = requestTask.getWriter();

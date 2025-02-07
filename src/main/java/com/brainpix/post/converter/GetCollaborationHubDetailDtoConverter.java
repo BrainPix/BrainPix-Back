@@ -8,7 +8,6 @@ import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
-import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
 
 public class GetCollaborationHubDetailDtoConverter {
@@ -49,7 +48,8 @@ public class GetCollaborationHubDetailDtoConverter {
 
 		return GetCollaborationHubDetailDto.Response.builder()
 			.collaborationId(collaborationHub.getId())
-			.thumbnailImageUrl(collaborationHub.getImageList() != null ? collaborationHub.getImageList().get(0) : null)
+			.thumbnailImageUrl(
+				!collaborationHub.getImageList().isEmpty() ? collaborationHub.getImageList().get(0) : null)
 			.category(collaborationHub.getSpecialization().toString())
 			.auth(collaborationHub.getPostAuth().toString())
 			.title(collaborationHub.getTitle())
@@ -60,7 +60,7 @@ public class GetCollaborationHubDetailDtoConverter {
 			.saveCount(saveCount)
 			.createdDate(collaborationHub.getCreatedAt().toLocalDate())
 			.writer(writerDto)
-			.attachments(collaborationHub.getImageList())
+			.attachments(collaborationHub.getAttachmentFileList())
 			.recruitments(recruitments)
 			.openMembers(openMembers)
 			.openMyProfile(collaborationHub.getOpenMyProfile())
@@ -73,8 +73,8 @@ public class GetCollaborationHubDetailDtoConverter {
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
-			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList() != null ?
+			.role(writer.getUserType())
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
 				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)

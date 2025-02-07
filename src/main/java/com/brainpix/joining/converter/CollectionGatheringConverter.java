@@ -32,6 +32,7 @@ public class CollectionGatheringConverter {
 			.postTitle(hub.getTitle())
 			.specialization(hub.getSpecialization())
 			.domain(recruitment.getDomain())
+			.collaborationId(hub.getId())
 			.build();
 	}
 
@@ -47,7 +48,6 @@ public class CollectionGatheringConverter {
 		// 작성자 정보
 		User writer = hub.getWriter();
 		String writerName = writer.getName();
-		String writerType = (writer instanceof Individual) ? "개인" : "회사";
 
 		return AcceptedCollaborationDto.builder()
 			.collectionGatheringId(cg.getId())
@@ -57,8 +57,9 @@ public class CollectionGatheringConverter {
 			.specialization(hub.getSpecialization())
 			.domain(recruitment.getDomain())
 			.writerName(writerName)
-			.writerType(writerType)
+			.writerType(writer.getUserType())
 			.teamInfoList(teamInfoList)
+			.collaborationId(hub.getId())
 			.build();
 	}
 
@@ -84,15 +85,22 @@ public class CollectionGatheringConverter {
 		List<CollectionGathering> joined =
 			findAcceptedOrInitial(recruitment.getCollectionGatherings());
 
-		List<String> joinerIds = joined.stream()
-			.map(cg -> cg.getJoiner().getName())
+		List<TeamMemberInfoDto.JoinerInfo> joiners = joined.stream()
+			.map(cg -> {
+				User joiner = cg.getJoiner();
+				String userType = (joiner instanceof Individual) ? "개인" : "회사";
+				return TeamMemberInfoDto.JoinerInfo.builder()
+					.joinerID(joiner.getIdentifier())
+					.userType(userType)
+					.build();
+			})
 			.collect(Collectors.toList());
 
 		return TeamMemberInfoDto.builder()
 			.domain(recruitment.getDomain())
 			.occupied(occupied)
 			.total(total)
-			.joinerIds(joinerIds)
+			.joiners(joiners)
 			.build();
 	}
 

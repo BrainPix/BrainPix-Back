@@ -31,4 +31,5 @@ public class AcceptedRequestTaskPurchasingDto {
 	// 게시물 작성자 정보 (이름 + 개인/회사)
 	private String writerName;
 	private String writerType;            // "개인" or "회사"
+	private Long requestTaskId;
 }

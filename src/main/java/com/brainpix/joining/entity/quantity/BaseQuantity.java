@@ -25,4 +25,8 @@ public abstract class BaseQuantity extends BaseTimeEntity {
 	public Long getRemainingQuantity() {
 		return this.totalQuantity - this.occupiedQuantity;
 	}
+
+	public void increaseOccupiedQuantity(Long quantity) {
+		this.occupiedQuantity += quantity;
+	}
 }

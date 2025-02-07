@@ -27,4 +27,5 @@ public class RejectedRequestTaskPurchasingDto {
 	private String postTitle;             // 게시글 제목
 	private Specialization specialization;
 	private String domain;                // 지원 파트 (ex: "디자이너")
+	private Long requestTaskId;
 }
