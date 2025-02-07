@@ -17,26 +17,28 @@ public abstract class SignUpService {
 
 	private final UserRepository userRepository;
 	public final PasswordEncoder passwordEncoder;
+	private final EmailAuthService emailAuthService;
 
 	public void signUpUser(SignUpRequest.CommonSignUpRequest commonSignUpRequest) {
-		if (isDuplicated(commonSignUpRequest.getId())) {
-			throw new BrainPixException(SecurityErrorCode.IDENTIFIER_DUPLICATED);
-		}
-		if (isDuplicatedNickName(commonSignUpRequest.getUserNickName())) {
-			throw new BrainPixException(SecurityErrorCode.NICKNAME_DUPLICATED);
-		}
+		checkDuplicated(commonSignUpRequest.getId());
+		checkDuplicatedNickName(commonSignUpRequest.myNickname());
+		emailAuthService.checkEmailToken(commonSignUpRequest.getEmail(), commonSignUpRequest.getEmailToken());
 
 		User user = commonSignUpRequest.toEntity(passwordEncoder.encode(commonSignUpRequest.getPassword()));
 		userRepository.save(user);
 		firstSignupProcess(user);
 	}
 
-	public boolean isDuplicated(String identifier) {
-		return userRepository.findByIdentifier(identifier).isPresent();
+	public void checkDuplicated(String identifier) {
+		if (userRepository.findByIdentifier(identifier).isPresent()) {
+			throw new BrainPixException(SecurityErrorCode.IDENTIFIER_DUPLICATED);
+		}
 	}
 
-	public boolean isDuplicatedNickName(String nickName) {
-		return userRepository.findByNickName(nickName).isPresent();
+	public void checkDuplicatedNickName(String nickName) {
+		if (userRepository.findByNickName(nickName).isPresent()) {
+			throw new BrainPixException(SecurityErrorCode.NICKNAME_DUPLICATED);
+		}
 	}
 
 	protected abstract void firstSignupProcess(User user);

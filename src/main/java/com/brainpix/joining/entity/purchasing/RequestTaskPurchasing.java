@@ -31,16 +31,22 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 
 	private Boolean accepted;
 
+	private Boolean openProfile;
+	private String message;
+
 	@ManyToOne
 	private RequestTaskRecruitment requestTaskRecruitment;
 
 	@Builder
-	public RequestTaskPurchasing(User buyer, Long price, PaymentDuration paymentDuration, Boolean accepted,
-		RequestTaskRecruitment requestTaskRecruitment) {
+	public RequestTaskPurchasing(Long id, User buyer, Long price, PaymentDuration paymentDuration, Boolean accepted,
+		Boolean openProfile, String message, RequestTaskRecruitment requestTaskRecruitment) {
+		this.id = id;
 		this.buyer = buyer;
 		this.price = price;
 		this.paymentDuration = paymentDuration;
 		this.accepted = accepted;
+		this.openProfile = openProfile;
+		this.message = message;
 		this.requestTaskRecruitment = requestTaskRecruitment;
 	}
 
@@ -54,5 +60,13 @@ public class RequestTaskPurchasing extends BaseTimeEntity {
 		if (Boolean.TRUE.equals(this.accepted)) {
 			throw new BrainPixException(PurchasingErrorCode.INVALID_STATUS);
 		}
+	}
+
+	public void approve() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
 	}
 }

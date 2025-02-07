@@ -2,11 +2,11 @@ package com.brainpix.post.converter;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.brainpix.api.CommonPageResponse;
 import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.post.dto.GetCollaborationHubListDto;
@@ -39,9 +39,10 @@ public class GetCollaborationHubListDtoConverter {
 			.build();
 	}
 
-	public static GetCollaborationHubListDto.Response toResponse(Page<Object[]> CollaborationHubs) {
+	public static CommonPageResponse<GetCollaborationHubListDto.CollaborationDetail> toResponse(
+		Page<Object[]> CollaborationHubs) {
 
-		List<GetCollaborationHubListDto.CollaborationDetail> collaborationDetailList = CollaborationHubs.stream()
+		Page<GetCollaborationHubListDto.CollaborationDetail> response = CollaborationHubs
 			.map(CollaborationHub -> {
 					CollaborationHub collaboration = (CollaborationHub)CollaborationHub[0];    // 실제 엔티티 객체
 					Long saveCount = (Long)CollaborationHub[1];        // 저장 횟수
@@ -54,34 +55,28 @@ public class GetCollaborationHubListDtoConverter {
 					Long totalQuantity = collaboration.getTotalQuantity();
 					return toCollaborationDetail(collaboration, saveCount, days, occupiedQuantity, totalQuantity);
 				}
-			).toList();
+			);
 
-		return GetCollaborationHubListDto.Response.builder()
-			.collaborationDetailList(collaborationDetailList)
-			.totalPages(CollaborationHubs.getTotalPages())
-			.totalElements((int)CollaborationHubs.getTotalElements())
-			.currentPage(CollaborationHubs.getNumber())
-			.currentSize(CollaborationHubs.getNumberOfElements())
-			.hasNext(CollaborationHubs.hasNext())
-			.build();
+		return CommonPageResponse.of(response);
 	}
 
 	public static GetCollaborationHubListDto.CollaborationDetail toCollaborationDetail(
-		CollaborationHub CollaborationHub, Long saveCount,
+		CollaborationHub collaborationHub, Long saveCount,
 		Long deadline, Long occupiedQuantity, Long totalQuantity) {
 		return GetCollaborationHubListDto.CollaborationDetail.builder()
-			.collaborationId(CollaborationHub.getId())
-			.auth(CollaborationHub.getPostAuth().toString())
-			.writerImageUrl(CollaborationHub.getWriter().getProfileImage())
-			.writerName(CollaborationHub.getWriter().getName())
-			.thumbnailImageUrl(CollaborationHub.getImageList().get(0))
-			.title(CollaborationHub.getTitle())
+			.collaborationId(collaborationHub.getId())
+			.auth(collaborationHub.getPostAuth().toString())
+			.writerImageUrl(collaborationHub.getWriter().getProfileImage())
+			.writerName(collaborationHub.getWriter().getName())
+			.thumbnailImageUrl(
+				!collaborationHub.getImageList().isEmpty() ? collaborationHub.getImageList().get(0) : null)
+			.title(collaborationHub.getTitle())
 			.deadline(deadline)
-			.category(CollaborationHub.getSpecialization().toString())
+			.category(collaborationHub.getSpecialization().toString())
 			.occupiedQuantity(occupiedQuantity)
 			.totalQuantity(totalQuantity)
 			.saveCount(saveCount)
-			.viewCount(CollaborationHub.getViewCount())
+			.viewCount(collaborationHub.getViewCount())
 			.build();
 	}
 }

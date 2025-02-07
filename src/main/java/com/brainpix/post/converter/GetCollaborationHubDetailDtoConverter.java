@@ -8,14 +8,14 @@ import com.brainpix.joining.entity.purchasing.CollectionGathering;
 import com.brainpix.post.dto.GetCollaborationHubDetailDto;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
-import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
 
 public class GetCollaborationHubDetailDtoConverter {
 
-	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId) {
+	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId, Long userId) {
 		return GetCollaborationHubDetailDto.Parameter.builder()
 			.collaborationId(collaborationId)
+			.userId(userId)
 			.build();
 	}
 
@@ -48,7 +48,8 @@ public class GetCollaborationHubDetailDtoConverter {
 
 		return GetCollaborationHubDetailDto.Response.builder()
 			.collaborationId(collaborationHub.getId())
-			.thumbnailImageUrl(collaborationHub.getImageList().get(0))
+			.thumbnailImageUrl(
+				!collaborationHub.getImageList().isEmpty() ? collaborationHub.getImageList().get(0) : null)
 			.category(collaborationHub.getSpecialization().toString())
 			.auth(collaborationHub.getPostAuth().toString())
 			.title(collaborationHub.getTitle())
@@ -59,19 +60,22 @@ public class GetCollaborationHubDetailDtoConverter {
 			.saveCount(saveCount)
 			.createdDate(collaborationHub.getCreatedAt().toLocalDate())
 			.writer(writerDto)
-			.attachments(collaborationHub.getImageList())
+			.attachments(collaborationHub.getAttachmentFileList())
 			.recruitments(recruitments)
 			.openMembers(openMembers)
+			.openMyProfile(collaborationHub.getOpenMyProfile())
 			.build();
 	}
 
 	public static GetCollaborationHubDetailDto.Writer toWriter(User writer, Long totalIdeas, Long totalCollaborations) {
+
 		return GetCollaborationHubDetailDto.Writer.builder()
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
-			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList().get(0).toString())
+			.role(writer.getUserType())
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
+				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)
 			.build();
@@ -91,7 +95,7 @@ public class GetCollaborationHubDetailDtoConverter {
 			.userId(collectionGathering.getJoiner().getId())
 			.name(collectionGathering.getJoiner().getName())
 			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
-			// .isOpenPortfolio(?)
+			.openMyProfile(collectionGathering.getOpenProfile())
 			.build();
 	}
 }

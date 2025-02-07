@@ -7,13 +7,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.brainpix.security.filter.JwtAuthenticationFilter;
+import com.brainpix.security.tokenManger.TokenManager;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+
+	private final TokenManager tokenManager;
 
 	@Bean
 	public SecurityFilterChain publicResourceConfig(HttpSecurity http) throws Exception {
@@ -22,6 +31,7 @@ public class SecurityConfig {
 		http.cors(
 			cors -> cors.configurationSource(corsConfigurationSource())
 		);
+		http.addFilterAt(new JwtAuthenticationFilter(tokenManager), BasicAuthenticationFilter.class);
 		http.authorizeHttpRequests(
 			(authorizeRequests)
 				-> authorizeRequests.anyRequest().permitAll()
@@ -32,8 +42,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.addAllowedOrigin("http://localhost:3000");
-		configuration.addAllowedOrigin("https://www.brainpix.net");
+		configuration.addAllowedOriginPattern("*");
 
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");

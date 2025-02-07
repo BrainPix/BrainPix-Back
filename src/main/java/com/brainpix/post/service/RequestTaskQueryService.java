@@ -5,34 +5,43 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.CommonPageResponse;
-import com.brainpix.api.code.error.RequestTaskErrorCode;
+import com.brainpix.api.code.error.CommonErrorCode;
+import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
+import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
 import com.brainpix.post.converter.GetPopularRequestTaskListDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskDetailDtoConverter;
 import com.brainpix.post.converter.GetRequestTaskListDtoConverter;
 import com.brainpix.post.dto.GetPopularRequestTaskListDto;
 import com.brainpix.post.dto.GetRequestTaskDetailDto;
 import com.brainpix.post.dto.GetRequestTaskListDto;
+import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
+import com.brainpix.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RequestTaskQueryService {
 
 	private final RequestTaskRepository requestTaskRepository;
 	private final SavedPostRepository savedPostRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final CollectionGatheringRepository collectionGatheringRepository;
+	private final UserRepository userRepository;
+	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
+	private final PostRepository postRepository;
 
 	// 요청 과제 메인페이지에서 검색 조건을 적용하여 요청 과제 목록을 반환합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetRequestTaskListDto.RequestTaskDetail> getRequestTaskList(
 		GetRequestTaskListDto.Parameter parameter) {
 
@@ -46,6 +55,7 @@ public class RequestTaskQueryService {
 	}
 
 	// 저장순으로 요청 과제를 조회합니다.
+	@Transactional(readOnly = true)
 	public CommonPageResponse<GetPopularRequestTaskListDto.RequestTaskDetail> getPopularRequestTaskList(
 		GetPopularRequestTaskListDto.Parameter parameter) {
 
@@ -58,12 +68,26 @@ public class RequestTaskQueryService {
 	}
 
 	// 요청 과제 상세 페이지 내용을 조회합니다.
+	@Transactional
 	public GetRequestTaskDetailDto.Response getRequestTaskDetail(
 		GetRequestTaskDetailDto.Parameter parameter) {
 
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
+
 		// 요청 과제 조회
 		RequestTask requestTask = requestTaskRepository.findById(parameter.getTaskId())
-			.orElseThrow(() -> new BrainPixException(RequestTaskErrorCode.TASK_NOT_FOUND));
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
+
+		// 개인이 기업 게시물을 상세보기 하는 경우 처리
+		if (requestTask.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
+			.equals(BrainpixAuthority.INDIVIDUAL)) {
+			throw new BrainPixException(PostErrorCode.FORBIDDEN_ACCESS);
+		}
+
+		// 조회수 증가
+		postRepository.increaseViewCount(requestTask.getId());
 
 		// 작성자 조회
 		User writer = requestTask.getWriter();
@@ -75,7 +99,9 @@ public class RequestTaskQueryService {
 		Long totalIdeas = ideaMarketRepository.countByWriterId(writer.getId());
 
 		// 작성자의 협업 횟수
-		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true);
+		Long totalCollaborations = collectionGatheringRepository.countByJoinerIdAndAccepted(writer.getId(), true)
+			+ collectionGatheringRepository.countByJoinerIdAndInitialGathering(
+			writer.getId(), true) + requestTaskPurchasingRepository.countByBuyerIdAndAccepted(writer.getId(), true);
 
 		return GetRequestTaskDetailDtoConverter.toResponse(requestTask, writer, saveCount, totalIdeas,
 			totalCollaborations);

@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.brainpix.joining.dto.IdeaMarketPurchaseDto;
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
-import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
-import com.brainpix.post.entity.idea_market.IdeaMarketType;
-import com.brainpix.user.entity.Individual;
+import com.brainpix.profile.entity.Specialization;
 import com.brainpix.user.entity.User;
 
 @Component
@@ -21,38 +19,26 @@ public class IdeaMarketPurchasingConverter {
 
 		// 게시글
 		IdeaMarket ideaMarket = purchasing.getIdeaMarket();
-		String category = "아이디어마켓 > " + ideaMarket.getSpecialization();
+		Specialization category = ideaMarket.getSpecialization();
 		String title = ideaMarket.getTitle();
 
 		// 작성자
 		User writer = ideaMarket.getWriter();
 		String writerName = writer.getName();
-		String writerType = (writer instanceof Individual) ? "개인" : "회사";
-
-		// 아이디어마켓 타입
-		IdeaMarketType type = ideaMarket.getIdeaMarketType();
-
-		// 수량 결정 (IDEA_SOLUTION → 1, MARKET_PLACE → price.totalQuantity)
-		Price priceEntity = ideaMarket.getPrice();
-		Long quantity = (type == IdeaMarketType.IDEA_SOLUTION)
-			? 1L
-			: priceEntity.getTotalQuantity();
-
-		// 금액 계산
-		long basePrice = priceEntity.getPrice() * quantity;
-		long fee = (long)(basePrice * 0.01); // 1% 예시
-		long finalPrice = basePrice + fee;
+		Long itemPrice = ideaMarket.getPrice().getPrice();
 
 		return IdeaMarketPurchaseDto.builder()
 			.purchasingId(purchasingId)
 			.purchasedAt(purchasedAt)
-			.category(category)
+			.specialization(category)
 			.title(title)
 			.writerName(writerName)
-			.writerType(writerType)
-			.quantity(quantity)
-			.fee(fee)
-			.finalPrice(finalPrice)
+			.writerType(writer.getUserType())
+			.middlePrice(itemPrice)
+			.quantity(purchasing.getQuantity())
+			.fee(purchasing.getVat())
+			.finalPrice(purchasing.getPrice())
+			.ideaMarketId(ideaMarket.getId())
 			.build();
 	}
 }

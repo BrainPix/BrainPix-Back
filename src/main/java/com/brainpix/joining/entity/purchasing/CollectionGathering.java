@@ -32,16 +32,22 @@ public class CollectionGathering extends BaseTimeEntity {
 
 	private Boolean initialGathering;
 
+	private Boolean openProfile;
+	private String message;
+
 	@ManyToOne
 	@JoinColumn(name = "collaboration_recruitment_id")
 	private CollaborationRecruitment collaborationRecruitment;
 
 	@Builder
-	public CollectionGathering(User joiner, Boolean accepted, Boolean initialGathering,
-		CollaborationRecruitment collaborationRecruitment) {
+	public CollectionGathering(Long id, User joiner, Boolean accepted, Boolean initialGathering, Boolean openProfile,
+		String message, CollaborationRecruitment collaborationRecruitment) {
+		this.id = id;
 		this.joiner = joiner;
 		this.accepted = accepted;
 		this.initialGathering = initialGathering;
+		this.openProfile = openProfile;
+		this.message = message;
 		this.collaborationRecruitment = collaborationRecruitment;
 	}
 
@@ -55,5 +61,13 @@ public class CollectionGathering extends BaseTimeEntity {
 		if (Boolean.TRUE.equals(this.accepted)) {
 			throw new BrainPixException(CollectionErrorCode.INVALID_STATUS);
 		}
+	}
+
+	public void approve() {
+		this.accepted = true;
+	}
+
+	public void reject() {
+		this.accepted = false;
 	}
 }

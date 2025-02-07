@@ -7,14 +7,14 @@ import java.util.List;
 import com.brainpix.post.dto.GetRequestTaskDetailDto;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.entity.request_task.RequestTaskRecruitment;
-import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
 
 public class GetRequestTaskDetailDtoConverter {
 
-	public static GetRequestTaskDetailDto.Parameter toParameter(Long taskId) {
+	public static GetRequestTaskDetailDto.Parameter toParameter(Long taskId, Long userId) {
 		return GetRequestTaskDetailDto.Parameter.builder()
 			.taskId(taskId)
+			.userId(userId)
 			.build();
 	}
 
@@ -36,7 +36,7 @@ public class GetRequestTaskDetailDtoConverter {
 
 		return GetRequestTaskDetailDto.Response.builder()
 			.taskId(requestTask.getId())
-			.thumbnailImageUrl(requestTask.getImageList().get(0))
+			.thumbnailImageUrl(requestTask.getImageList() != null ? requestTask.getImageList().get(0) : null)
 			.category(requestTask.getSpecialization().toString())
 			.requestTaskType(requestTask.getRequestTaskType().toString())
 			.auth(requestTask.getPostAuth().toString())
@@ -47,8 +47,9 @@ public class GetRequestTaskDetailDtoConverter {
 			.saveCount(saveCount)
 			.createdDate(requestTask.getCreatedAt().toLocalDate())
 			.writer(writerDto)
-			.attachments(requestTask.getImageList())
+			.attachments(requestTask.getAttachmentFileList())
 			.recruitments(recruitments)
+			.openMyProfile(requestTask.getOpenMyProfile())
 			.build();
 	}
 
@@ -57,8 +58,9 @@ public class GetRequestTaskDetailDtoConverter {
 			.writerId(writer.getId())
 			.name(writer.getName())
 			.profileImageUrl(writer.getProfileImage())
-			.role(writer instanceof Company ? "COMPANY" : "INDIVIDUAL")
-			.specialization(writer.getProfile().getSpecializationList().get(0).toString())
+			.role(writer.getUserType())
+			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
+				writer.getProfile().getSpecializationList().get(0).toString() : null)
 			.totalIdeas(totalIdeas)
 			.totalCollaborations(totalCollaborations)
 			.build();

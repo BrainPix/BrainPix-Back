@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.brainpix.post.entity.request_task.RequestTaskType;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class GetPopularRequestTaskListDto {
 	@Getter
 	@Setter
 	public static class Request {
+		@NotBlank(message = "요청 과제 타입은 필수입니다. (OPEN_IDEA, TECH_ZONE)")
 		private String type;    // 요청 과제 타입
 	}
 

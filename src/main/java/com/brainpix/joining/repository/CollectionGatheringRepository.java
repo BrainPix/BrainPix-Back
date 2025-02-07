@@ -1,15 +1,15 @@
 package com.brainpix.joining.repository;
 
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.brainpix.joining.entity.purchasing.CollectionGathering;
+import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.user.entity.User;
 
 public interface CollectionGatheringRepository extends JpaRepository<CollectionGathering, Long> {
@@ -17,6 +17,7 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 	// 협업 횟수 조회 (승낙된 협업)
 	Long countByJoinerIdAndAccepted(Long joinerId, Boolean accepted);
 
+	Long countByJoinerIdAndInitialGathering(Long joinerId, Boolean initialGathering);
 
 	Page<CollectionGathering> findByJoinerAndAcceptedIsFalse(User joiner, Pageable pageable);
 
@@ -29,4 +30,14 @@ public interface CollectionGatheringRepository extends JpaRepository<CollectionG
 		"AND cg.initialGathering = true")
 	List<CollectionGathering> findByCollaborationHubId(@Param("collaborationHubId") Long collaborationHubId);
 
+	// 이미 지원했던 분야인지 확인
+	boolean existsByJoinerIdAndCollaborationRecruitmentId(Long joinerId, Long collaborationRecruitmentId);
+
+	List<CollectionGathering> findByCollaborationRecruitmentIn(
+		List<CollaborationRecruitment> recruitments);
+
+	List<CollectionGathering> findByCollaborationRecruitmentInAndAcceptedIsNull(
+		List<CollaborationRecruitment> recruitments);
+
 }
+

@@ -18,8 +18,25 @@ spring:
         format_sql: true
   data:
     mongodb:
-      uri: ENC(OyBqzmMmtLqk4kAhF/+3rGjN/7ZzE3gIHHBE5T7sfRK2fgj3L+xq26lIUmkJG4Aqa0gQ5i83l43yGpxOIuT56aQ098QukuiFAPYNVpSerxY=)
+      uri: ENC(ntZhfbWKkCOZNqOpRHvqXNo6dobNfFZ/Di5ttdUS2DYYcrgyKJ65WS2QwDANfHxaLz5oYrPgYOiEfRgtWSCq+Iz9sMKPumkayGCZRCGK+zrV4SjF0DHUHMgCWOjgiZJKJBbHxKbwdgwHHnNAJkYGixZMTy2fTp+5OJKFOMSn5Lb5Mz+UXFnMKfrIhnIV6HAjd8Lew8yry6npsHneBiXzlA==)
+  mail:
+    host: ENC(5WpWHIIQtBVAYDvxlhS3jjaEZXLMSQjIqO5kXPrLze/PM29RbHV3U8Z6ihG501qp)
+    username: ENC(prCp5Ol/nxisuAB+sy7D1brjRQDnk1sArHFMZ1J310Q7O/DOed09i9OXAiZBSrh2Lae9pI7soUI6dxdpgcx3KA==)
+    password: ENC(15oeubKhgXAzVQFYZJlBH+zhMn9nO9baDacvG0xfZVKCALibswPooowYZbQHja6X/kgi0gSJ5/kVx6yuQhgz+Q==)
 jasypt:
   encryptor:
     password: jasyptKey
     bean: jasyptEncryptor
+
+jwt:
+  secret: ENC(IM7p+pHVt55x2ugo5fWNu03bDw76hiCwRRWk/Os7r3Cvpcbk1lKtLccdbaWmCI+bOTsjepwpIpbHSVorbDTd0t0JfKMuskq75YfF9ehPzjw/4nEkK5Pli/FnDqeiT6fiFSnVvlGrsswp3BVR0YOzwbxMTAz06cGEu+fNqW3DzLBpv3WGIzcMP4BodGohaoct)
+
+springdoc:
+  use-fqn: true
+
+kakao:
+  pay:
+    secret-key: ENC(97EXNTaZOAO5M/YmiG831cRnVLAaz2aVg3+bWr6obBiBk5k0sg91JTZv1sGHFhCNTatNJV4XX43l5Qxz1eBk0m1QMJ/VDLJ9T6AC/6yuISQ=)
+    cid: ENC(+Kb6JKxydvdU8AtNjy6i8E/0cr3mcK3/yIXO4oULT/Z41Ri57uepQtt7vEAl1uyk)
+    ready-url: https://open-api.kakaopay.com/online/v1/payment/ready
+    approve-url: https://open-api.kakaopay.com/online/v1/payment/approve

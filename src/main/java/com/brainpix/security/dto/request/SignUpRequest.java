@@ -19,10 +19,11 @@ public class SignUpRequest {
 		protected String name;
 		protected LocalDate birthday;
 		protected String email;
+		protected String emailToken;
 
 		public abstract User toEntity(String encodedPassword);
 
-		public abstract String getUserNickName();
+		public abstract String myNickname();
 	}
 
 	@Getter
@@ -44,7 +45,7 @@ public class SignUpRequest {
 		}
 
 		@Override
-		public String getUserNickName() {
+		public String myNickname() {
 			return nickName;
 		}
 	}
@@ -70,7 +71,7 @@ public class SignUpRequest {
 		}
 
 		@Override
-		public String getUserNickName() {
+		public String myNickname() {
 			return companyName;
 		}
 	}
