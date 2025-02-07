@@ -8,7 +8,6 @@ import com.brainpix.joining.dto.IdeaMarketPurchaseDto;
 import com.brainpix.joining.entity.purchasing.IdeaMarketPurchasing;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.profile.entity.Specialization;
-import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 
 @Component
@@ -26,8 +25,6 @@ public class IdeaMarketPurchasingConverter {
 		// 작성자
 		User writer = ideaMarket.getWriter();
 		String writerName = writer.getName();
-		String writerType = (writer instanceof Individual) ? "개인" : "회사";
-
 		Long itemPrice = ideaMarket.getPrice().getPrice();
 
 		return IdeaMarketPurchaseDto.builder()
@@ -36,7 +33,7 @@ public class IdeaMarketPurchasingConverter {
 			.specialization(category)
 			.title(title)
 			.writerName(writerName)
-			.writerType(writerType)
+			.writerType(writer.getUserType())
 			.middlePrice(itemPrice)
 			.quantity(purchasing.getQuantity())
 			.fee(purchasing.getVat())
