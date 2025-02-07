@@ -18,6 +18,7 @@ public class MyProfileConverter {
 		IndividualProfile profile = (IndividualProfile)user.getProfile();
 
 		return IndividualProfileResponseDto.builder()
+			.userId(user.getId())
 			.userType("개인")
 			.specializations(profile.getSpecializationList().stream()
 				.toList())
@@ -49,6 +50,7 @@ public class MyProfileConverter {
 		CompanyProfile profile = (CompanyProfile)user.getProfile();
 
 		return CompanyProfileResponseDto.builder()
+			.userId(user.getId())
 			.userType("기업")
 			.specializations(profile.getSpecializationList().stream()
 				.toList())

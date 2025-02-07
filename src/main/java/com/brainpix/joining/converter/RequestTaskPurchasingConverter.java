@@ -29,6 +29,7 @@ public class RequestTaskPurchasingConverter {
 			.postTitle(requestTask.getTitle())
 			.specialization(requestTask.getSpecialization())
 			.domain(recruitment.getDomain())
+			.requestTaskId(requestTask.getId())
 			.build();
 	}
 
@@ -52,6 +53,7 @@ public class RequestTaskPurchasingConverter {
 			.domain(recruitment.getDomain())
 			.writerName(writerName)
 			.writerType(writerType)
+			.requestTaskId(requestTask.getId())
 			.build();
 	}
 }

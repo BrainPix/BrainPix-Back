@@ -19,6 +19,7 @@ import com.brainpix.post.dto.mypostdto.RequestTaskCurrentMemberResponse;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.user.entity.Individual;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -63,9 +64,14 @@ public class MyRequestTaskService {
 			.findByRequestTaskRecruitmentInAndAcceptedTrue(requestTask.getRecruitments())
 			.stream()
 			.collect(Collectors.groupingBy(
-				purchasing -> purchasing.getRequestTaskRecruitment().getDomain(), //역할별 그룹화
-				Collectors.mapping(purchasing -> purchasing.getBuyer().getIdentifier(), Collectors.toList())
-				// 승인된 멤버 ID 리스트
+				collection -> collection.getRequestTaskRecruitment().getDomain(),
+				Collectors.mapping(collection -> {
+					User buyer = collection.getBuyer();
+					String userType = (buyer instanceof Individual) ? "개인" : "회사";
+					Long acceptedMemberId = buyer.getId();
+					return RequestTaskCurrentMemberResponse.AcceptedInfo.from(buyer.getIdentifier(), userType,
+						acceptedMemberId);
+				}, Collectors.toList())
 			))
 			.entrySet()
 			.stream()

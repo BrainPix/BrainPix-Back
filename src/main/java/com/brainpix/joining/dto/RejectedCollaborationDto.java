@@ -27,4 +27,5 @@ public class RejectedCollaborationDto {
 	private String postTitle;             // 게시글 제목
 	private Specialization specialization;
 	private String domain;                // 지원한 파트
+	private Long collaborationId;
 }
