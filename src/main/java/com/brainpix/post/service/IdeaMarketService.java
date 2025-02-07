@@ -16,9 +16,11 @@ import com.brainpix.joining.service.PriceService;
 import com.brainpix.post.converter.CreateIdeaMarketConverter;
 import com.brainpix.post.converter.GetIdeaDetailDtoConverter;
 import com.brainpix.post.converter.GetIdeaListDtoConverter;
+import com.brainpix.post.converter.GetIdeaPurchasePageDtoConverter;
 import com.brainpix.post.converter.GetPopularIdeaListDtoConverter;
 import com.brainpix.post.dto.GetIdeaDetailDto;
 import com.brainpix.post.dto.GetIdeaListDto;
+import com.brainpix.post.dto.GetIdeaPurchasePageDto;
 import com.brainpix.post.dto.GetPopularIdeaListDto;
 import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
@@ -144,5 +146,32 @@ public class IdeaMarketService {
 			parameter.getPageable());
 
 		return GetPopularIdeaListDtoConverter.toResponse(ideaMarkets);
+	}
+
+	@Transactional(readOnly = true)
+	public GetIdeaPurchasePageDto.Response getIdeaPurchasePage(GetIdeaPurchasePageDto.Parameter parameter) {
+
+		// 유저 조회
+		User user = userRepository.findById(parameter.getUserId())
+			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
+
+		// 아이디어 조회
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
+			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
+
+		// 판매자 정보 조회
+		User seller = ideaMarket.getWriter();
+
+		// 개인이 기업 게시물을 구매하려는 경우 처리
+		if (ideaMarket.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
+			.equals(BrainpixAuthority.INDIVIDUAL)) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
+		// 글 작성자가 구매하려는 경우 처리
+		if (seller == user) {
+			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+		}
+
+		return GetIdeaPurchasePageDtoConverter.toResponse(ideaMarket, seller);
 	}
 }
