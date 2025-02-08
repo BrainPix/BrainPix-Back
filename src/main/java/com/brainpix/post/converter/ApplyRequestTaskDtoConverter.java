@@ -27,6 +27,7 @@ public class ApplyRequestTaskDtoConverter {
 			.accepted(null)    // 보류 상태
 			.openProfile(openProfile)
 			.message(message)
+			.requestTaskRecruitment(recruitment)
 			.build();
 	}
 
