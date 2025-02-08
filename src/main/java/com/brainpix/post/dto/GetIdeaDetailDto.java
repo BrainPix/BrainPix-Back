@@ -34,6 +34,8 @@ public class GetIdeaDetailDto {
 		private Writer writer;                // 작성자
 		private List<String> attachments; // 첨부 파일 목록
 		private Boolean openMyProfile;    // 프로필 공개 여부
+		private Boolean isSavedPost;    // 저장한 게시글인지 여부
+		private Boolean isMyPost;    // 내 게시글인지 여부
 	}
 
 	@Builder

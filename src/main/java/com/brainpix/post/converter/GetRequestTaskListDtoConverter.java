@@ -17,7 +17,7 @@ import com.brainpix.profile.entity.Specialization;
 
 public class GetRequestTaskListDtoConverter {
 
-	public static GetRequestTaskListDto.Parameter toParameter(GetRequestTaskListDto.Request request,
+	public static GetRequestTaskListDto.Parameter toParameter(Long userId, GetRequestTaskListDto.Request request,
 		Pageable pageable) {
 
 		RequestTaskType type = null;
@@ -36,6 +36,7 @@ public class GetRequestTaskListDtoConverter {
 		}
 
 		return GetRequestTaskListDto.Parameter.builder()
+			.userId(userId)
 			.type(type)
 			.keyword(request.getKeyword())
 			.category(category)
@@ -46,7 +47,7 @@ public class GetRequestTaskListDtoConverter {
 	}
 
 	public static GetRequestTaskListDto.RequestTaskDetail toRequestTaskDetail(RequestTask requestTask, Long saveCount,
-		Long deadline) {
+		Long deadline, Boolean isSavedPost) {
 		return GetRequestTaskListDto.RequestTaskDetail.builder()
 			.taskId(requestTask.getId())
 			.auth(requestTask.getPostAuth().toString())
@@ -58,6 +59,7 @@ public class GetRequestTaskListDtoConverter {
 			.category(requestTask.getSpecialization().toString())
 			.saveCount(saveCount)
 			.viewCount(requestTask.getViewCount())
+			.isSavedPost(isSavedPost)
 			.build();
 	}
 
@@ -70,7 +72,8 @@ public class GetRequestTaskListDtoConverter {
 					LocalDateTime deadline = task.getDeadline();    // 마감 기한
 					LocalDateTime now = LocalDateTime.now();    // 현재 시간
 					Long days = deadline.isBefore(now) ? 0L : ChronoUnit.DAYS.between(now, deadline); // D-DAY 계산
-					return GetRequestTaskListDtoConverter.toRequestTaskDetail(task, saveCount, days);
+					Boolean isSavedPost = (Boolean)requestTask[2];    // 게시글 저장 여부
+					return GetRequestTaskListDtoConverter.toRequestTaskDetail(task, saveCount, days, isSavedPost);
 				}
 			);
 

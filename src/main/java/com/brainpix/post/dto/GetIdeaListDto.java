@@ -27,6 +27,7 @@ public class GetIdeaListDto {
 	@Builder
 	@Getter
 	public static class Parameter {
+		private Long userId;    // 유저 식별자
 		private IdeaMarketType type;    // 아이디어 타입
 		private String keyword;        // 검색 키워드
 		private Specialization category;  // 카테고리
@@ -48,5 +49,6 @@ public class GetIdeaListDto {
 		private String category;  // 게시글의 카테고리
 		private Long saveCount;        // 저장수
 		private Long viewCount;        // 조회수
+		private Boolean isSavedPost;    // 저장한 게시글인지 여부
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.brainpix.post.entity.QSavedPost;
+import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.entity.idea_market.QIdeaMarket;
 import com.brainpix.post.enums.PostBooleanExpression;
@@ -17,6 +18,8 @@ import com.brainpix.profile.entity.Specialization;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanTemplate;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -34,7 +37,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	// ideaMarketType으로 아이디어 유형을 구분한 뒤,
 	// 검색 조건을 동적으로 적용하여 아이디어 목록을 조회합니다.
 	@Override
-	public Page<Object[]> findIdeaListWithSaveCount(IdeaMarketType ideaMarketType, String keyword,
+	public Page<Object[]> findIdeaListWithSaveCount(Long userId, IdeaMarketType ideaMarketType, String keyword,
 		Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable) {
 
@@ -53,9 +56,20 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 		// 정렬 조건 (기본 값은 최신순)
 		OrderSpecifier<?> order = sortType != null ? sortType.getOrder() : SortType.IDEA_NEWEST.getOrder();
 
+		// 저장 여부 판별을 위한 쿼리
+		BooleanTemplate isSavedPost = Expressions.booleanTemplate(
+			"CASE WHEN EXISTS (SELECT 1 FROM SavedPost sp WHERE sp.post.id = {0} AND sp.user.id = {1}) "
+				+ "THEN TRUE ELSE FALSE END",
+			ideaMarket.id, userId
+		);
+
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
-			.select(ideaMarket, savedPost.count())
+			.select(
+				ideaMarket,
+				savedPost.count(),
+				isSavedPost
+			)
 			.from(ideaMarket)
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
 			.where(where)
@@ -72,7 +86,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
 			.where(where);
 
-		// 게시글-저장수를 쌍으로 저장
+		// 게시글-저장수-저장여부를 쌍으로 저장
 		List<Object[]> result = parsingResult(queryResult);
 
 		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
@@ -82,7 +96,8 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	// ideaMarketType으로 아이디어 유형을 구분한 뒤,
 	// 모든 아이디어에서 저장순으로 조회합니다.
 	@Override
-	public Page<Object[]> findPopularIdeaListWithSaveCount(IdeaMarketType ideaMarketType, Pageable pageable) {
+	public Page<Object[]> findPopularIdeaListWithSaveCount(Long userId, IdeaMarketType ideaMarketType,
+		Pageable pageable) {
 
 		// 검색 조건
 		BooleanExpression where = Stream.of(
@@ -96,9 +111,20 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 		// 정렬 조건
 		OrderSpecifier<?> order = savedPost.count().desc();
 
+		// 저장 여부 판별을 위한 쿼리
+		BooleanTemplate isSavedPost = Expressions.booleanTemplate(
+			"CASE WHEN EXISTS (SELECT 1 FROM SavedPost sp WHERE sp.post.id = {0} AND sp.user.id = {1}) "
+				+ "THEN TRUE ELSE FALSE END",
+			ideaMarket.id, userId
+		);
+
 		// 조회 결과
 		List<Tuple> queryResult = queryFactory
-			.select(ideaMarket, savedPost.count())
+			.select(
+				ideaMarket,
+				savedPost.count(),
+				isSavedPost
+			)
 			.from(ideaMarket)
 			.leftJoin(savedPost).on(ideaMarket.eq(savedPost.post))
 			.where(where)
@@ -114,7 +140,7 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 			.from(ideaMarket)
 			.where(where);
 
-		// 게시글-저장수를 쌍으로 저장
+		// 게시글-저장수-저장여부를 쌍으로 저장
 		List<Object[]> result = parsingResult(queryResult);
 
 		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
@@ -123,9 +149,10 @@ public class IdeaMarketCustomRepositoryImpl implements IdeaMarketCustomRepositor
 	private List<Object[]> parsingResult(List<Tuple> queryResult) {
 		return queryResult.stream()
 			.map(tuple -> {
-				Object[] objects = new Object[2];
-				objects[0] = tuple.get(ideaMarket);
-				objects[1] = tuple.get(savedPost.count());
+				Object[] objects = new Object[3];
+				objects[0] = tuple.get(0, IdeaMarket.class);
+				objects[1] = tuple.get(1, Long.class);
+				objects[2] = tuple.get(2, Boolean.class);
 				return objects;
 			})
 			.toList();

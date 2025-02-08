@@ -23,6 +23,7 @@ public class GetPopularRequestTaskListDto {
 	@Builder
 	@Getter
 	public static class Parameter {
+		private Long userId;    // 유저 ID
 		private RequestTaskType type;    // 요청 과제 타입
 		private Pageable pageable;    // 페이징 기준
 	}
@@ -40,5 +41,6 @@ public class GetPopularRequestTaskListDto {
 		private String category;  // 게시글의 카테고리
 		private Long saveCount;        // 저장수
 		private Long viewCount;        // 조회수
+		private Boolean isSavedPost;    // 저장한 게시글인지 여부
 	}
 }

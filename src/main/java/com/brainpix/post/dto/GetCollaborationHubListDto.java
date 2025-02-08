@@ -23,6 +23,7 @@ public class GetCollaborationHubListDto {
 	@Builder
 	@Getter
 	public static class Parameter {
+		private Long userId;    // 유저 ID
 		private String keyword;        // 검색 키워드
 		private Specialization category;  // 카테고리
 		private Boolean onlyCompany;  // 기업 공개 제외/기업 공개만 보기
@@ -45,5 +46,6 @@ public class GetCollaborationHubListDto {
 		private Long totalQuantity;     // 전체 인원
 		private Long saveCount;        // 저장수
 		private Long viewCount;        // 조회수
+		private Boolean isSavedPost;    // 게시글 저장 여부
 	}
 }

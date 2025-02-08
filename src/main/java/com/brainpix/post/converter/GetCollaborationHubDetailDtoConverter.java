@@ -12,17 +12,17 @@ import com.brainpix.user.entity.User;
 
 public class GetCollaborationHubDetailDtoConverter {
 
-	public static GetCollaborationHubDetailDto.Parameter toParameter(Long collaborationId, Long userId) {
+	public static GetCollaborationHubDetailDto.Parameter toParameter(Long userId, Long collaborationId) {
 		return GetCollaborationHubDetailDto.Parameter.builder()
-			.collaborationId(collaborationId)
 			.userId(userId)
+			.collaborationId(collaborationId)
 			.build();
 	}
 
 	public static GetCollaborationHubDetailDto.Response toResponse(CollaborationHub collaborationHub,
 		List<CollectionGathering> collectionGathering, User writer,
 		Long saveCount,
-		Long totalIdeas, Long totalCollaborations) {
+		Long totalIdeas, Long totalCollaborations, Boolean isSavedPost, Boolean isMyPost) {
 
 		// 작성자
 		GetCollaborationHubDetailDto.Writer writerDto = toWriter(writer, totalIdeas, totalCollaborations);
@@ -64,6 +64,8 @@ public class GetCollaborationHubDetailDtoConverter {
 			.recruitments(recruitments)
 			.openMembers(openMembers)
 			.openMyProfile(collaborationHub.getOpenMyProfile())
+			.isSavedPost(isSavedPost)
+			.isMyPost(isMyPost)
 			.build();
 	}
 
