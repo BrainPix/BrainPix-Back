@@ -23,6 +23,7 @@ public class GetPopularIdeaListDto {
 	@Builder
 	@Getter
 	public static class Parameter {
+		private Long userId;    // 유저 ID
 		private IdeaMarketType type;    // 아이디어 타입 (IDEA_SOLUTION, MARKET_PLACE)
 		private Pageable pageable;    // 페이징 기준
 	}
@@ -40,5 +41,6 @@ public class GetPopularIdeaListDto {
 		private String category;    // 게시글의 카테고리
 		private Long saveCount;        // 저장 횟수
 		private Long viewCount;        // 조회수
+		private Boolean isSavedPost;    // 저장한 게시글인지 여부
 	}
 }

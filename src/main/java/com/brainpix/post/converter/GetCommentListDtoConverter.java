@@ -13,19 +13,24 @@ import com.brainpix.post.entity.Comment;
 
 public class GetCommentListDtoConverter {
 
-	public static GetCommentListDto.Parameter toParameter(Long postId, Pageable pageable) {
+	public static GetCommentListDto.Parameter toParameter(Long userId, Long postId, Pageable pageable) {
 		return GetCommentListDto.Parameter.builder()
+			.userId(userId)
 			.postId(postId)
 			.pageable(pageable)
 			.build();
 	}
 
-	public static CommonPageResponse<GetCommentListDto.Comment> toResponse(Page<Comment> comments, Pageable pageable) {
+	public static CommonPageResponse<GetCommentListDto.Comment> toResponse(Page<Comment> comments, Pageable pageable,
+		List<Boolean> isMyComments) {
 
 		List<GetCommentListDto.Comment> commentDtoList = new ArrayList<>();
 
-		for (Comment comment : comments) {
-			GetCommentListDto.Comment commentDto = GetCommentListDtoConverter.toComment(comment);
+		List<Comment> commentList = comments.getContent();
+
+		for (int i = 0; i < commentList.size(); i++) {
+			GetCommentListDto.Comment commentDto = GetCommentListDtoConverter.toComment(commentList.get(i),
+				isMyComments.get(i));
 			// 자식 댓글인 경우 리스트에서 부모를 꺼내 자식 리스트에 추가
 			if (commentDto.getParentCommentId() != null && !commentDtoList.isEmpty()) {
 				GetCommentListDto.Comment parent = commentDtoList.get(commentDtoList.size() - 1);
@@ -42,7 +47,7 @@ public class GetCommentListDtoConverter {
 		return CommonPageResponse.of(response);
 	}
 
-	public static GetCommentListDto.Comment toComment(Comment comment) {
+	public static GetCommentListDto.Comment toComment(Comment comment, Boolean isMyComment) {
 
 		return GetCommentListDto.Comment.builder()
 			.commentId(comment.getId())
@@ -52,6 +57,7 @@ public class GetCommentListDtoConverter {
 			.parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
 			.childComments(new ArrayList<>())
 			.createdDate(comment.getCreatedAt().toLocalDate())
+			.isMyComment(isMyComment)
 			.build();
 	}
 }

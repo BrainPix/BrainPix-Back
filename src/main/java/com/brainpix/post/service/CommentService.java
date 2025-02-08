@@ -1,5 +1,7 @@
 package com.brainpix.post.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +49,14 @@ public class CommentService {
 		// 게시글에 연관된 모든 댓글을 조회
 		Page<Comment> comments = commentRepository.findByParentPostId(post.getId(), parameter.getPageable());
 
+		// 내가 쓴 댓글인지 여부
+		List<Boolean> isMyComments = comments.stream()
+			.map(comment -> comment.getWriter().getId().equals(parameter.getUserId())
+			)
+			.toList();
+
 		// dto 변환
-		return GetCommentListDtoConverter.toResponse(comments, parameter.getPageable());
+		return GetCommentListDtoConverter.toResponse(comments, parameter.getPageable(), isMyComments);
 	}
 
 	// 댓글 생성

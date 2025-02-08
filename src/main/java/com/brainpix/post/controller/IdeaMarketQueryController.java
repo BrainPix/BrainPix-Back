@@ -52,9 +52,10 @@ public class IdeaMarketQueryController {
 			+ "<br>sortType : NEWEST, OLDEST, POPULAR, HIGHEST_PRICE, LOWEST_PRICE")
 	@PostMapping("/search")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetIdeaListDto.IdeaDetail>>> getIdeaList(
+		@UserId Long userId,
 		@RequestBody @Valid GetIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 6) Pageable pageable) {
-		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(request, pageable);
+		GetIdeaListDto.Parameter parameter = GetIdeaListDtoConverter.toParameter(userId, request, pageable);
 		CommonPageResponse<GetIdeaListDto.IdeaDetail> response = ideaMarketService.getIdeaList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
@@ -75,10 +76,12 @@ public class IdeaMarketQueryController {
 	@Operation(summary = "인기 아이디어 조회 [GET]", description = "쿼리 파라미터로 아이디어 마켓 타입과 페이징을 위한 page, size를 입력받아 인기 아이디어를 조회합니다.<br>type : IDEA_SOLUTION, MARKET_PLACE")
 	@GetMapping("/search/popular")
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetPopularIdeaListDto.IdeaDetail>>> getPopularIdeaList(
+		@UserId Long userId,
 		@ModelAttribute @ParameterObject @Valid GetPopularIdeaListDto.Request request,
 		@PageableDefault(page = 0, size = 3) Pageable pageable
 	) {
-		GetPopularIdeaListDto.Parameter parameter = GetPopularIdeaListDtoConverter.toParameter(request, pageable);
+		GetPopularIdeaListDto.Parameter parameter = GetPopularIdeaListDtoConverter.toParameter(userId, request,
+			pageable);
 		CommonPageResponse<GetPopularIdeaListDto.IdeaDetail> response = ideaMarketService.getPopularIdeaList(
 			parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));

@@ -9,7 +9,7 @@ import com.brainpix.profile.entity.Specialization;
 public interface CollaborationHubCustomRepository {
 
 	// 검색 기능을 포함한 협업 광장 조회
-	Page<Object[]> findCollaborationListWithSaveCount(String keyword,
+	Page<Object[]> findCollaborationListWithSaveCount(Long userId, String keyword,
 		Specialization category,
 		Boolean onlyCompany, SortType sortType, Pageable pageable);
 }

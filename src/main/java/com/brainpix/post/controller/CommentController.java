@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brainpix.api.ApiResponse;
@@ -40,15 +39,16 @@ public class CommentController {
 
 	private final CommentService commentService;
 
-	@SwaggerPageable
 	@AllUser
+	@SwaggerPageable
 	@Operation(summary = "댓글 목록 조회 API", description = "경로변수로 postId를 입력받아 해당 게시글의 댓글 목록을 조회합니다.<br>페이징을 위한 page와 size는 쿼리 파라미터로 입력받습니다.")
 	@GetMapping
 	public ResponseEntity<ApiResponse<CommonPageResponse<GetCommentListDto.Comment>>> getCommentList(
+		@UserId Long userId,
 		@PathVariable("postId") Long postId,
 		@PageableDefault(page = 0, size = 10) Pageable pageable
 	) {
-		GetCommentListDto.Parameter parameter = GetCommentListDtoConverter.toParameter(postId, pageable);
+		GetCommentListDto.Parameter parameter = GetCommentListDtoConverter.toParameter(userId, postId, pageable);
 		CommonPageResponse<GetCommentListDto.Comment> response = commentService.getCommentList(parameter);
 		return ResponseEntity.ok(ApiResponse.success(response));
 	}
@@ -58,7 +58,7 @@ public class CommentController {
 	@Operation(summary = "댓글 등록 API", description = "경로변수로 postId를 입력받아 해당 게시글에 댓글을 등록합니다.")
 	@PostMapping
 	public ResponseEntity<ApiResponse<CreateCommentDto.Response>> createComment(@PathVariable("postId") Long postId,
-		@RequestParam("userId") Long userId,
+		@UserId Long userId,
 		@Valid @RequestBody CreateCommentDto.Request request) {
 		CreateCommentDto.Parameter parameter = CreateCommentDtoConverter.toParameter(postId, userId, request);
 		CreateCommentDto.Response response = commentService.createComment(parameter);

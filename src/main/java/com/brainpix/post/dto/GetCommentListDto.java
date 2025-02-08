@@ -13,6 +13,7 @@ public class GetCommentListDto {
 	@Builder
 	@Getter
 	public static class Parameter {
+		private Long userId;    // 유저 ID
 		private Long postId;    // 게시글 ID
 		private Pageable pageable;    // 페이징 기준
 	}
@@ -27,5 +28,6 @@ public class GetCommentListDto {
 		private Long parentCommentId;        // 부모 댓글 ID
 		private LocalDate createdDate;       // 댓글 작성일
 		private List<Comment> childComments;      // Q&A 목록
+		private Boolean isMyComment;    // 내 댓글인지 여부
 	}
 }

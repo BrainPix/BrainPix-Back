@@ -13,17 +13,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record PortfolioRequest(
 	@NotBlank(message = "포트폴리오 제목을 입력해주세요.")
 	String title,
 	List<Specialization> specializations,
-	@NotBlank(message = "시작 날짜를 입력해주세요.")
+	@NotNull(message = "시작 날짜를 입력해주세요.")
 	@Schema(type = "string", example = "yyyy-MM")
 	@DateTimeFormat(pattern = "yyyy-MM")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 	YearMonth startDate,
-	@NotBlank(message = "종료 날짜를 입력해주세요.")
+	@NotNull(message = "종료 날짜를 입력해주세요.")
 	@Schema(type = "string", example = "yyyy-MM")
 	@DateTimeFormat(pattern = "yyyy-MM")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
