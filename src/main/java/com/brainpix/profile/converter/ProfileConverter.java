@@ -43,7 +43,7 @@ public class ProfileConverter {
 
 	public CompanyInformation toCompanyInformation(CompanyProfileUpdateDto.CompanyInformationDto dto,
 		CompanyProfile profile) {
-		return new CompanyInformation(dto.getType(), dto.getValue(), profile);
+		return new CompanyInformation(dto.getType(), dto.getValue(), profile, dto.getIsPublic());
 	}
 
 	public List<CompanyInformation> toCompanyInformationList(

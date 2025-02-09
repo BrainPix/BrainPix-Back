@@ -15,7 +15,6 @@ public class CompanyProfileUpdateDto {
 	private String businessInformation; // 사업 정보
 
 	private List<CompanyInformationDto> companyInformations; // 기업 정보
-	private Boolean openInformation; // 기업 정보 공개 여부
 
 	private List<Specialization> specializations; // 기업 분야 (최대 2개)
 
@@ -23,5 +22,6 @@ public class CompanyProfileUpdateDto {
 	public static class CompanyInformationDto {
 		private CompanyInformationType type; // 기업 정보 타입
 		private String value; // 기업 정보 값
+		private Boolean isPublic; // 공개 여부 추가
 	}
 }

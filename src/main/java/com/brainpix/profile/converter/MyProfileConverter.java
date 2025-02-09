@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.brainpix.profile.dto.CompanyProfileResponseDto;
 import com.brainpix.profile.dto.IndividualProfileResponseDto;
+import com.brainpix.profile.entity.CompanyInformation;
 import com.brainpix.profile.entity.CompanyProfile;
 import com.brainpix.profile.entity.Contact;
 import com.brainpix.profile.entity.IndividualProfile;
@@ -62,9 +63,11 @@ public class MyProfileConverter {
 			.selfIntroduction(profile.getSelfIntroduction())
 			.businessInformation(profile.getBusinessInformation())
 			.companyInformations(profile.getCompanyInformations().stream()
+				.filter(CompanyInformation::getIsPublic)
 				.map(info -> CompanyProfileResponseDto.CompanyInformationDto.builder()
 					.type(info.getCompanyInformationType())
 					.value(info.getValue())
+					.isPublic(info.getIsPublic())
 					.build())
 				.collect(Collectors.toList()))
 			.build();

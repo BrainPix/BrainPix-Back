@@ -26,6 +26,7 @@ public class CompanyProfileResponseDto {
 	public static class CompanyInformationDto {
 		private CompanyInformationType type; // 기업 정보 타입
 		private String value; // 기업 정보 값
+		private Boolean isPublic;
 	}
 
 }

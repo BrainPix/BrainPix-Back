@@ -39,10 +39,9 @@ public class CompanyProfile extends Profile {
 		this.companyInformations = companyInformations != null ? companyInformations : new ArrayList<>();
 	}
 
-	public void update(String selfIntroduction, String businessInformation, Boolean openInformation) {
+	public void update(String selfIntroduction, String businessInformation) {
 		this.selfIntroduction = selfIntroduction;
 		this.businessInformation = businessInformation;
-		this.openInformation = openInformation;
 	}
 
 	public void updateSpecializations(List<Specialization> specializations) {

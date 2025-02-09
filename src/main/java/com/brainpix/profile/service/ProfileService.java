@@ -109,8 +109,7 @@ public class ProfileService {
 		}
 
 		// 기업 소개, 사업 정보 및 공개 여부 업데이트
-		profile.update(updateDto.getSelfIntroduction(), updateDto.getBusinessInformation(),
-			updateDto.getOpenInformation());
+		profile.update(updateDto.getSelfIntroduction(), updateDto.getBusinessInformation());
 
 		// 기업 분야 업데이트
 		profile.updateSpecializations(updateDto.getSpecializations());
