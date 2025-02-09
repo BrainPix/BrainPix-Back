@@ -122,7 +122,7 @@ public class ProfileService {
 	}
 
 	@Transactional(readOnly = true)
-	public IndividualProfileResponseDto getMyProfile(Long userId) {
+	public IndividualProfileResponseDto getIndividualProfile(Long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
 		return myconverter.toDto(user);
