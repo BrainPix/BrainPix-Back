@@ -65,7 +65,7 @@ public class PublicProfileService {
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
 			.name(profileDto.getName())
-			.selfIntroduction(profile.getCareerOpen() ? profileDto.getSelfIntroduction() : "")
+			.selfIntroduction(profileDto.getSelfIntroduction())
 			.contacts(profile.getContactOpen() ? profileDto.getContacts() : Collections.emptyList())
 			.stacks(profile.getStackOpen() ? profileDto.getStacks() : Collections.emptyList())
 			.careers(profile.getCareerOpen() ? profileDto.getCareers() : Collections.emptyList())
@@ -92,8 +92,8 @@ public class PublicProfileService {
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
 			.name(profileDto.getName())
-			.selfIntroduction(profile.getOpenInformation() ? profileDto.getSelfIntroduction() : "")
-			.businessInformation(profile.getOpenInformation() ? profileDto.getBusinessInformation() : "")
+			.selfIntroduction(profileDto.getSelfIntroduction())
+			.businessInformation(profileDto.getBusinessInformation())
 			.companyInformations(profile.getOpenInformation() ? profileDto.getCompanyInformations() :
 				Collections.emptyList())
 			.build();
