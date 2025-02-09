@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.brainpix.profile.dto.CompanyProfileResponseDto;
 import com.brainpix.profile.dto.IndividualProfileResponseDto;
+import com.brainpix.profile.entity.CompanyInformation;
 import com.brainpix.profile.entity.CompanyProfile;
+import com.brainpix.profile.entity.Contact;
 import com.brainpix.profile.entity.IndividualProfile;
 import com.brainpix.user.entity.Company;
 import com.brainpix.user.entity.User;
@@ -26,11 +28,12 @@ public class MyProfileConverter {
 			.name(user.getName())
 			.selfIntroduction(profile.getSelfIntroduction())
 			.contacts(profile.getContacts().stream()
+				.filter(Contact::getIsPublic)
 				.map(contact -> IndividualProfileResponseDto.ContactDto.builder()
 					.type(contact.getType())
 					.value(contact.getValue())
 					.build())
-				.collect(Collectors.toList()))
+				.toList())
 			.stacks(profile.getStacks().stream()
 				.map(stack -> IndividualProfileResponseDto.StackDto.builder()
 					.stackName(stack.getStackName())
@@ -60,9 +63,11 @@ public class MyProfileConverter {
 			.selfIntroduction(profile.getSelfIntroduction())
 			.businessInformation(profile.getBusinessInformation())
 			.companyInformations(profile.getCompanyInformations().stream()
+				.filter(CompanyInformation::getIsPublic)
 				.map(info -> CompanyProfileResponseDto.CompanyInformationDto.builder()
 					.type(info.getCompanyInformationType())
 					.value(info.getValue())
+					.isPublic(info.getIsPublic())
 					.build())
 				.collect(Collectors.toList()))
 			.build();

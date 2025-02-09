@@ -33,7 +33,7 @@ public class ProfileController {
 	@Individual
 	@GetMapping("/individual")
 	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getIndividualProfile(@UserId Long userId) {
-		IndividualProfileResponseDto profile = profileService.getMyProfile(userId);
+		IndividualProfileResponseDto profile = profileService.getIndividualProfile(userId);
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
 

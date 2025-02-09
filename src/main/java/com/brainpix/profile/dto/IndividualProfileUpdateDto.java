@@ -20,7 +20,6 @@ public class IndividualProfileUpdateDto {
 	private String selfIntroduction; // 자기소개
 
 	private List<ContactDto> contacts; // 개별 정보
-	private Boolean contactOpen; // 개별 정보 공개여부
 
 	private List<StackDto> stacks; // 보유 기술
 	private Boolean stackOpen; // 보유 기술 공개여부
@@ -34,6 +33,7 @@ public class IndividualProfileUpdateDto {
 	public static class ContactDto {
 		private ContactType type; // 연락처 타입
 		private String value; // 연락처 내용
+		private Boolean isPublic;
 	}
 
 	@Getter

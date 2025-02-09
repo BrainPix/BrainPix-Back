@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class IndividualProfile extends Profile {
 	private String selfIntroduction;
-	private Boolean ContactOpen;
 	private Boolean CareerOpen;
 	private Boolean stackOpen;
 
@@ -34,17 +33,15 @@ public class IndividualProfile extends Profile {
 
 	@Builder
 	public IndividualProfile(User user, List<Specialization> specializationList, String selfIntroduction,
-		Boolean contactOpen, Boolean careerOpen, Boolean stackOpen) {
+		Boolean careerOpen, Boolean stackOpen) {
 		super(user, specializationList);
 		this.selfIntroduction = selfIntroduction;
-		this.ContactOpen = contactOpen;
 		this.CareerOpen = careerOpen;
 		this.stackOpen = stackOpen;
 	}
 
-	public void update(String selfIntroduction, Boolean contactOpen, Boolean careerOpen, Boolean stackOpen) {
+	public void update(String selfIntroduction, Boolean careerOpen, Boolean stackOpen) {
 		this.selfIntroduction = selfIntroduction;
-		this.ContactOpen = contactOpen;
 		this.CareerOpen = careerOpen;
 		this.stackOpen = stackOpen;
 	}

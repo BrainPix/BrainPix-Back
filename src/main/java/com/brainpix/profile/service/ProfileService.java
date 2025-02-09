@@ -68,15 +68,16 @@ public class ProfileService {
 		}
 
 		// 자기소개와 공개 여부 업데이트
-		profile.update(updateDto.getSelfIntroduction(), updateDto.getContactOpen(),
-			updateDto.getCareerOpen(), updateDto.getStackOpen());
+		profile.update(updateDto.getSelfIntroduction(), updateDto.getCareerOpen(), updateDto.getStackOpen());
 
 		// 전문 분야 업데이트
 		profile.updateSpecializations(updateDto.getSpecializations());
 
 		// 연락처(Contact) 업데이트
 		contactRepository.deleteByIndividualProfile(profile);
-		List<Contact> contacts = converter.toContactList(updateDto.getContacts(), profile);
+		List<Contact> contacts = updateDto.getContacts().stream()
+			.map(dto -> new Contact(dto.getType(), dto.getValue(), profile, dto.getIsPublic()))
+			.toList();
 		contactRepository.saveAll(contacts);
 
 		// 보유 기술(Stack) 업데이트
@@ -108,8 +109,7 @@ public class ProfileService {
 		}
 
 		// 기업 소개, 사업 정보 및 공개 여부 업데이트
-		profile.update(updateDto.getSelfIntroduction(), updateDto.getBusinessInformation(),
-			updateDto.getOpenInformation());
+		profile.update(updateDto.getSelfIntroduction(), updateDto.getBusinessInformation());
 
 		// 기업 분야 업데이트
 		profile.updateSpecializations(updateDto.getSpecializations());
@@ -122,7 +122,7 @@ public class ProfileService {
 	}
 
 	@Transactional(readOnly = true)
-	public IndividualProfileResponseDto getMyProfile(Long userId) {
+	public IndividualProfileResponseDto getIndividualProfile(Long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(ProfileErrorCode.USER_NOT_FOUND));
 		return myconverter.toDto(user);

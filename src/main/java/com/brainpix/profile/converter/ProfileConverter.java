@@ -17,7 +17,7 @@ import com.brainpix.profile.entity.Stack;
 @Component
 public class ProfileConverter {
 	public Contact toContact(IndividualProfileUpdateDto.ContactDto dto, IndividualProfile profile) {
-		return new Contact(dto.getType(), dto.getValue(), profile);
+		return new Contact(dto.getType(), dto.getValue(), profile, dto.getIsPublic());
 	}
 
 	public Stack toStack(IndividualProfileUpdateDto.StackDto dto, IndividualProfile profile) {
@@ -43,7 +43,7 @@ public class ProfileConverter {
 
 	public CompanyInformation toCompanyInformation(CompanyProfileUpdateDto.CompanyInformationDto dto,
 		CompanyProfile profile) {
-		return new CompanyInformation(dto.getType(), dto.getValue(), profile);
+		return new CompanyInformation(dto.getType(), dto.getValue(), profile, dto.getIsPublic());
 	}
 
 	public List<CompanyInformation> toCompanyInformationList(

@@ -26,12 +26,14 @@ public class CompanyInformation {
 
 	@ManyToOne
 	private CompanyProfile companyProfile;
+	private Boolean isPublic;
 
 	@Builder
 	public CompanyInformation(CompanyInformationType companyInformationType, String value,
-		CompanyProfile companyProfile) {
+		CompanyProfile companyProfile, Boolean isPublic) {
 		this.companyInformationType = companyInformationType;
 		this.value = value;
 		this.companyProfile = companyProfile;
+		this.isPublic = isPublic != null ? isPublic : true;
 	}
 }

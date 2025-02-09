@@ -29,10 +29,12 @@ public class Contact extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private IndividualProfile individualProfile;
+	private Boolean isPublic;
 
-	public Contact(ContactType type, String value, IndividualProfile individualProfile) {
+	public Contact(ContactType type, String value, IndividualProfile individualProfile, Boolean isPublic) {
 		this.type = type;
 		this.value = value;
 		this.individualProfile = individualProfile;
+		this.isPublic = isPublic;
 	}
 }
