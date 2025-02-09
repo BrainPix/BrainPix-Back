@@ -32,6 +32,7 @@ public class MyProfileConverter {
 				.map(contact -> IndividualProfileResponseDto.ContactDto.builder()
 					.type(contact.getType())
 					.value(contact.getValue())
+					.isPublic(contact.getIsPublic())
 					.build())
 				.toList())
 			.stacks(profile.getStacks().stream()

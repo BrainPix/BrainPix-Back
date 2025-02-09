@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,6 @@ import com.brainpix.profile.dto.IndividualProfileResponseDto;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
 import com.brainpix.profile.service.PublicProfileService;
 import com.brainpix.security.authorization.AllUser;
-import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +37,7 @@ public class PublicProfileController {
 	@Operation(summary = "개인 공개 프로필 조회", description = "특정 사용자에게 공개 개인 프로필을 조회합니다.")
 	@GetMapping("/individual")
 	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getPublicIndividualProfile(
-		@UserId Long userId) {
+		@PathVariable Long userId) {
 		IndividualProfileResponseDto profile = publicProfileService.getPublicIndividualProfile(userId);
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
@@ -48,7 +48,7 @@ public class PublicProfileController {
 	@AllUser
 	@Operation(summary = "기업 공개 프로필 조회", description = "특정 사용자에게 공개 기업 프로필을 조회합니다.")
 	@GetMapping("/company")
-	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getPublicCompanyProfile(@UserId Long userId) {
+	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getPublicCompanyProfile(@PathVariable Long userId) {
 		CompanyProfileResponseDto profile = publicProfileService.getPublicCompanyProfile(userId);
 		return ResponseEntity.ok(ApiResponse.success(profile));
 	}
@@ -58,7 +58,7 @@ public class PublicProfileController {
 	@GetMapping
 	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
-		@UserId Long userId,
+		@PathVariable Long userId,
 		@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 		CommonPageResponse<PublicProfileResponseDto.PostPreviewDto> pageResponse =
 			CommonPageResponse.of(publicProfileService.getPostsByUser(userId, pageable));
