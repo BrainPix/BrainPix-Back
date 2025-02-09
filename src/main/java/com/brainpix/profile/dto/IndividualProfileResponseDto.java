@@ -38,6 +38,7 @@ public class IndividualProfileResponseDto {
 	public static class ContactDto {
 		private ContactType type; // 연락처 유형
 		private String value; // 연락처 값
+		private Boolean isPublic;
 	}
 
 	@Getter

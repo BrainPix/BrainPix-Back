@@ -66,7 +66,9 @@ public class PublicProfileService {
 			.specializations(profileDto.getSpecializations())
 			.name(profileDto.getName())
 			.selfIntroduction(profileDto.getSelfIntroduction())
-			.contacts(profile.getContactOpen() ? profileDto.getContacts() : Collections.emptyList())
+			.contacts(profileDto.getContacts().stream()
+				.filter(IndividualProfileResponseDto.ContactDto::getIsPublic)
+				.toList())
 			.stacks(profile.getStackOpen() ? profileDto.getStacks() : Collections.emptyList())
 			.careers(profile.getCareerOpen() ? profileDto.getCareers() : Collections.emptyList())
 			.build();

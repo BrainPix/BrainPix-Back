@@ -24,7 +24,6 @@ public class IndividualSignUpService extends SignUpService {
 		IndividualProfile profile = IndividualProfile.builder()
 			.user(user)
 			.specializationList(null)
-			.contactOpen(true)
 			.careerOpen(true)
 			.stackOpen(true)
 			.build();

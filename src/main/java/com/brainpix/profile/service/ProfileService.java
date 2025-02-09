@@ -68,15 +68,16 @@ public class ProfileService {
 		}
 
 		// 자기소개와 공개 여부 업데이트
-		profile.update(updateDto.getSelfIntroduction(), updateDto.getContactOpen(),
-			updateDto.getCareerOpen(), updateDto.getStackOpen());
+		profile.update(updateDto.getSelfIntroduction(), updateDto.getCareerOpen(), updateDto.getStackOpen());
 
 		// 전문 분야 업데이트
 		profile.updateSpecializations(updateDto.getSpecializations());
 
 		// 연락처(Contact) 업데이트
 		contactRepository.deleteByIndividualProfile(profile);
-		List<Contact> contacts = converter.toContactList(updateDto.getContacts(), profile);
+		List<Contact> contacts = updateDto.getContacts().stream()
+			.map(dto -> new Contact(dto.getType(), dto.getValue(), profile, dto.getIsPublic()))
+			.toList();
 		contactRepository.saveAll(contacts);
 
 		// 보유 기술(Stack) 업데이트
