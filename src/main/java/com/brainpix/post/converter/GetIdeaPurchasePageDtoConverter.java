@@ -25,6 +25,7 @@ public class GetIdeaPurchasePageDtoConverter {
 			.sellerId(seller.getId())
 			.name(seller.getName())
 			.profileImageUrl(seller.getProfileImage())
+			.email(seller.getEmail())
 			.build();
 	}
 }

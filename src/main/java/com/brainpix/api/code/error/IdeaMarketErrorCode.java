@@ -18,7 +18,8 @@ public enum IdeaMarketErrorCode implements ErrorCode {
 	UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "IDEAMARKET401", "로그인이 필요합니다."),
 
 	// 403 Forbidden - 권한 없음
-	FORBIDDEN_ACCESS(HttpStatus.UNAUTHORIZED, "IDEAMARKET403", "해당 요청에 대한 권한이 없습니다."),
+	INDIVIDUAL_ACCESS_COMPANY(HttpStatus.UNAUTHORIZED, "IDEAMARKET403", "개인은 기업 게시글에 접근할 수 없습니다."),
+	IDEA_OWNER_PURCHASE(HttpStatus.UNAUTHORIZED, "IDEAMARKET403", "게시글 작성자는 구매할 수 없습니다."),
 
 	// 404 Not Found - 리소스를 찾을 수 없음
 	IDEA_NOT_FOUND(HttpStatus.NOT_FOUND, "IDEAMARKET404", "아이디어 마켓 게시글을 찾을 수 없습니다."),

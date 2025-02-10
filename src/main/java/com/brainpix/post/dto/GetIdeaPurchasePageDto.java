@@ -23,5 +23,6 @@ public class GetIdeaPurchasePageDto {
 		private Long sellerId;            // 판매자의 식별자 값
 		private String name;              // 판매자 이름
 		private String profileImageUrl;   // 판매자 프로필 이미지 URL
+		private String email;    // 판매자 이메일
 	}
 }
