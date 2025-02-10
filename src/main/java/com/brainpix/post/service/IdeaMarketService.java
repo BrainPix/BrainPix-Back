@@ -114,7 +114,7 @@ public class IdeaMarketService {
 		// 개인이 기업 게시물을 상세보기 하는 경우 처리
 		if (ideaMarket.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
-			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+			throw new BrainPixException(IdeaMarketErrorCode.INDIVIDUAL_ACCESS_COMPANY);
 		}
 
 		// 조회수 증가
@@ -174,11 +174,11 @@ public class IdeaMarketService {
 		// 개인이 기업 게시물을 구매하려는 경우 처리
 		if (ideaMarket.getPostAuth().equals(PostAuth.COMPANY) && user.getAuthority()
 			.equals(BrainpixAuthority.INDIVIDUAL)) {
-			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+			throw new BrainPixException(IdeaMarketErrorCode.INDIVIDUAL_ACCESS_COMPANY);
 		}
 		// 글 작성자가 구매하려는 경우 처리
 		if (seller == user) {
-			throw new BrainPixException(IdeaMarketErrorCode.FORBIDDEN_ACCESS);
+			throw new BrainPixException(IdeaMarketErrorCode.IDEA_OWNER_PURCHASE);
 		}
 
 		return GetIdeaPurchasePageDtoConverter.toResponse(ideaMarket, seller);
