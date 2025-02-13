@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
-import com.brainpix.kakaopay.entity.KakaoPaymentData;
+import com.brainpix.kakaopay.dto.KakaoPaymentDataDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.user.entity.User;
 
@@ -49,7 +49,7 @@ public class KakaoPayApiClient {
 
 	// 카카오페이 결제 승인 API
 	public KakaoPayApproveDto.KakaoApiResponse requestPaymentApprove(
-		KakaoPayApproveDto.Parameter parameter, KakaoPaymentData kakaoPaymentData) {
+		KakaoPayApproveDto.Parameter parameter, KakaoPaymentDataDto kakaoPaymentData) {
 
 		Map<String, String> parameters = getApproveParams(parameter, kakaoPaymentData);
 		HttpHeaders headers = getHeaders();
@@ -78,23 +78,23 @@ public class KakaoPayApiClient {
 		params.put("tax_free_amount", "0");
 		params.put("vat_amount", String.valueOf(parameter.getVat()));
 		params.put("approval_url",
-			"https://www.brainpix.net/purchase/approve?ideaId=" + ideaMarket.getId() + "&orderId=" + orderId);
-		params.put("cancel_url", "https://www.brainpix.net/purchase/cancel?ideaId=" + ideaMarket.getId());
-		params.put("fail_url", "https://www.brainpix.net/purchase/fail?ideaId=" + ideaMarket.getId());
+			"http://localhost:5173/purchase/approve?ideaId=" + ideaMarket.getId() + "&orderId=" + orderId);
+		params.put("cancel_url", "http://localhost:5173/purchase/cancel?ideaId=" + ideaMarket.getId());
+		params.put("fail_url", "http://localhost:5173/purchase/fail?ideaId=" + ideaMarket.getId());
 
 		return params;
 	}
 
 	// 결제 승인 파라미터 생성
 	private Map<String, String> getApproveParams(KakaoPayApproveDto.Parameter parameter,
-		KakaoPaymentData kakaoPaymentData) {
+		KakaoPaymentDataDto kakaoPaymentData) {
 
 		Map<String, String> params = new HashMap<>();
 
 		params.put("cid", cid);
 		params.put("tid", kakaoPaymentData.getTid());
 		params.put("partner_order_id", parameter.getOrderId());
-		params.put("partner_user_id", String.valueOf(kakaoPaymentData.getBuyer().getId()));
+		params.put("partner_user_id", String.valueOf(kakaoPaymentData.getBuyerId()));
 		params.put("pg_token", parameter.getPgToken());
 
 		return params;

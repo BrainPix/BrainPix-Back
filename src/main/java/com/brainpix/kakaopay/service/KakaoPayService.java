@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brainpix.api.code.error.CommonErrorCode;
@@ -19,12 +18,13 @@ import com.brainpix.kafka.service.AlarmEventService;
 import com.brainpix.kakaopay.api_client.KakaoPayApiClient;
 import com.brainpix.kakaopay.converter.KakaoPayApproveDtoConverter;
 import com.brainpix.kakaopay.converter.KakaoPayReadyDtoConverter;
+import com.brainpix.kakaopay.converter.KakaoPaymentDataDtoConverter;
 import com.brainpix.kakaopay.dto.KakaoPayApproveDto;
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
-import com.brainpix.kakaopay.entity.KakaoPaymentData;
-import com.brainpix.kakaopay.repository.KakaoPaymentDataRepository;
+import com.brainpix.kakaopay.dto.KakaoPaymentDataDto;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.repository.IdeaMarketRepository;
+import com.brainpix.redis.service.RedisKakaoPayCacheService;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
 
@@ -39,9 +39,9 @@ public class KakaoPayService {
 	private final UserRepository userRepository;
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final IdeaMarketPurchasingRepository ideaMarketPurchasingRepository;
-	private final KakaoPaymentDataRepository kakaoPaymentDataRepository;
 	private final AlarmEventService alarmEventService;
 	private final KakaoPayApiClient kakaoPayApiClient;
+	private final RedisKakaoPayCacheService redisKakaoPayCacheService;
 
 	@Transactional
 	public KakaoPayReadyDto.Response kakaoPayReady(KakaoPayReadyDto.Parameter parameter) {
@@ -74,34 +74,35 @@ public class KakaoPayService {
 
 		log.info("카카오페이 결제 준비 API 성공");
 
-		// 4. 결제 정보 DB에 저장
-		KakaoPaymentData kakaoPaymentData = KakaoPayReadyDtoConverter.toKakaoPaymentData(kakaoApiResponse,
-			parameter, orderId, buyer, ideaMarket);
+		// 4. 결제 정보 캐싱
+		KakaoPaymentDataDto kakaoPaymentData = KakaoPaymentDataDtoConverter.toKakaoPaymentDataDto(
+			kakaoApiResponse.getTid(), buyer.getId(),
+			parameter.getQuantity());
 
-		kakaoPaymentDataRepository.save(kakaoPaymentData);
+		redisKakaoPayCacheService.savePaymentData(orderId, kakaoPaymentData);
 
 		// 5. 최종 응답
-		return KakaoPayReadyDtoConverter.toResponse(kakaoApiResponse, orderId);
+		return KakaoPayReadyDtoConverter.toResponse(kakaoApiResponse);
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	public KakaoPayApproveDto.Response kakaoPayApprove(KakaoPayApproveDto.Parameter parameter) {
 
-		// 1. DB에서 결제 정보 조회
-		KakaoPaymentData kakaoPaymentData = kakaoPaymentDataRepository.findByOrderId(parameter.getOrderId())
-			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
+		// 1. 결제 정보 조회
+		KakaoPaymentDataDto kakaoPaymentData = redisKakaoPayCacheService.getPaymentData(parameter.getOrderId())
+			.orElseThrow(() -> new BrainPixException(KakaoPayErrorCode.PAYMENT_DATA_NOT_FOUND));
 
 		// 2. 엔티티 검색
 		User user = userRepository.findById(parameter.getUserId())
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND));
-		IdeaMarket ideaMarket = ideaMarketRepository.findById(kakaoPaymentData.getIdeaMarket().getId())
+		IdeaMarket ideaMarket = ideaMarketRepository.findById(parameter.getIdeaId())
 			.orElseThrow(() -> new BrainPixException(PostErrorCode.POST_NOT_FOUND));
 
 		// 3. API 호출 전 검증 로직
 		if (kakaoPaymentData.getQuantity() > ideaMarket.getPrice().getRemainingQuantity()) {
 			throw new BrainPixException(KakaoPayErrorCode.QUANTITY_INVALID);    // 주문 수량이 재고를 초과한 경우
 		}
-		if (user != kakaoPaymentData.getBuyer()) {
+		if (user.getId() != kakaoPaymentData.getBuyerId()) {
 			throw new BrainPixException(CommonErrorCode.INVALID_PARAMETER);    // API 호출자와 실 구매자가 일치하지 않는 경우
 		}
 
@@ -123,7 +124,7 @@ public class KakaoPayService {
 			ideaMarket, PaymentDuration.ONCE);
 
 		ideaMarketPurchasingRepository.save(ideaMarketPurchasing);
-		kakaoPaymentDataRepository.delete(kakaoPaymentData);
+		redisKakaoPayCacheService.deletePaymentData(parameter.getOrderId());
 
 		// 8. 판매자에게 알람 생성
 		alarmEventService.publishIdeaSold(ideaMarket.getWriter().getId(), ideaMarket.getWriter().getName());

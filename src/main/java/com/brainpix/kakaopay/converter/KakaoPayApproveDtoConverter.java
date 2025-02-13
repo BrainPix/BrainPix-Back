@@ -15,6 +15,7 @@ public class KakaoPayApproveDtoConverter {
 			.userId(userId)
 			.orderId(request.getOrderId())
 			.pgToken(request.getPgToken())
+			.ideaId(request.getIdeaId())
 			.build();
 	}
 

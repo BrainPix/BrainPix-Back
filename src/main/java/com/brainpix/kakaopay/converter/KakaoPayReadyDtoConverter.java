@@ -1,9 +1,6 @@
 package com.brainpix.kakaopay.converter;
 
 import com.brainpix.kakaopay.dto.KakaoPayReadyDto;
-import com.brainpix.kakaopay.entity.KakaoPaymentData;
-import com.brainpix.post.entity.idea_market.IdeaMarket;
-import com.brainpix.user.entity.User;
 
 public class KakaoPayReadyDtoConverter {
 
@@ -19,25 +16,10 @@ public class KakaoPayReadyDtoConverter {
 			.build();
 	}
 
-	public static KakaoPayReadyDto.Response toResponse(KakaoPayReadyDto.KakaoApiResponse kakaoApiResponse,
-		String orderId) {
+	public static KakaoPayReadyDto.Response toResponse(KakaoPayReadyDto.KakaoApiResponse kakaoApiResponse) {
 
 		return KakaoPayReadyDto.Response.builder()
 			.nextRedirectPcUrl(kakaoApiResponse.getNext_redirect_pc_url())
-			.build();
-	}
-
-	public static KakaoPaymentData toKakaoPaymentData(KakaoPayReadyDto.KakaoApiResponse kakaoApiResponse,
-		KakaoPayReadyDto.Parameter parameter,
-		String orderId, User buyer,
-		IdeaMarket ideaMarket) {
-
-		return KakaoPaymentData.builder()
-			.tid(kakaoApiResponse.getTid())
-			.quantity(parameter.getQuantity())
-			.orderId(orderId)
-			.buyer(buyer)
-			.ideaMarket(ideaMarket)
 			.build();
 	}
 }
