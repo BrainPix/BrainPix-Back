@@ -8,7 +8,7 @@ public class SendMessageDto {
 	@Getter
 	@Builder
 	public static class Request {
-		private Long receiverId;
+		private String receiverNickname;
 		private String title;
 		private String content;
 	}
@@ -17,7 +17,7 @@ public class SendMessageDto {
 	@Builder
 	public static class Parameter {
 		private Long senderId;
-		private Long receiverId;
+		private String receiverNickname;
 		private String title;
 		private String content;
 	}
