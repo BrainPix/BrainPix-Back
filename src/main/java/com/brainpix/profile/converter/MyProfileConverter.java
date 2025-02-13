@@ -39,6 +39,7 @@ public class MyProfileConverter {
 				.map(stack -> IndividualProfileResponseDto.StackDto.builder()
 					.stackName(stack.getStackName())
 					.proficiency(stack.getStackProficiency())
+					.stackOpen(profile.getStackOpen())
 					.build())
 				.collect(Collectors.toList()))
 			.careers(profile.getCareers().stream()
@@ -46,6 +47,7 @@ public class MyProfileConverter {
 					.content(career.getCareerContent())
 					.startDate(career.getStartDate())
 					.endDate(career.getEndDate())
+					.careerOpen(profile.getCareerOpen())
 					.build())
 				.collect(Collectors.toList()))
 			.build();
