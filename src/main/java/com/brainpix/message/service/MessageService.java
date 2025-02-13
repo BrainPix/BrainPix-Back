@@ -73,9 +73,10 @@ public class MessageService {
 	@Transactional(readOnly = true)
 	public SendMessageDto.Response sendMessage(SendMessageDto.Parameter parameter) {
 		validateUserExists(parameter.getSenderId(), MessageErrorCode.SENDER_NOT_FOUND);
-		validateUserExists(parameter.getReceiverId(), MessageErrorCode.RECEIVER_NOT_FOUND);
+		User receiver = userRepository.findByNickName(parameter.getReceiverNickname())
+			.orElseThrow(() -> new BrainPixException(MessageErrorCode.RECEIVER_NOT_FOUND));
 
-		Message message = SendMessageConverter.toMessage(parameter);
+		Message message = SendMessageConverter.toMessage(parameter, receiver.getId());
 
 		messageRepository.save(message);
 
