@@ -46,6 +46,7 @@ public class IndividualProfileResponseDto {
 	public static class StackDto {
 		private String stackName; // 스택 이름
 		private StackProficiency proficiency; // 숙련도 (상/중/하)
+		private Boolean stackOpen;
 	}
 
 	@Getter
@@ -60,6 +61,7 @@ public class IndividualProfileResponseDto {
 		@DateTimeFormat(pattern = "yyyy-MM")
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 		private YearMonth endDate; // 종료 날짜
+		private Boolean careerOpen;
 	}
 
 }
