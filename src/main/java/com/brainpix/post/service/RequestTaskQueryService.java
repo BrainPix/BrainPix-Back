@@ -19,9 +19,9 @@ import com.brainpix.post.dto.GetRequestTaskListDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.post.repository.IdeaMarketRepository;
-import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.RequestTaskRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.redis.service.RedisViewCountService;
 import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
@@ -38,7 +38,7 @@ public class RequestTaskQueryService {
 	private final CollectionGatheringRepository collectionGatheringRepository;
 	private final UserRepository userRepository;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
-	private final PostRepository postRepository;
+	private final RedisViewCountService redisViewCountService;
 
 	// 요청 과제 메인페이지에서 검색 조건을 적용하여 요청 과제 목록을 반환합니다.
 	@Transactional(readOnly = true)
@@ -96,7 +96,7 @@ public class RequestTaskQueryService {
 		}
 
 		// 조회수 증가
-		postRepository.increaseViewCount(requestTask.getId());
+		redisViewCountService.increaseViewCount(requestTask.getId(), parameter.getUserId());
 
 		// 작성자 조회
 		User writer = requestTask.getWriter();
