@@ -62,6 +62,8 @@ public class PublicProfileService {
 
 		// 비공개 항목 처리 (비공개면 빈 값/리스트 반환)
 		return IndividualProfileResponseDto.builder()
+			.userId(profileDto.getUserId())
+			.profileImage(profileDto.getProfileImage())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
 			.name(profileDto.getName())
@@ -91,6 +93,8 @@ public class PublicProfileService {
 		CompanyProfileResponseDto profileDto = myProfileConverter.toCompanyDto((Company)user);
 
 		return CompanyProfileResponseDto.builder()
+			.userId(profileDto.getUserId())
+			.imageUrl(profileDto.getImageUrl())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
 			.name(profileDto.getName())
