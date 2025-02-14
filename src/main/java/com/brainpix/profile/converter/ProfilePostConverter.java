@@ -1,10 +1,7 @@
 package com.brainpix.profile.converter;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Component;
 
-import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
@@ -61,16 +58,8 @@ public class ProfilePostConverter {
 	 * 협업 광장 미리보기용 DTO 변환
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toCollaborationHubPreviewDto(CollaborationHub hub, long savedCount) {
-		long currentMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> Optional.ofNullable(rec.getGathering())
-				.map(Gathering::getOccupiedQuantity)
-				.orElse(0L))
-			.sum();
-		long totalMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> Optional.ofNullable(rec.getGathering())
-				.map(Gathering::getTotalQuantity)
-				.orElse(0L))
-			.sum();
+		long currentMembers = hub.getOccupiedQuantity();
+		long totalMembers = hub.getTotalQuantity();
 		String openScope = parseOpenScope(hub.getPostAuth());
 		String writerName = getDisplayName(hub.getWriter());
 
