@@ -81,7 +81,7 @@ public class PortfolioController {
 	@AllUser
 	@Operation(summary = "사용자의 포트폴리오 목록 조회",
 		description = "특정 사용자의 포트폴리오 목록을 조회합니다. 자신의 포트폴리오를 조회하려면 자신의 userId를 전달하세요.")
-	@GetMapping("/{userId}")
+	@GetMapping("/{userId}/list")
 	@SwaggerPageable
 	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findPortfolios(
 		@PathVariable Long userId,
