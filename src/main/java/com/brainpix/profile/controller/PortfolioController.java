@@ -79,17 +79,16 @@ public class PortfolioController {
 	}
 
 	@AllUser
-	@Operation(summary = "내 포트폴리오 목록 조회", description = "사용자 ID를 기준으로 포트폴리오 목록을 페이징 처리하여 조회합니다.")
-	@GetMapping
+	@Operation(summary = "사용자의 포트폴리오 목록 조회",
+		description = "특정 사용자의 포트폴리오 목록을 조회합니다. 자신의 포트폴리오를 조회하려면 자신의 userId를 전달하세요.")
+	@GetMapping("/{userId}")
 	@SwaggerPageable
-	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findMyPortfolios(
-		@UserId Long userId,
+	public ResponseEntity<CommonPageResponse<PortfolioResponse>> findPortfolios(
+		@PathVariable Long userId,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		Page<PortfolioResponse> page = portfolioService.findAllMyPortfolios(userId, pageable);
-
+		Page<PortfolioResponse> page = portfolioService.findAllPortfoliosByUserId(userId, pageable);
 		CommonPageResponse<PortfolioResponse> response = CommonPageResponse.of(page);
-
 		return ResponseEntity.ok(response);
 	}
 
