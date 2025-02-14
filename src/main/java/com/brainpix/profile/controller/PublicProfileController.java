@@ -59,7 +59,7 @@ public class PublicProfileController {
 	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
 		@PathVariable Long userId,
-		@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 		CommonPageResponse<PublicProfileResponseDto.PostPreviewDto> pageResponse =
 			CommonPageResponse.of(publicProfileService.getPostsByUser(userId, pageable));
 		return ResponseEntity.ok(ApiResponse.success(pageResponse));
