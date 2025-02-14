@@ -35,7 +35,7 @@ public class PublicProfileController {
 	 */
 	@AllUser
 	@Operation(summary = "개인 공개 프로필 조회", description = "특정 사용자에게 공개 개인 프로필을 조회합니다.")
-	@GetMapping("/individual")
+	@GetMapping("/individual/{userId}")
 	public ResponseEntity<ApiResponse<IndividualProfileResponseDto>> getPublicIndividualProfile(
 		@PathVariable Long userId) {
 		IndividualProfileResponseDto profile = publicProfileService.getPublicIndividualProfile(userId);
@@ -47,7 +47,7 @@ public class PublicProfileController {
 	 */
 	@AllUser
 	@Operation(summary = "기업 공개 프로필 조회", description = "특정 사용자에게 공개 기업 프로필을 조회합니다.")
-	@GetMapping("/company")
+	@GetMapping("/company/{userId}")
 	public ResponseEntity<ApiResponse<CompanyProfileResponseDto>> getPublicCompanyProfile(@PathVariable Long userId) {
 		CompanyProfileResponseDto profile = publicProfileService.getPublicCompanyProfile(userId);
 		return ResponseEntity.ok(ApiResponse.success(profile));
@@ -55,7 +55,7 @@ public class PublicProfileController {
 
 	@AllUser
 	@Operation(summary = "사용자 게시글 조회", description = "특정 사용자가 작성한 공개 게시글을 조회합니다.")
-	@GetMapping
+	@GetMapping("/{userId}")
 	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
 		@PathVariable Long userId,
