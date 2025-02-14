@@ -78,9 +78,9 @@ public class KakaoPayApiClient {
 		params.put("tax_free_amount", "0");
 		params.put("vat_amount", String.valueOf(parameter.getVat()));
 		params.put("approval_url",
-			"https://www.brainpix.net/purchase/approve?ideaId=" + ideaMarket.getId() + "&orderId=" + orderId);
-		params.put("cancel_url", "https://www.brainpix.net/purchase/cancel?ideaId=" + ideaMarket.getId());
-		params.put("fail_url", "https://www.brainpix.net/purchase/fail?ideaId=" + ideaMarket.getId());
+			"http://localhost:5173/purchase/approve?ideaId=" + ideaMarket.getId() + "&orderId=" + orderId);
+		params.put("cancel_url", "http://localhost:5173/purchase/cancel?ideaId=" + ideaMarket.getId());
+		params.put("fail_url", "http://localhost:5173/purchase/fail?ideaId=" + ideaMarket.getId());
 
 		return params;
 	}
