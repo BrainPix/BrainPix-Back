@@ -17,4 +17,5 @@ public class MyPageResponseDto {
 	private long collaborationCount;    // 협업 경험 횟수
 	private String selfIntroduction;    // 자기소개
 	private String profileImage;
+	private Long userId;
 }
