@@ -1,7 +1,10 @@
 package com.brainpix.profile.converter;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
+import com.brainpix.joining.entity.quantity.Gathering;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
@@ -59,10 +62,14 @@ public class ProfilePostConverter {
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toCollaborationHubPreviewDto(CollaborationHub hub, long savedCount) {
 		long currentMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getOccupiedQuantity())
+			.mapToLong(rec -> Optional.ofNullable(rec.getGathering())
+				.map(Gathering::getOccupiedQuantity)
+				.orElse(0L))
 			.sum();
 		long totalMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getTotalQuantity())
+			.mapToLong(rec -> Optional.ofNullable(rec.getGathering())
+				.map(Gathering::getTotalQuantity)
+				.orElse(0L))
 			.sum();
 		String openScope = parseOpenScope(hub.getPostAuth());
 		String writerName = getDisplayName(hub.getWriter());
