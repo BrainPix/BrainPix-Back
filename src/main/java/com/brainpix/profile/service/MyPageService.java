@@ -57,6 +57,7 @@ public class MyPageService {
 			.collaborationCount(collaborationCount)
 			.selfIntroduction(selfIntroduction)
 			.profileImage(user.getProfileImage())
+			.userId(userId)
 			.build();
 	}
 
