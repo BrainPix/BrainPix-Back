@@ -58,12 +58,8 @@ public class ProfilePostConverter {
 	 * 협업 광장 미리보기용 DTO 변환
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toCollaborationHubPreviewDto(CollaborationHub hub, long savedCount) {
-		long currentMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getOccupiedQuantity())
-			.sum();
-		long totalMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getTotalQuantity())
-			.sum();
+		long currentMembers = hub.getOccupiedQuantity();
+		long totalMembers = hub.getTotalQuantity();
 		String openScope = parseOpenScope(hub.getPostAuth());
 		String writerName = getDisplayName(hub.getWriter());
 
