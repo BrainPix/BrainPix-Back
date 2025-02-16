@@ -15,6 +15,7 @@ public class GetAlarmConverter {
 			.builder()
 			.alarmDetailList(alarmList)
 			.listSize(alarmList.size())
+			.currentPage(alarmPage.getNumber())
 			.isLast(alarmPage.isLast())
 			.totalPage(alarmPage.getTotalPages())
 			.totalElements(alarmPage.getTotalElements())

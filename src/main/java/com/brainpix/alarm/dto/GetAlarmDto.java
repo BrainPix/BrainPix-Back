@@ -17,6 +17,7 @@ public class GetAlarmDto {
 	@Builder
 	public static class Response {
 		private Integer totalPage;
+		private Integer currentPage;
 		private Long totalElements;
 		private Integer listSize;
 		private Boolean isLast;
