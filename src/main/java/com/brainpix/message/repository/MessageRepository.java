@@ -9,5 +9,6 @@ import com.brainpix.message.model.Message;
 public interface MessageRepository extends MongoRepository<Message, String> {
 	Page<Message> findAllByReceiverId(Long receiverId, Pageable pageable);
 	Page<Message> findAllByReceiverIdAndIsRead(Long receiverId, Boolean isRead, Pageable pageable);
+	Page<Message> findAllBySenderId(Long senderId, Pageable pageable);
 	Long countAllByReceiverIdAndIsRead(Long receiverId, Boolean isRead);
 }

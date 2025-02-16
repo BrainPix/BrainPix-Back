@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,13 +62,18 @@ public class MessageService {
 		Page<Message> messages = getMessageListBySearchType(parameter.getUserId(), parameter.getSearchType(),
 			pageRequest);
 
+		// 수신자와 송신자의 id를 모두 가져옴
 		Set<Long> senderIdSet = messages.stream().map(Message::getSenderId).collect(Collectors.toSet());
+		Set<Long> receiverIdSet = messages.stream().map(Message::getReceiverId).collect(Collectors.toSet());
+		Set<Long> senderAndReceiverIdSet = Stream.concat(senderIdSet.stream(), receiverIdSet.stream())
+			.collect(Collectors.toSet());
 
-		Map<Long, String> senderMap = userRepository.findAllByIdIn(senderIdSet)
+		// in 쿼리로 한번에 가져온 후 Map 으로 변환
+		Map<Long, String> userIdAndNickNameMap = userRepository.findAllByIdIn(senderAndReceiverIdSet)
 			.stream()
 			.collect(Collectors.toMap(User::getId, User::getNickName));
 
-		return GetMessageListConverter.toResponse(messages, senderMap);
+		return GetMessageListConverter.toResponse(messages, userIdAndNickNameMap);
 	}
 
 	@Transactional(readOnly = true)
@@ -117,10 +123,10 @@ public class MessageService {
 		PageRequest pageRequest) {
 		if (searchType == MessageSearchType.ALL) {
 			return messageRepository.findAllByReceiverId(userId, pageRequest);
-		} else if (searchType == MessageSearchType.READ) {
-			return messageRepository.findAllByReceiverIdAndIsRead(userId, true, pageRequest);
-		} else if (searchType == MessageSearchType.UNREAD) {
-			return messageRepository.findAllByReceiverIdAndIsRead(userId, false, pageRequest);
+		} else if (searchType == MessageSearchType.SEND) {
+			return messageRepository.findAllBySenderId(userId, pageRequest);
+		} else if (searchType == MessageSearchType.RECEIVED) {
+			return messageRepository.findAllByReceiverId(userId, pageRequest);
 		} else {
 			return Page.empty();
 		}
