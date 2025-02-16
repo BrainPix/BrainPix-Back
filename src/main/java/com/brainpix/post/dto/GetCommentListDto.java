@@ -29,5 +29,6 @@ public class GetCommentListDto {
 		private LocalDate createdDate;       // 댓글 작성일
 		private List<Comment> childComments;      // Q&A 목록
 		private Boolean isMyComment;    // 내 댓글인지 여부
+		private String profileImageUrl; // 댓글 작성자의 프로필 이미지
 	}
 }

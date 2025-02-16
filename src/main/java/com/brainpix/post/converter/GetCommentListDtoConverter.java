@@ -58,6 +58,7 @@ public class GetCommentListDtoConverter {
 			.childComments(new ArrayList<>())
 			.createdDate(comment.getCreatedAt().toLocalDate())
 			.isMyComment(isMyComment)
+			.profileImageUrl(comment.getWriter().getProfileImage())
 			.build();
 	}
 }
