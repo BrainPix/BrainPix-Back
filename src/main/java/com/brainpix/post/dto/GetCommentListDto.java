@@ -25,10 +25,10 @@ public class GetCommentListDto {
 		private Long writerId;              // 댓글 작성자 식별자 값
 		private String content;           // 댓글 내용
 		private String writerName;            // 댓글 작성자 이름
-		private Long parentCommentId;        // 부모 댓글 ID
-		private LocalDate createdDate;       // 댓글 작성일
-		private List<Comment> childComments;      // Q&A 목록
-		private Boolean isMyComment;    // 내 댓글인지 여부
 		private String profileImageUrl; // 댓글 작성자의 프로필 이미지
+		private LocalDate createdDate;       // 댓글 작성일
+		private Boolean isMyComment;    // 내 댓글인지 여부
+		private Long parentCommentId;        // 부모 댓글 ID
+		private List<Comment> childComments;      // Q&A 목록
 	}
 }
