@@ -27,10 +27,10 @@ public class GetMessageListConverter {
 			.build();
 	}
 
-	public static GetMessageListDto.Response toResponse(Page<Message> messages, Map<Long, String> senderMap) {
+	public static GetMessageListDto.Response toResponse(Page<Message> messages, Map<Long, String> userIdToNameMap) {
 		List<Message> messageList = messages.getContent();
 		List<GetMessageListDto.MessageDetail> messageDetailList = messageList.stream()
-			.map(message -> toMessageDetail(message, senderMap.get(message.getSenderId())))
+			.map(message -> toMessageDetail(message, userIdToNameMap))
 			.toList();
 
 		return GetMessageListDto.Response.builder()
@@ -39,12 +39,14 @@ public class GetMessageListConverter {
 			.build();
 	}
 
-	public static GetMessageListDto.MessageDetail toMessageDetail(Message message, String senderName){
+	public static GetMessageListDto.MessageDetail toMessageDetail(Message message, Map<Long, String> userIdToNameMap){
 		return GetMessageListDto.MessageDetail.builder()
 			.messageId(message.getId())
 			.title(message.getTitle())
-			.senderNickname(senderName)
+			.senderNickname(userIdToNameMap.get(message.getSenderId()))
+			.receiverNickname(userIdToNameMap.get(message.getReceiverId()))
 			.sendDate(message.getCreatedAt().toLocalDate())
+			.isRead(message.getIsRead())
 			.build();
 	}
 }
