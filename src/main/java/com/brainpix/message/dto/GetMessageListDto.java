@@ -31,6 +31,8 @@ public class GetMessageListDto {
 		private String messageId;
 		private String title;
 		private String senderNickname;
+		private String receiverNickname;
 		private LocalDate sendDate;
+		private Boolean isRead;
 	}
 }
