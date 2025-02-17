@@ -58,7 +58,7 @@ public class GetRequestTaskDetailDtoConverter {
 	public static GetRequestTaskDetailDto.Writer toWriter(User writer, Long totalIdeas, Long totalCollaborations) {
 		return GetRequestTaskDetailDto.Writer.builder()
 			.writerId(writer.getId())
-			.name(writer.getName())
+			.name(writer.getNickName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer.getUserType())
 			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?

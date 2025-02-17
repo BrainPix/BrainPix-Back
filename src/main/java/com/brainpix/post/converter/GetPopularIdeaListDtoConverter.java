@@ -45,7 +45,7 @@ public class GetPopularIdeaListDtoConverter {
 			.ideaId(ideaMarket.getId())
 			.auth(ideaMarket.getPostAuth().toString())
 			.writerImageUrl(ideaMarket.getWriter().getProfileImage())
-			.writerName(ideaMarket.getWriter().getName())
+			.writerName(ideaMarket.getWriter().getNickName())
 			.thumbnailImageUrl(!ideaMarket.getImageList().isEmpty() ? ideaMarket.getImageList().get(0) : null)
 			.title(ideaMarket.getTitle())
 			.price(ideaMarket.getPrice().getPrice())
