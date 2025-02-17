@@ -73,7 +73,7 @@ public class GetCollaborationHubDetailDtoConverter {
 
 		return GetCollaborationHubDetailDto.Writer.builder()
 			.writerId(writer.getId())
-			.name(writer.getName())
+			.name(writer.getNickName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer.getUserType())
 			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?
@@ -95,7 +95,7 @@ public class GetCollaborationHubDetailDtoConverter {
 	public static GetCollaborationHubDetailDto.OpenMember toOpenMember(CollectionGathering collectionGathering) {
 		return GetCollaborationHubDetailDto.OpenMember.builder()
 			.userId(collectionGathering.getJoiner().getId())
-			.name(collectionGathering.getJoiner().getName())
+			.name(collectionGathering.getJoiner().getNickName())
 			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
 			.openMyProfile(collectionGathering.getOpenProfile())
 			.build();

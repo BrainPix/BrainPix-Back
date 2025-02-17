@@ -7,8 +7,6 @@ import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
-import com.brainpix.user.entity.Company;
-import com.brainpix.user.entity.User;
 
 @Component
 public class ProfilePostConverter {
@@ -17,14 +15,13 @@ public class ProfilePostConverter {
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toRequestTaskPreviewDto(RequestTask task, long savedCount) {
 		String openScope = parseOpenScope(task.getPostAuth());
-		String writerName = getDisplayName(task.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(task.getId())
 			.openScope(openScope)
 			.specialization(task.getSpecialization())
 			.title(task.getTitle())
-			.writerName(writerName)
+			.writerName(task.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(task.getViewCount())
 			.deadline(task.getDeadline())
@@ -38,14 +35,13 @@ public class ProfilePostConverter {
 	 */
 	public PublicProfileResponseDto.PostPreviewDto toIdeaMarketPreviewDto(IdeaMarket market, long savedCount) {
 		String openScope = parseOpenScope(market.getPostAuth());
-		String writerName = getDisplayName(market.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(market.getId())
 			.openScope(openScope)
 			.specialization(market.getSpecialization())
 			.title(market.getTitle())
-			.writerName(writerName)
+			.writerName(market.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(market.getViewCount())
 			.thumbnailImage(market.getFirstImage())
@@ -61,14 +57,13 @@ public class ProfilePostConverter {
 		long currentMembers = hub.getOccupiedQuantity();
 		long totalMembers = hub.getTotalQuantity();
 		String openScope = parseOpenScope(hub.getPostAuth());
-		String writerName = getDisplayName(hub.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(hub.getId())
 			.openScope(openScope)
 			.specialization(hub.getSpecialization())
 			.title(hub.getTitle())
-			.writerName(writerName)
+			.writerName(hub.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(hub.getViewCount())
 			.deadline(hub.getDeadline())
@@ -77,14 +72,6 @@ public class ProfilePostConverter {
 			.totalMembers(totalMembers)
 			.writerImageUrl(hub.getWriter().getProfileImage())
 			.build();
-	}
-
-	private String getDisplayName(User user) {
-		if (user instanceof Company) {
-			return user.getName();  // 기업명
-		} else {
-			return user.getNickName(); // 개인 닉네임
-		}
 	}
 
 	private String parseOpenScope(PostAuth auth) {

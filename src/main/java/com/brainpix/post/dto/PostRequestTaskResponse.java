@@ -15,7 +15,7 @@ public record PostRequestTaskResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
-	String writerName,
+	String writerNickName,
 	String thumbnailImageUrl,
 	String title,
 	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
@@ -31,7 +31,7 @@ public record PostRequestTaskResponse(
 			requestTask.getId(),
 			requestTask.getPostAuth(),
 			requestTask.getWriter().getProfileImage(),
-			requestTask.getWriter().getName(),
+			requestTask.getWriter().getNickName(),
 			requestTask.getFirstImage(),
 			requestTask.getTitle(),
 			requestTask.getDeadline(),

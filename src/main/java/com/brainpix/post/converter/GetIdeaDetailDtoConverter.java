@@ -49,7 +49,7 @@ public class GetIdeaDetailDtoConverter {
 	public static GetIdeaDetailDto.Writer toWriter(User writer, Long totalIdeas, Long totalCollaborations) {
 		return GetIdeaDetailDto.Writer.builder()
 			.writerId(writer.getId())
-			.name(writer.getName())
+			.name(writer.getNickName())
 			.profileImageUrl(writer.getProfileImage())
 			.role(writer.getUserType())
 			.specialization(!writer.getProfile().getSpecializationList().isEmpty() ?

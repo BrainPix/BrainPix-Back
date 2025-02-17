@@ -15,7 +15,7 @@ public class CompanyProfileResponseDto {
 	private String imageUrl;
 	private String userType; // 개인/기업
 	private List<Specialization> specializations;
-	private String name; // 기업 이름
+	private String nickname; // 기업 이름
 	private String selfIntroduction; // 기업 소개
 	private String businessInformation; // 사업 정보
 

@@ -47,7 +47,7 @@ public class CollectionGatheringConverter {
 
 		// 작성자 정보
 		User writer = hub.getWriter();
-		String writerName = writer.getName();
+		String writerName = writer.getNickName();
 
 		return AcceptedCollaborationDto.builder()
 			.collectionGatheringId(cg.getId())
@@ -56,7 +56,7 @@ public class CollectionGatheringConverter {
 			.postTitle(hub.getTitle())
 			.specialization(hub.getSpecialization())
 			.domain(recruitment.getDomain())
-			.writerName(writerName)
+			.writerNickName(writerName)
 			.writerType(writer.getUserType())
 			.teamInfoList(teamInfoList)
 			.collaborationId(hub.getId())
