@@ -18,6 +18,7 @@ public class SendMessageConverter {
 		return Message.builder()
 			.senderId(parameter.getSenderId())
 			.receiverId(receiverId)
+			.isRead(false)
 			.title(parameter.getTitle())
 			.content(parameter.getContent())
 			.build();
