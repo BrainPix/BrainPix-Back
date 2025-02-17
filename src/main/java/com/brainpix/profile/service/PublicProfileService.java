@@ -66,7 +66,7 @@ public class PublicProfileService {
 			.profileImage(profileDto.getProfileImage())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
-			.name(profileDto.getName())
+			.nickname(profileDto.getNickname())
 			.selfIntroduction(profileDto.getSelfIntroduction())
 			.contacts(profileDto.getContacts().stream()
 				.filter(IndividualProfileResponseDto.ContactDto::getIsPublic)
@@ -97,7 +97,7 @@ public class PublicProfileService {
 			.imageUrl(profileDto.getImageUrl())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
-			.name(profileDto.getName())
+			.nickname(profileDto.getNickname())
 			.selfIntroduction(profileDto.getSelfIntroduction())
 			.businessInformation(profileDto.getBusinessInformation())
 			.companyInformations(profile.getOpenInformation() ? profileDto.getCompanyInformations() :

@@ -21,7 +21,7 @@ public class IndividualProfileResponseDto {
 	private String profileImage;
 	private String userType; // 개인/기업
 	private List<Specialization> specializations; // 전문 분야 (e.g., "IT/디자인")
-	private String name; // 사용자 이름
+	private String nickname; // 사용자 이름
 	private String selfIntroduction; // 자기소개
 
 	@Builder.Default

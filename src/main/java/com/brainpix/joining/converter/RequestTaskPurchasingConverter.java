@@ -40,7 +40,7 @@ public class RequestTaskPurchasingConverter {
 		RequestTask requestTask = recruitment.getRequestTask();
 
 		User writer = requestTask.getWriter();
-		String writerName = writer.getName();
+		String writerName = writer.getNickName();
 
 		return AcceptedRequestTaskPurchasingDto.builder()
 			.purchasingId(p.getId())
@@ -49,7 +49,7 @@ public class RequestTaskPurchasingConverter {
 			.postTitle(requestTask.getTitle())
 			.specialization(requestTask.getSpecialization())
 			.domain(recruitment.getDomain())
-			.writerName(writerName)
+			.writerNickName(writerName)
 			.writerType(writer.getUserType())
 			.requestTaskId(requestTask.getId())
 			.build();

@@ -50,7 +50,7 @@ public class MyPageService {
 		String selfIntroduction = getSelfIntroduction(user);
 
 		return MyPageResponseDto.builder()
-			.name(user.getName())
+			.nickname(user.getNickName())
 			.userType(user.getUserType())
 			.specializations(specializations)
 			.ideaCount(ideaCount)
