@@ -45,13 +45,12 @@ public class CollaborationHubInitialMemberService {
 			CollaborationRecruitment recruitment = createInitialMemberConverter.convertToInitialMember(
 				collaborationHub, initialMemberDto);
 
+			recruitmentRepository.save(recruitment);
+
 			initialCollectionGatheringService.CreateInitialGathering(joiner, recruitment);
 
 			initialMembers.add(recruitment);
 		}
-
-		recruitmentRepository.saveAll(initialMembers);
-
 	}
 
 	//개최 인원 아이디 검증
