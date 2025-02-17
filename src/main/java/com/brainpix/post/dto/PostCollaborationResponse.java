@@ -15,7 +15,7 @@ public record PostCollaborationResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
-	String writerName,
+	String writerNickName,
 	String thumbnailImageUrl,
 	String title,
 	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
@@ -34,7 +34,7 @@ public record PostCollaborationResponse(
 			collaborationHub.getId(),
 			collaborationHub.getPostAuth(),
 			collaborationHub.getWriter().getProfileImage(),
-			collaborationHub.getWriter().getName(),
+			collaborationHub.getWriter().getNickName(),
 			collaborationHub.getFirstImage(),
 			collaborationHub.getTitle(),
 			collaborationHub.getDeadline(),

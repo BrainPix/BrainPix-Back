@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MyPageResponseDto {
-	private String name;                // 사용자 이름
+	private String nickname;                // 사용자 이름
 	private String userType;            // 개인/기업
 	private List<Specialization> specializations; // 분야 (최대 2개)
 	private long ideaCount;             // 아이디어 작성 횟수

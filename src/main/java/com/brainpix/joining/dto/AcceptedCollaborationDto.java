@@ -31,7 +31,7 @@ public class AcceptedCollaborationDto {
 	private String domain;                // 내가 지원한 파트 (ex: "PM")
 
 	// 게시글 관리자
-	private String writerName;            // 작성자 이름 (ex: "SEO YEON")
+	private String writerNickName;            // 작성자 이름 (ex: "SEO YEON")
 	private String writerType;            // "개인" or "회사"
 
 	// 팀원 정보 (모든 도메인에 대한 현재인원/총인원 + 멤버)
