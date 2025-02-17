@@ -73,7 +73,7 @@ public class MessageService {
 			.stream()
 			.collect(Collectors.toMap(User::getId, User::getNickName));
 
-		return GetMessageListConverter.toResponse(messages, userIdAndNickNameMap);
+		return GetMessageListConverter.toResponse(messages, userIdAndNickNameMap, parameter.getUserId());
 	}
 
 	@Transactional(readOnly = true)

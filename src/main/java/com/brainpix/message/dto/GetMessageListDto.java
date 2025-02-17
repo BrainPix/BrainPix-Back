@@ -22,6 +22,7 @@ public class GetMessageListDto {
 	@Builder
 	public static class Response {
 		private List<MessageDetail> messageDetailList;
+		private Integer currentPage;
 		private Boolean hasNext;
 	}
 
@@ -34,5 +35,6 @@ public class GetMessageListDto {
 		private String receiverNickname;
 		private LocalDate sendDate;
 		private Boolean isRead;
+		private MessageType messageType;
 	}
 }
