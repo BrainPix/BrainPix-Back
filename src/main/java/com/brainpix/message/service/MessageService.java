@@ -122,7 +122,7 @@ public class MessageService {
 	private Page<Message> getMessageListBySearchType(Long userId, MessageSearchType searchType,
 		PageRequest pageRequest) {
 		if (searchType == MessageSearchType.ALL) {
-			return messageRepository.findAllByReceiverId(userId, pageRequest);
+			return messageRepository.findByReceiverIdOrSenderId(userId, userId, pageRequest);
 		} else if (searchType == MessageSearchType.SEND) {
 			return messageRepository.findAllBySenderId(userId, pageRequest);
 		} else if (searchType == MessageSearchType.RECEIVED) {
