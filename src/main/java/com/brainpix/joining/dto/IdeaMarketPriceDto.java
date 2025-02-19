@@ -18,4 +18,8 @@ public class IdeaMarketPriceDto {
 	@NotNull(message = "수량 설정은 필수입니다.")
 	@Min(value = 1, message = "수량은 최소 1개 이상이어야 합니다.")
 	private Long totalQuantity;
+
+	public void updateTotalQuantity(Long totalQuantity) {
+		this.totalQuantity = totalQuantity;
+	}
 }
