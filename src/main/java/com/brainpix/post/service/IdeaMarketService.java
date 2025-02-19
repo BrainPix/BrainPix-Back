@@ -9,7 +9,6 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
-import com.brainpix.joining.dto.IdeaMarketPriceDto;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
@@ -58,9 +57,7 @@ public class IdeaMarketService {
 
 		// IDEA_SOLUTION은 수량화가 불가능한 무형의 자산이므로 totalQuantity를 무한으로 설정
 		if (createDto.getIdeaMarketType().equals(IdeaMarketType.IDEA_SOLUTION)) {
-			IdeaMarketPriceDto ideaMarketPriceDto = new IdeaMarketPriceDto(createDto.getPriceDto().getPrice(),
-				(long)Integer.MAX_VALUE);
-			createDto = new IdeaMarketCreateDto(createDto.getIdeaMarketType(), ideaMarketPriceDto);
+			createDto.getPriceDto().updateTotalQuantity((long)Integer.MAX_VALUE);
 		}
 
 		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
