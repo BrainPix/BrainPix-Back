@@ -95,7 +95,7 @@ public class GetCollaborationHubDetailDtoConverter {
 	public static GetCollaborationHubDetailDto.OpenMember toOpenMember(CollectionGathering collectionGathering) {
 		return GetCollaborationHubDetailDto.OpenMember.builder()
 			.userId(collectionGathering.getJoiner().getId())
-			.name(collectionGathering.getJoiner().getNickName())
+			.name(collectionGathering.getJoiner().getIdentifier())
 			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
 			.build();
 	}
