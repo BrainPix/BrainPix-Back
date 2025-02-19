@@ -61,10 +61,10 @@ public class CollaborationHubCommandController {
 		return ResponseEntity.ok(ApiResponse.successWithNoData());
 	}
 
-	@Operation(summary = "협업 광장 內 개최 인원 아이디 검증", description = "개최 인원 정보 파트에 아이디 입력 후 포트폴리오 불러오기를 통해 아이디의 존재 여부를 검증합니다.")
+	@Operation(summary = "협업 광장 內 개최 인원 유저 고유 아이디 반환", description = "개최 인원 정보 파트에 로그인 아이디 입력 후 포트폴리오 불러오기를 통해 유저 고유 아이디를 반환하여 유저 프로필에 접근할 수 있도록 합니다.")
 	@GetMapping("/validate/{identifier}")
-	public ResponseEntity<ApiResponse<Void>> validateUserIdentifier(@PathVariable String identifier) {
-		collaborationHubInitialMemberService.validateUserIdentifier(identifier);
-		return ResponseEntity.ok(ApiResponse.successWithNoData());
+	public ResponseEntity<ApiResponse<Long>> validateUserIdentifier(@PathVariable String identifier) {
+		Long userId = collaborationHubInitialMemberService.validateUserIdentifier(identifier);
+		return ResponseEntity.ok(ApiResponse.success(userId));
 	}
 }
