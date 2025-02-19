@@ -65,5 +65,6 @@ public class GetCollaborationHubDetailDto {
 		private Long userId;    // 유저 식별자 값
 		private String name;    // 유저 이름
 		private String domain;    // 유저 역할
+		private Boolean openMyProfile;    // 프로필 공개 여부
 	}
 }

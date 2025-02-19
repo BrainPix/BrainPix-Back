@@ -9,6 +9,7 @@ import com.brainpix.api.code.error.CommonErrorCode;
 import com.brainpix.api.code.error.IdeaMarketErrorCode;
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
+import com.brainpix.joining.dto.IdeaMarketPriceDto;
 import com.brainpix.joining.entity.quantity.Price;
 import com.brainpix.joining.repository.CollectionGatheringRepository;
 import com.brainpix.joining.repository.RequestTaskPurchasingRepository;
@@ -26,6 +27,7 @@ import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
+import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
@@ -53,6 +55,13 @@ public class IdeaMarketService {
 
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
+
+		// IDEA_SOLUTION은 수량화가 불가능한 무형의 자산이므로 totalQuantity를 무한으로 설정
+		if (createDto.getIdeaMarketType().equals(IdeaMarketType.IDEA_SOLUTION)) {
+			IdeaMarketPriceDto ideaMarketPriceDto = new IdeaMarketPriceDto(createDto.getPriceDto().getPrice(),
+				(long)Integer.MAX_VALUE);
+			createDto = new IdeaMarketCreateDto(createDto.getIdeaMarketType(), ideaMarketPriceDto);
+		}
 
 		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
 
