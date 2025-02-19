@@ -97,6 +97,7 @@ public class GetCollaborationHubDetailDtoConverter {
 			.userId(collectionGathering.getJoiner().getId())
 			.name(collectionGathering.getJoiner().getIdentifier())
 			.domain(collectionGathering.getCollaborationRecruitment().getDomain())
+			.openMyProfile(collectionGathering.getOpenProfile())
 			.build();
 	}
 }
