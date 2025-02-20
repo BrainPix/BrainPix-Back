@@ -17,6 +17,7 @@ import com.brainpix.profile.dto.IndividualProfileResponseDto;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
 import com.brainpix.profile.service.PublicProfileService;
 import com.brainpix.security.authorization.AllUser;
+import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,9 +60,10 @@ public class PublicProfileController {
 	@SwaggerPageable
 	public ResponseEntity<ApiResponse<CommonPageResponse<PublicProfileResponseDto.PostPreviewDto>>> getPostsByUser(
 		@PathVariable Long userId,
+		@UserId Long currentUserId,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 		CommonPageResponse<PublicProfileResponseDto.PostPreviewDto> pageResponse =
-			CommonPageResponse.of(publicProfileService.getPostsByUser(userId, pageable));
+			CommonPageResponse.of(publicProfileService.getPostsByUser(userId, currentUserId, pageable));
 		return ResponseEntity.ok(ApiResponse.success(pageResponse));
 	}
 }
