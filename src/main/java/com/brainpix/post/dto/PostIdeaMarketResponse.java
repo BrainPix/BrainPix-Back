@@ -14,9 +14,10 @@ public record PostIdeaMarketResponse(
 	Long price,
 	Specialization specialization,
 	Long saveCount,
-	Long viewCount
+	Long viewCount,
+	boolean isSavedPost
 ) {
-	public static PostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount) {
+	public static PostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount, boolean isSavedPost) {
 		return new PostIdeaMarketResponse(
 			ideaMarket.getId(),
 			ideaMarket.getPostAuth(),
@@ -27,7 +28,8 @@ public record PostIdeaMarketResponse(
 			ideaMarket.getPrice().getPrice(),
 			ideaMarket.getSpecialization(),
 			saveCount,
-			ideaMarket.getViewCount()
+			ideaMarket.getViewCount(),
+			isSavedPost
 		);
 	}
 }

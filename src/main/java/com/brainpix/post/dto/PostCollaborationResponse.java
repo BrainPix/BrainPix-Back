@@ -26,10 +26,11 @@ public record PostCollaborationResponse(
 	Long saveCount,
 	Long viewCount,
 	Long totalQuantity,
-	Long occupiedQuantity
+	Long occupiedQuantity,
+	boolean isSavedPost
 ) {
 	public static PostCollaborationResponse from(CollaborationHub collaborationHub, Long saveCount,
-		Long totalQuantity, Long occupiedQuantity) {
+		Long totalQuantity, Long occupiedQuantity, boolean isSavedPost) {
 		return new PostCollaborationResponse(
 			collaborationHub.getId(),
 			collaborationHub.getPostAuth(),
@@ -42,7 +43,8 @@ public record PostCollaborationResponse(
 			saveCount,
 			collaborationHub.getViewCount(),
 			totalQuantity,
-			occupiedQuantity
+			occupiedQuantity,
+			isSavedPost
 		);
 	}
 }

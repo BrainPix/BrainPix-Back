@@ -40,6 +40,7 @@ public class PublicProfileResponseDto {
 		private Long price;            // (아이디어 마켓 전용)
 		private Long currentMembers;   // (협업 광장 전용)
 		private Long totalMembers;     // (협업 광장 전용)
+		private boolean isSavedPost;
 
 	}
 }
