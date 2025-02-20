@@ -39,7 +39,8 @@ public class MyIdeaMarketService {
 		return ideaMarketRepository.findByWriter(writer, pageable)
 			.map(ideaMarket -> {
 				Long saveCount = savedPostRepository.countByPostId(ideaMarket.getId());
-				return PostIdeaMarketResponse.from(ideaMarket, saveCount);
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, ideaMarket.getId());
+				return PostIdeaMarketResponse.from(ideaMarket, saveCount, isSavedPost);
 			});
 	}
 

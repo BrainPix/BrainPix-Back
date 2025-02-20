@@ -24,9 +24,10 @@ public record PostRequestTaskResponse(
 	LocalDateTime deadline,
 	Specialization specialization,
 	Long saveCount,
-	Long viewCount
+	Long viewCount,
+	boolean isSavedPost
 ) {
-	public static PostRequestTaskResponse from(RequestTask requestTask, Long saveCount) {
+	public static PostRequestTaskResponse from(RequestTask requestTask, Long saveCount, boolean isSavedPost) {
 		return new PostRequestTaskResponse(
 			requestTask.getId(),
 			requestTask.getPostAuth(),
@@ -37,7 +38,8 @@ public record PostRequestTaskResponse(
 			requestTask.getDeadline(),
 			requestTask.getSpecialization(),
 			saveCount,
-			requestTask.getViewCount()
+			requestTask.getViewCount(),
+			isSavedPost
 		);
 	}
 }

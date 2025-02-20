@@ -65,7 +65,8 @@ public class SavedPostService {
 			.map(savedPost -> {
 				RequestTask requestTask = (RequestTask)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(requestTask.getId());
-				return PostRequestTaskResponse.from(requestTask, saveCount);
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, requestTask.getId());
+				return PostRequestTaskResponse.from(requestTask, saveCount, isSavedPost);
 			});
 	}
 
@@ -77,7 +78,8 @@ public class SavedPostService {
 			.map(savedPost -> {
 				IdeaMarket ideaMarket = (IdeaMarket)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(ideaMarket.getId());
-				return PostIdeaMarketResponse.from(ideaMarket, saveCount);
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, ideaMarket.getId());
+				return PostIdeaMarketResponse.from(ideaMarket, saveCount, isSavedPost);
 			});
 	}
 
@@ -89,13 +91,14 @@ public class SavedPostService {
 			.map(savedPost -> {
 				CollaborationHub collaborationHub = (CollaborationHub)savedPost.getPost();
 				Long saveCount = savedPostRepository.countByPostId(collaborationHub.getId());
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, collaborationHub.getId());
 
 				// 엔티티 메서드를 호출하여 모집 데이터의 합산 계산
 				long totalQuantity = collaborationHub.getTotalQuantity();
 				long occupiedQuantity = collaborationHub.getOccupiedQuantity();
 
 				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity,
-					occupiedQuantity);
+					occupiedQuantity, isSavedPost);
 			});
 	}
 }

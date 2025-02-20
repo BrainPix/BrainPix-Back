@@ -43,9 +43,11 @@ public class MyCollaborationHubService {
 		return collaborationHubRepository.findByWriter(writer, pageable)
 			.map(collaborationHub -> {
 				Long saveCount = savedPostRepository.countByPostId(collaborationHub.getId());
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, collaborationHub.getId());
 				long totalQuantity = collaborationHub.getTotalQuantity();
 				long occupiedQuantity = collaborationHub.getOccupiedQuantity();
-				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity, occupiedQuantity);
+				return PostCollaborationResponse.from(collaborationHub, saveCount, totalQuantity, occupiedQuantity,
+					isSavedPost);
 			});
 	}
 
