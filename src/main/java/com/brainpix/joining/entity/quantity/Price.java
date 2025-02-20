@@ -1,5 +1,7 @@
 package com.brainpix.joining.entity.quantity;
 
+import org.hibernate.annotations.BatchSize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@BatchSize(size = 10)
 @Entity
 @NoArgsConstructor
 @Getter
