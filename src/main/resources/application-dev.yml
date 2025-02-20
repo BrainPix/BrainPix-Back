@@ -40,7 +40,7 @@ kakao:
     cid: ENC(+Kb6JKxydvdU8AtNjy6i8E/0cr3mcK3/yIXO4oULT/Z41Ri57uepQtt7vEAl1uyk)
     ready-url: https://open-api.kakaopay.com/online/v1/payment/ready
     approve-url: https://open-api.kakaopay.com/online/v1/payment/approve
-    redirect-domain: http://localhost:5173
+    redirect-domain: https://www.brainpix.net
 
 cloud:
   aws:
