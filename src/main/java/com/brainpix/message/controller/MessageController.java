@@ -23,6 +23,7 @@ import com.brainpix.security.authorization.AllUser;
 import com.brainpix.security.authorization.UserId;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +38,8 @@ public class MessageController {
 	@AllUser
 	@GetMapping
 	@Operation(summary = "메시지 다건 조회 API", description = "여러개의 메시지를 조회합니다.")
-	public ResponseEntity<ApiResponse<GetMessageListDto.Response>> getMessageList(@RequestParam String status,
+	public ResponseEntity<ApiResponse<GetMessageListDto.Response>> getMessageList(
+		@Parameter(description = "메시지 검색 조건 :  ALL, SEND, RECEIVED") @RequestParam String status,
 		Pageable pageable, @UserId Long userId) {
 
 		GetMessageListDto.Parameter parameter = GetMessageListConverter.toParameter(userId, status, pageable);

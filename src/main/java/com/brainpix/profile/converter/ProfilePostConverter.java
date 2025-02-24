@@ -7,72 +7,68 @@ import com.brainpix.post.entity.collaboration_hub.CollaborationHub;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
 import com.brainpix.post.entity.request_task.RequestTask;
 import com.brainpix.profile.dto.PublicProfileResponseDto;
-import com.brainpix.user.entity.Company;
-import com.brainpix.user.entity.User;
 
 @Component
 public class ProfilePostConverter {
 	/**
 	 * 요청 과제 미리보기용 DTO 변환
 	 */
-	public PublicProfileResponseDto.PostPreviewDto toRequestTaskPreviewDto(RequestTask task, long savedCount) {
+	public PublicProfileResponseDto.PostPreviewDto toRequestTaskPreviewDto(RequestTask task, long savedCount,
+		boolean isSavePost) {
 		String openScope = parseOpenScope(task.getPostAuth());
-		String writerName = getDisplayName(task.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(task.getId())
 			.openScope(openScope)
 			.specialization(task.getSpecialization())
 			.title(task.getTitle())
-			.writerName(writerName)
+			.writerName(task.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(task.getViewCount())
 			.deadline(task.getDeadline())
 			.thumbnailImage(task.getFirstImage())
 			.writerImageUrl(task.getWriter().getProfileImage())
+			.isSavedPost(isSavePost)
 			.build();
 	}
 
 	/**
 	 * 아이디어 마켓 미리보기용 DTO 변환
 	 */
-	public PublicProfileResponseDto.PostPreviewDto toIdeaMarketPreviewDto(IdeaMarket market, long savedCount) {
+	public PublicProfileResponseDto.PostPreviewDto toIdeaMarketPreviewDto(IdeaMarket market, long savedCount,
+		boolean isSavePost) {
 		String openScope = parseOpenScope(market.getPostAuth());
-		String writerName = getDisplayName(market.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(market.getId())
 			.openScope(openScope)
 			.specialization(market.getSpecialization())
 			.title(market.getTitle())
-			.writerName(writerName)
+			.writerName(market.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(market.getViewCount())
 			.thumbnailImage(market.getFirstImage())
 			.writerImageUrl(market.getWriter().getProfileImage())
 			.price(market.getPrice().getPrice())
+			.isSavedPost(isSavePost)
 			.build();
 	}
 
 	/**
 	 * 협업 광장 미리보기용 DTO 변환
 	 */
-	public PublicProfileResponseDto.PostPreviewDto toCollaborationHubPreviewDto(CollaborationHub hub, long savedCount) {
-		long currentMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getOccupiedQuantity())
-			.sum();
-		long totalMembers = hub.getCollaborations().stream()
-			.mapToLong(rec -> rec.getGathering().getTotalQuantity())
-			.sum();
+	public PublicProfileResponseDto.PostPreviewDto toCollaborationHubPreviewDto(CollaborationHub hub, long savedCount,
+		boolean isSavePost) {
+		long currentMembers = hub.getOccupiedQuantity();
+		long totalMembers = hub.getTotalQuantity();
 		String openScope = parseOpenScope(hub.getPostAuth());
-		String writerName = getDisplayName(hub.getWriter());
 
 		return PublicProfileResponseDto.PostPreviewDto.builder()
 			.postId(hub.getId())
 			.openScope(openScope)
 			.specialization(hub.getSpecialization())
 			.title(hub.getTitle())
-			.writerName(writerName)
+			.writerName(hub.getWriter().getNickName())
 			.savedCount(savedCount)
 			.viewCount(hub.getViewCount())
 			.deadline(hub.getDeadline())
@@ -80,15 +76,8 @@ public class ProfilePostConverter {
 			.currentMembers(currentMembers)
 			.totalMembers(totalMembers)
 			.writerImageUrl(hub.getWriter().getProfileImage())
+			.isSavedPost(isSavePost)
 			.build();
-	}
-
-	private String getDisplayName(User user) {
-		if (user instanceof Company) {
-			return user.getName();  // 기업명
-		} else {
-			return user.getNickName(); // 개인 닉네임
-		}
 	}
 
 	private String parseOpenScope(PostAuth auth) {

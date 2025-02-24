@@ -44,5 +44,6 @@ public class KakaoPayReadyDto {
 	@Builder
 	public static class Response {
 		private String nextRedirectPcUrl;
+		private String orderId;
 	}
 }

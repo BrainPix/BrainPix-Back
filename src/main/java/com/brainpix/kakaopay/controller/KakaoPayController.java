@@ -41,7 +41,7 @@ public class KakaoPayController {
 	}
 
 	@AllUser
-	@Operation(summary = "결제 승인 API", description = "pgToken과 주문 번호를 json 본문으로 입력받아 최종 승인을 처리합니다.")
+	@Operation(summary = "결제 승인 API", description = "pgToken, orderId, ideaId를 json 본문으로 입력받아 최종 승인을 처리합니다.")
 	@PostMapping("/approve")
 	public ResponseEntity<ApiResponse<KakaoPayApproveDto.Response>> kakaoPayApprove(
 		@UserId Long userId,

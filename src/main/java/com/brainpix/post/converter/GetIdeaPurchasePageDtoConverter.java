@@ -23,7 +23,7 @@ public class GetIdeaPurchasePageDtoConverter {
 			.title(ideaMarket.getTitle())
 			.remainingQuantity(ideaMarket.getPrice().getRemainingQuantity())
 			.sellerId(seller.getId())
-			.name(seller.getName())
+			.name(seller.getNickName())
 			.profileImageUrl(seller.getProfileImage())
 			.email(seller.getEmail())
 			.build();

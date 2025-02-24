@@ -15,7 +15,7 @@ public record PostCollaborationResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
-	String writerName,
+	String writerNickName,
 	String thumbnailImageUrl,
 	String title,
 	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
@@ -26,15 +26,16 @@ public record PostCollaborationResponse(
 	Long saveCount,
 	Long viewCount,
 	Long totalQuantity,
-	Long occupiedQuantity
+	Long occupiedQuantity,
+	boolean isSavedPost
 ) {
 	public static PostCollaborationResponse from(CollaborationHub collaborationHub, Long saveCount,
-		Long totalQuantity, Long occupiedQuantity) {
+		Long totalQuantity, Long occupiedQuantity, boolean isSavedPost) {
 		return new PostCollaborationResponse(
 			collaborationHub.getId(),
 			collaborationHub.getPostAuth(),
 			collaborationHub.getWriter().getProfileImage(),
-			collaborationHub.getWriter().getName(),
+			collaborationHub.getWriter().getNickName(),
 			collaborationHub.getFirstImage(),
 			collaborationHub.getTitle(),
 			collaborationHub.getDeadline(),
@@ -42,7 +43,8 @@ public record PostCollaborationResponse(
 			saveCount,
 			collaborationHub.getViewCount(),
 			totalQuantity,
-			occupiedQuantity
+			occupiedQuantity,
+			isSavedPost
 		);
 	}
 }

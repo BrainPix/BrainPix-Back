@@ -67,7 +67,7 @@ public class PortfolioService {
 		portfolioRepository.delete(portfolio);
 	}
 
-	public Page<PortfolioResponse> findAllMyPortfolios(long userId, Pageable pageable) {
+	public Page<PortfolioResponse> findAllPortfoliosByUserId(Long userId, Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(CommonErrorCode.USER_NOT_FOUND));
 

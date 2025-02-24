@@ -8,26 +8,28 @@ public record PostIdeaMarketResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
-	String writerName,
+	String writerNickName,
 	String thumbnailImageUrl,
 	String title,
 	Long price,
 	Specialization specialization,
 	Long saveCount,
-	Long viewCount
+	Long viewCount,
+	boolean isSavedPost
 ) {
-	public static PostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount) {
+	public static PostIdeaMarketResponse from(IdeaMarket ideaMarket, Long saveCount, boolean isSavedPost) {
 		return new PostIdeaMarketResponse(
 			ideaMarket.getId(),
 			ideaMarket.getPostAuth(),
 			ideaMarket.getWriter().getProfileImage(),
-			ideaMarket.getWriter().getName(),
+			ideaMarket.getWriter().getNickName(),
 			ideaMarket.getImageList().isEmpty() ? "thumbnail does not exist" : ideaMarket.getImageList().get(0),
 			ideaMarket.getTitle(),
 			ideaMarket.getPrice().getPrice(),
 			ideaMarket.getSpecialization(),
 			saveCount,
-			ideaMarket.getViewCount()
+			ideaMarket.getViewCount(),
+			isSavedPost
 		);
 	}
 }

@@ -27,7 +27,7 @@ public class IdeaMarketPurchaseDto {
 	// 게시글 정보
 	private Specialization specialization;
 	private String title;
-	private String writerName;
+	private String writerNickName;
 	private String writerType;    // "개인"/"회사"
 	private Long middlePrice; //원가 *수량
 	// 수량

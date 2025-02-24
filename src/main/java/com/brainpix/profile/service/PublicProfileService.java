@@ -62,9 +62,11 @@ public class PublicProfileService {
 
 		// 비공개 항목 처리 (비공개면 빈 값/리스트 반환)
 		return IndividualProfileResponseDto.builder()
+			.userId(profileDto.getUserId())
+			.profileImage(profileDto.getProfileImage())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
-			.name(profileDto.getName())
+			.nickname(profileDto.getNickname())
 			.selfIntroduction(profileDto.getSelfIntroduction())
 			.contacts(profileDto.getContacts().stream()
 				.filter(IndividualProfileResponseDto.ContactDto::getIsPublic)
@@ -91,9 +93,11 @@ public class PublicProfileService {
 		CompanyProfileResponseDto profileDto = myProfileConverter.toCompanyDto((Company)user);
 
 		return CompanyProfileResponseDto.builder()
+			.userId(profileDto.getUserId())
+			.imageUrl(profileDto.getImageUrl())
 			.userType(profileDto.getUserType())
 			.specializations(profileDto.getSpecializations())
-			.name(profileDto.getName())
+			.nickname(profileDto.getNickname())
 			.selfIntroduction(profileDto.getSelfIntroduction())
 			.businessInformation(profileDto.getBusinessInformation())
 			.companyInformations(profile.getOpenInformation() ? profileDto.getCompanyInformations() :
@@ -101,7 +105,8 @@ public class PublicProfileService {
 			.build();
 	}
 
-	public Page<PublicProfileResponseDto.PostPreviewDto> getPostsByUser(Long userId, Pageable pageable) {
+	public Page<PublicProfileResponseDto.PostPreviewDto> getPostsByUser(Long userId, Long currentUserId,
+		Pageable pageable) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(
 				com.brainpix.api.code.error.CommonErrorCode.RESOURCE_NOT_FOUND));
@@ -109,12 +114,13 @@ public class PublicProfileService {
 		return postRepository.findByWriter(user, pageable)
 			.map(post -> {
 				long savedCount = savedPostRepository.countByPostId(post.getId());
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(currentUserId, post.getId());
 				if (post instanceof RequestTask) {
-					return postConverter.toRequestTaskPreviewDto((RequestTask)post, savedCount);
+					return postConverter.toRequestTaskPreviewDto((RequestTask)post, savedCount, isSavedPost);
 				} else if (post instanceof IdeaMarket) {
-					return postConverter.toIdeaMarketPreviewDto((IdeaMarket)post, savedCount);
+					return postConverter.toIdeaMarketPreviewDto((IdeaMarket)post, savedCount, isSavedPost);
 				} else if (post instanceof CollaborationHub) {
-					return postConverter.toCollaborationHubPreviewDto((CollaborationHub)post, savedCount);
+					return postConverter.toCollaborationHubPreviewDto((CollaborationHub)post, savedCount, isSavedPost);
 				}
 				throw new BrainPixException(CommonErrorCode.RESOURCE_NOT_FOUND);
 			});

@@ -20,6 +20,7 @@ public class KakaoPayReadyDtoConverter {
 
 		return KakaoPayReadyDto.Response.builder()
 			.nextRedirectPcUrl(kakaoApiResponse.getNext_redirect_pc_url())
+			.orderId(orderId)
 			.build();
 	}
 }

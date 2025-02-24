@@ -26,6 +26,7 @@ import com.brainpix.post.dto.IdeaMarketCreateDto;
 import com.brainpix.post.dto.IdeaMarketUpdateDto;
 import com.brainpix.post.entity.PostAuth;
 import com.brainpix.post.entity.idea_market.IdeaMarket;
+import com.brainpix.post.entity.idea_market.IdeaMarketType;
 import com.brainpix.post.repository.IdeaMarketRepository;
 import com.brainpix.post.repository.SavedPostRepository;
 import com.brainpix.redis.service.RedisViewCountService;
@@ -53,6 +54,11 @@ public class IdeaMarketService {
 
 		User writer = userRepository.findById(userId)
 			.orElseThrow(() -> new BrainPixException(PostErrorCode.USER_NOT_FOUND));
+
+		// IDEA_SOLUTION은 수량화가 불가능한 무형의 자산이므로 totalQuantity를 무한으로 설정
+		if (createDto.getIdeaMarketType().equals(IdeaMarketType.IDEA_SOLUTION)) {
+			createDto.getPriceDto().updateTotalQuantity((long)Integer.MAX_VALUE);
+		}
 
 		Price price = priceService.createIdeaMarketPrice(createDto.getPriceDto());
 

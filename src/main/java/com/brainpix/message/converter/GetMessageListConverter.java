@@ -2,6 +2,7 @@ package com.brainpix.message.converter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import com.brainpix.api.code.error.MessageErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.message.dto.GetMessageListDto;
 import com.brainpix.message.dto.MessageSearchType;
+import com.brainpix.message.dto.MessageType;
 import com.brainpix.message.model.Message;
 
 public class GetMessageListConverter {
@@ -27,24 +29,30 @@ public class GetMessageListConverter {
 			.build();
 	}
 
-	public static GetMessageListDto.Response toResponse(Page<Message> messages, Map<Long, String> senderMap) {
+	public static GetMessageListDto.Response toResponse(Page<Message> messages, Map<Long, String> userIdToNameMap,
+		Long userId) {
 		List<Message> messageList = messages.getContent();
 		List<GetMessageListDto.MessageDetail> messageDetailList = messageList.stream()
-			.map(message -> toMessageDetail(message, senderMap.get(message.getSenderId())))
+			.map(message -> toMessageDetail(message, userIdToNameMap, userId))
 			.toList();
 
 		return GetMessageListDto.Response.builder()
 			.messageDetailList(messageDetailList)
 			.hasNext(messages.hasNext())
+			.currentPage(messages.getNumber())
 			.build();
 	}
 
-	public static GetMessageListDto.MessageDetail toMessageDetail(Message message, String senderName){
+	public static GetMessageListDto.MessageDetail toMessageDetail(Message message, Map<Long, String> userIdToNameMap,
+		Long userId) {
 		return GetMessageListDto.MessageDetail.builder()
 			.messageId(message.getId())
 			.title(message.getTitle())
-			.senderNickname(senderName)
+			.senderNickname(userIdToNameMap.get(message.getSenderId()))
+			.receiverNickname(userIdToNameMap.get(message.getReceiverId()))
 			.sendDate(message.getCreatedAt().toLocalDate())
+			.isRead(message.getIsRead())
+			.messageType(Objects.equals(message.getReceiverId(), userId) ? MessageType.RECEIVED : MessageType.SEND)
 			.build();
 	}
 }

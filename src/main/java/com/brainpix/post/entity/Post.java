@@ -2,6 +2,8 @@ package com.brainpix.post.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.brainpix.api.code.error.PostErrorCode;
 import com.brainpix.api.exception.BrainPixException;
 import com.brainpix.jpa.BaseTimeEntity;
@@ -47,6 +49,7 @@ public abstract class Post extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private Specialization specialization;
 
+	@BatchSize(size = 10)
 	@ElementCollection
 	private List<String> imageList;
 

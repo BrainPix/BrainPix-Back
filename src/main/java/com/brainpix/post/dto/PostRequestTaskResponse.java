@@ -15,7 +15,7 @@ public record PostRequestTaskResponse(
 	Long ideaId,
 	PostAuth auth,
 	String writerImageUrl,
-	String writerName,
+	String writerNickName,
 	String thumbnailImageUrl,
 	String title,
 	@Schema(type = "string", example = "yyyy-MM-dd HH:mm")
@@ -24,20 +24,22 @@ public record PostRequestTaskResponse(
 	LocalDateTime deadline,
 	Specialization specialization,
 	Long saveCount,
-	Long viewCount
+	Long viewCount,
+	boolean isSavedPost
 ) {
-	public static PostRequestTaskResponse from(RequestTask requestTask, Long saveCount) {
+	public static PostRequestTaskResponse from(RequestTask requestTask, Long saveCount, boolean isSavedPost) {
 		return new PostRequestTaskResponse(
 			requestTask.getId(),
 			requestTask.getPostAuth(),
 			requestTask.getWriter().getProfileImage(),
-			requestTask.getWriter().getName(),
+			requestTask.getWriter().getNickName(),
 			requestTask.getFirstImage(),
 			requestTask.getTitle(),
 			requestTask.getDeadline(),
 			requestTask.getSpecialization(),
 			saveCount,
-			requestTask.getViewCount()
+			requestTask.getViewCount(),
+			isSavedPost
 		);
 	}
 }

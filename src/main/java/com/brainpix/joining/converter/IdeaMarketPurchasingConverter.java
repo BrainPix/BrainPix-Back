@@ -24,7 +24,7 @@ public class IdeaMarketPurchasingConverter {
 
 		// 작성자
 		User writer = ideaMarket.getWriter();
-		String writerName = writer.getName();
+		String writerName = writer.getNickName();
 		Long itemPrice = ideaMarket.getPrice().getPrice();
 
 		return IdeaMarketPurchaseDto.builder()
@@ -32,7 +32,7 @@ public class IdeaMarketPurchasingConverter {
 			.purchasedAt(purchasedAt)
 			.specialization(category)
 			.title(title)
-			.writerName(writerName)
+			.writerNickName(writerName)
 			.writerType(writer.getUserType())
 			.middlePrice(itemPrice)
 			.quantity(purchasing.getQuantity())

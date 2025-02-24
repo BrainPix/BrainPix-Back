@@ -8,16 +8,17 @@ public class SendMessageConverter {
 	public static SendMessageDto.Parameter toParameter(SendMessageDto.Request request, Long userId) {
 		return SendMessageDto.Parameter.builder()
 			.senderId(userId)
-			.receiverId(request.getReceiverId())
+			.receiverNickname(request.getReceiverNickname())
 			.title(request.getTitle())
 			.content(request.getContent())
 			.build();
 	}
 
-	public static Message toMessage(SendMessageDto.Parameter parameter) {
+	public static Message toMessage(SendMessageDto.Parameter parameter, Long receiverId) {
 		return Message.builder()
 			.senderId(parameter.getSenderId())
-			.receiverId(parameter.getReceiverId())
+			.receiverId(receiverId)
+			.isRead(false)
 			.title(parameter.getTitle())
 			.content(parameter.getContent())
 			.build();

@@ -42,7 +42,8 @@ public class MyRequestTaskService {
 		return requestTaskRepository.findByWriter(writer, pageable)
 			.map(requestTask -> {
 				Long saveCount = savedPostRepository.countByPostId(requestTask.getId());
-				return PostRequestTaskResponse.from(requestTask, saveCount);
+				boolean isSavedPost = savedPostRepository.existsByUserIdAndPostId(userId, requestTask.getId());
+				return PostRequestTaskResponse.from(requestTask, saveCount, isSavedPost);
 			});
 	}
 

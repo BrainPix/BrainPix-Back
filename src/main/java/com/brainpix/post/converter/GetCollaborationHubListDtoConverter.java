@@ -72,7 +72,7 @@ public class GetCollaborationHubListDtoConverter {
 			.collaborationId(collaborationHub.getId())
 			.auth(collaborationHub.getPostAuth().toString())
 			.writerImageUrl(collaborationHub.getWriter().getProfileImage())
-			.writerName(collaborationHub.getWriter().getName())
+			.writerName(collaborationHub.getWriter().getNickName())
 			.thumbnailImageUrl(
 				!collaborationHub.getImageList().isEmpty() ? collaborationHub.getImageList().get(0) : null)
 			.title(collaborationHub.getTitle())

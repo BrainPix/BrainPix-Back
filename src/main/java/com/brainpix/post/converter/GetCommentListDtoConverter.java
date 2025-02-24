@@ -53,11 +53,12 @@ public class GetCommentListDtoConverter {
 			.commentId(comment.getId())
 			.writerId(comment.getWriter().getId())
 			.content(comment.getContent())
-			.writerName(comment.getWriter().getName())
+			.writerName(comment.getWriter().getNickName())
 			.parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
 			.childComments(new ArrayList<>())
 			.createdDate(comment.getCreatedAt().toLocalDate())
 			.isMyComment(isMyComment)
+			.profileImageUrl(comment.getWriter().getProfileImage())
 			.build();
 	}
 }

@@ -2,6 +2,8 @@ package com.brainpix.user.entity;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.brainpix.jpa.BaseTimeEntity;
 import com.brainpix.profile.entity.Profile;
 import com.brainpix.security.authority.BrainpixAuthority;
@@ -18,6 +20,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@BatchSize(size = 10)
 @Entity
 @Table(name = "users") //user 테이블 이름과 SQL 예약어 충돌 (테스트할때 충돌나서 넣었습니다)
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -57,11 +60,10 @@ public abstract class User extends BaseTimeEntity {
 		return profile.getId();
 	}
 
-
 	public abstract String getUserType();
 
 	public abstract BrainpixAuthority getAuthority();
- 
+
 	public void updateProfileImage(String profileImage) {
 		this.profileImage = profileImage;
 	}
