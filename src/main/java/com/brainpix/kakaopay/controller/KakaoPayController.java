@@ -30,7 +30,7 @@ public class KakaoPayController {
 	private final KakaoPayFacadeService kakaoPayService;
 
 	@AllUser
-	@Operation(summary = "결제 준비 API", description = "아이디어 식별자, 판매자 식별자, 상품 수량, 총 결제금액(vat 포함), vat를 json 본문으로 입력받아 카카오페이 쪽에 결제 정보를 생성합니다.<br>사용자를 결제 화면으로 이동시킬 수 있도록 리다이렉트 url이 응답값으로 제공됩니다.<br>해당 url로 이동하여 비밀번호 입력을 마치면 프론트 쪽 경로로 이동합니다. 이때 쿼리 파라미터로 전달되는 pgToken, ideaId, orderId를 /kakao-pay/approve에 전달하시면 됩니다.")
+	@Operation(summary = "결제 준비 API", description = "아이디어 식별자, 판매자 식별자, 상품 수량, 총 결제금액(vat 포함), vat를 json 본문으로 입력받아 카카오페이 쪽에 결제 정보를 생성합니다.<br>사용자를 결제 화면으로 이동시킬 수 있도록 리다이렉트 url과 주문 번호가 응답값으로 제공됩니다.<br>주문 번호는 이후 승인 단계에서 pgToken과 함께 전달해주시면 됩니다.")
 	@PostMapping("/ready")
 	public ResponseEntity<ApiResponse<KakaoPayReadyDto.Response>> kakaoPayReady(@UserId Long userId,
 		@RequestBody KakaoPayReadyDto.Request request) {

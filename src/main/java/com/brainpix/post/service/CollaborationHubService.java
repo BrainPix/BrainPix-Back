@@ -32,8 +32,8 @@ import com.brainpix.post.entity.collaboration_hub.CollaborationRecruitment;
 import com.brainpix.post.repository.CollaborationHubRepository;
 import com.brainpix.post.repository.CollaborationRecruitmentRepository;
 import com.brainpix.post.repository.IdeaMarketRepository;
-import com.brainpix.post.repository.PostRepository;
 import com.brainpix.post.repository.SavedPostRepository;
+import com.brainpix.redis.service.RedisViewCountService;
 import com.brainpix.security.authority.BrainpixAuthority;
 import com.brainpix.user.entity.User;
 import com.brainpix.user.repository.UserRepository;
@@ -55,7 +55,7 @@ public class CollaborationHubService {
 	private final IdeaMarketRepository ideaMarketRepository;
 	private final RequestTaskPurchasingRepository requestTaskPurchasingRepository;
 	private final AlarmEventService alarmEventService;
-	private final PostRepository postRepository;
+	private final RedisViewCountService redisViewCountService;
 
 	@Transactional
 	public Long createCollaborationHub(Long userId, CollaborationHubCreateDto createDto) {
@@ -115,7 +115,7 @@ public class CollaborationHubService {
 		return GetCollaborationHubListDtoConverter.toResponse(result);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public GetCollaborationHubDetailDto.Response getCollaborationHubDetail(
 		GetCollaborationHubDetailDto.Parameter parameter) {
 
@@ -134,7 +134,7 @@ public class CollaborationHubService {
 		}
 
 		// 조회수 증가
-		postRepository.increaseViewCount(collaborationHub.getId());
+		redisViewCountService.increaseViewCount(collaborationHub.getId(), parameter.getUserId());
 
 		// 작성자 조회
 		User writer = collaborationHub.getWriter();

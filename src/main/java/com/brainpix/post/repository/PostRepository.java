@@ -15,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findByWriter(User writer, Pageable pageable);
 
 	@Modifying
-	@Query("update Post p set p.viewCount = p.viewCount + 1 where p.id = :id")
-	Integer increaseViewCount(@Param("id") Long postId);
+	@Query("update Post p set p.viewCount = p.viewCount + :viewCount where p.id = :id")
+	Integer updateViewCount(@Param("id") Long postId, @Param("viewCount") Long viewCount);
 }
