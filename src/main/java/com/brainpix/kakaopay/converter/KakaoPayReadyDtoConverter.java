@@ -16,7 +16,8 @@ public class KakaoPayReadyDtoConverter {
 			.build();
 	}
 
-	public static KakaoPayReadyDto.Response toResponse(KakaoPayReadyDto.KakaoApiResponse kakaoApiResponse) {
+	public static KakaoPayReadyDto.Response toResponse(KakaoPayReadyDto.KakaoApiResponse kakaoApiResponse,
+		String orderId) {
 
 		return KakaoPayReadyDto.Response.builder()
 			.nextRedirectPcUrl(kakaoApiResponse.getNext_redirect_pc_url())

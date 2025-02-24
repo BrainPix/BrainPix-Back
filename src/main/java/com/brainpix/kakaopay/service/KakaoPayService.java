@@ -82,7 +82,7 @@ public class KakaoPayService {
 		redisKakaoPayCacheService.savePaymentData(orderId, kakaoPaymentData);
 
 		// 5. 최종 응답
-		return KakaoPayReadyDtoConverter.toResponse(kakaoApiResponse);
+		return KakaoPayReadyDtoConverter.toResponse(kakaoApiResponse, orderId);
 	}
 
 	@Transactional
